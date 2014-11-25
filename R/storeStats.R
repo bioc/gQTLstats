@@ -108,11 +108,18 @@ storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-
         nperm=nperm )  # data already filtered
 }
 
-enumerateByFDR = function(store, fdrsupp, threshold=0.05) {
-   stopifnot(is.function(getFDRfunc(fdrsupp)))
-   selector = function(x)
-      x[ which( getFDRfunc(fdrsupp)(x$chisq) <= threshold ) ]
-   ans = storeApply( store, selector )
-   unlist(ans)
+enumerateByFDR = function (store, fdrsupp, threshold = 0.05) 
+{
+    if (!is.function(getFDRfunc(fdrsupp))) {
+       message("error: fdrsupp has no FDR interpolating function.")
+       message("please add one using setFDRfunc().")
+       stop("cannot find FDRfunc element in fdrsupp.")
+       }
+    selector = function(x) {
+        x$estFDR = getFDRfunc(fdrsupp)(x$chisq)
+        x[which(x$estFDR <= threshold)]
+    }
+    ans = storeApply(store, selector)
+    unlist(GRangesList(unlist(ans,recursive=FALSE)))
 }
 
