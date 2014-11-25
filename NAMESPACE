@@ -1,0 +1,38 @@
+import(methods)
+
+importFrom(limma, lmFit)
+
+importClassesFrom(GenomicRanges, GRanges, GRangesList)
+importFrom(GenomicRanges, unlist, rowData, exptData, 
+   "exptData<-", assays,
+   "assays<-", colData, GRangesList, assay, mcols,
+   "mcols<-", "assay<-")
+
+importFrom(GenomeInfoDb, seqnames, seqlevels, "seqlevels<-")
+
+importFrom(gQTLBase, storeToFf, loadAndFilterResult, ciseStore,
+	storeApply)
+
+export(cisAssoc, clipPCs, regressOut) #, pifdr)
+export( storeToQuantiles,  storeToHist, storeToFDR,
+     storeToFDRByProbe )
+exportClasses("FDRsupp")
+export(getFDRfunc, getTab, setFDRfunc, directPlot,
+       txsPlot)
+
+importFrom(BiocGenerics, width)
+
+
+importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam,
+   genotypeToSnpMatrix, alt, ref)
+
+importFrom(Biobase, selectSome, pData, assayDataNew, exprs, samples)
+
+importFrom(BiocParallel, bpparam, bpworkers, bplapply)
+
+importFrom(BatchJobs, batchMapResults, makeRegistry, submitJobs,
+	waitForJobs, findNotDone)
+
+importFrom(snpStats, snp.rhs.tests, col.summary, chi.squared)
+
+importFrom(S4Vectors, metadata, "metadata<-")

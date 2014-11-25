@@ -1,0 +1,174 @@
+
+---
+title: "gQTLstats: computationally efficient analysis and
+ 	interpretation of large eQTL, mQTL, etc. archives"
+author: "Vincent J. Carey, stvjc at channing.harvard.edu"
+date: "November 2014"
+output:
+  pdf_document:
+    toc: yes
+    number_sections: yes
+  html_document:
+    highlight: pygments
+    number_sections: yes
+    theme: united
+    toc: yes
+---
+
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{gQTLstats: computationally efficient analysis and
+ 	interpretation of large eQTL, mQTL, etc. archives}
+-->
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown()
+```
+
+# Introduction
+
+The software in this package aims to support
+refinements and functional interpretation of members of
+a collection of association statistics on a family of
+feature $\times$ genome hypotheses.
+provide a basis for refinement or functional interpretation.
+
+We take for granted the use of the gQTL* infrastructure
+for testing and management of test results.  We
+use for examples elements of the `r Biocexptpkg("geuvPack")` and 
+`r Biocexptpkg("geuvStore")`
+packages.
+
+# Basic infrastructure for statistics on a distributed store of eQTL results
+
+We work with a `ciseStore` instance based on a small subset
+of transcriptome-wide cis-eQTL tests for GEUVADIS FPKM data.
+```{r setup,echo=FALSE}
+suppressPackageStartupMessages({
+library(geuvStore)
+library(gQTLBase)
+library(gQTLstats)
+})
+```{r contset}
+library(geuvStore)
+library(gQTLBase)
+library(gQTLstats)
+prst = ciseStore(partialRegistry(), FALSE, FALSE)
+```
+
+## Estimation of quantiles of the distribution of observed associations
+
+Quantile estimation is very memory-efficient, based on a
+temporary ff representation of the vector of
+all association test results.
+
+```{r getqs, cache=TRUE}
+qassoc = storeToQuantiles(prst, field="chisq",
+    probs=c(seq(0,.999,.001), 1-(c(1e-4,1e-5,1e-6))))
+tail(qassoc)
+```
+
+## Estimation of histogram of the distribution of association scores under permutation
+
+Because we compute fixed breaks, contributions to the
+overall histogram can be assembled in parallel, with
+small footprint.  This is a tremendous reduction of
+data.
+```{r gethist, cache=TRUE}
+hh = storeToHist( prst, breaks= c(0,qassoc,1e9) )
+tail(hh$counts)
+```
+
+## Computing FDR from a gqtlStore
+
+FDR computation is post-hoc relative to filtering
+that need not be specified prior to testing.  For
+illustration, we survey the results in `r Biocexptpkg("geuvStore")`
+to obtain FDRs for each SNP:probe
+pair in two forms.  First, we obtain FDR without
+any filtering.  Second, we compute an
+a FDR for those SNP:probe pairs separated
+by at most 500kb, and for which the MAF for the SNP
+is at least 5 per cent.
+
+```{r twoFDRs, cache=TRUE}
+rawFDR = storeToFDR(prst, 
+   xprobs=c(seq(.05,.95,.05),.975,.990,.995,.9975,.999, 
+   .9995, .9999, .99999) )
+filtFDR = storeToFDR(prst, 
+   xprobs=c(seq(.05,.95,.05),.975,.990,.995,.9975,.999, 
+   .9995, .9999, .99999), filter = function(x)
+     x[ which(x$MAF >= 0.05 & x$mindist <= 500000) ] )
+```
+```{r lktails}
+rawFDR
+filtFDR
+```
+
+The filtering leads to a lower FDR for a given
+strength of association.  This is an inspiration for
+sensitivity analysis.
+Even with 5 million observations there is an effect of histogram bin
+selection in summarizing the permutation distribution of association.
+This can be seen fairly clearly in the wiggliness of the trace over
+the unfiltered association score:FDR plot.
+
+```{r showfd2, plot=TRUE}
+rawtab = getTab(rawFDR)
+filttab = getTab(filtFDR)
+ plot(rawtab[-(1:10),"assoc"], 
+      -log10(rawtab[-(1:10),"fdr"]+1e-6), log="x", axes=FALSE,
+  xlab="Observed association", ylab="-log10 plugin FDR")
+ axis(1, at=c(seq(0,10,1),100,200))
+ axis(2)
+ points(filttab[-(1:10),1], -log10(filttab[-(1:10),2]+1e-6), pch=2)
+ legend(1, 5, pch=c(1,2), legend=c("all loci", "MAF >= 0.05 & dist <= 500k"))
+```
+
+We'll address this below by fitting smooth functions for
+the score:FDR relationship.
+ 
+## Estimates of FDR at the probe level
+
+The `storeToFDRByProbe` FDR function examines the maximal association score
+by gene, for observed and permuted measures.
+
+```{r shobfu,cache=TRUE}
+fdbp = storeToFDRByProbe( prst, xprobs=c(seq(.025,.975,.025),.99))
+tail(getTab(fdbp),5)
+```
+
+```{r shobpf,cache=TRUE}
+fdAtM05bp = storeToFDRByProbe( prst, filter=function(x) x[which(x$MAF > .05)],
+   xprobs=c(seq(.025,.975,.025),.99))
+tail(getTab(fdAtM05bp),5)
+```
+
+# Modeling the association-FDR relationship to support efficient variant selection and annotation
+
+## Choosing a smooth model for the association:FDR relationship
+
+We'll focus here on all-pairs analysis, with and without filtering.
+
+Especially in this small example there will be some wiggling or
+even non-monotonicity in the trace of empirical
+FDR against association.  We want to be able to compute
+the approximate FDR quickly and with minimal assumptions
+and pathology.  To accomplish this, we will
+bind an interpolating model to the
+FDR estimates that we have.
+Interpolation will be accomplished with scatterplot smoothing in
+the `r CRANpkg("gam")` framework.  We'll use different
+smoothing spans for the raw and unfiltered FDR estimates.
+
+```{r lkgam,fig=TRUE}
+library(gam)
+rawFDR = setFDRfunc(rawFDR, span=.75)
+filtFDR = setFDRfunc(filtFDR, span=.25)
+par(mfrow=c(2,2))
+txsPlot(rawFDR)
+txsPlot(filtFDR)
+directPlot(rawFDR)
+directPlot(filtFDR)
+```
+
