@@ -172,3 +172,18 @@ directPlot(rawFDR)
 directPlot(filtFDR)
 ```
 
+More work is needed on assessing tolerability of relative
+error in FDR interpolation.
+
+# Enumerating significant cis-eQTL in a store
+
+We can use the `FDRsupp` instances with `ciseStore`
+to list the SNP-probe pairs meeting specific FDR conditions.
+
+```{r doenums,cache=TRUE}
+rawEnum = enumerateByFDR(prst, rawFDR, threshold=.05) 
+GenomicRanges::unlist(GRangesList(rawEnum))
+filtEnum = enumerateByFDR(prst, filtFDR, threshold=.05) 
+GenomicRanges::unlist(GRangesList(filtEnum))
+```
+
