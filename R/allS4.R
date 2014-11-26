@@ -6,13 +6,17 @@ class(.nullgam) = "gam"
 setClassUnion("gamORNULL", c("gam", "NULL"))
 
 setClass("FDRsupp", representation(tab="data.frame",
-   FDRfunc="functionORNULL", FDRmodel="gamORNULL"))
+   FDRfunc="functionORNULL", FDRmodel="gamORNULL", theCall="call",
+   sessinfo="ANY"))
 
 setMethod("initialize", "FDRsupp", function(.Object, 
-        tab=data.frame(), FDRfunc=NULL, FDRmodel=NULL, ...) {
+        tab=data.frame(), FDRfunc=NULL, FDRmodel=NULL, 
+        sessinfo=sessionInfo(), theCall=call(" "), ...) {
  .Object@tab = tab
  .Object@FDRfunc = FDRfunc
  .Object@FDRmodel = FDRmodel
+ .Object@sessinfo = sessinfo
+ .Object@theCall = theCall
  .Object
 })
 

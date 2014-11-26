@@ -36,6 +36,7 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
        c("permScore_1", "permScore_2", "permScore_3")])), nperm=3,
     filter=force) {
+ theCall = match.call()
  message("counting tests...")
  ntests = sum(unlist(storeApply( store, function(x) length(filter(x)) )) , na.rm=TRUE)
  message("counting #NA...")
@@ -52,7 +53,7 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
  ncalls = ntests*(1-xprobs)
  fdr = oy/(nperm*ncalls)
  ans = data.frame(assoc=xq, fdr=pmin(1, fdr), ncalls=ncalls, avg.false=oy/nperm)
- new("FDRsupp", tab=ans)
+ new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo())
 }
 
 addFDRfunc = function(supp, f) {
