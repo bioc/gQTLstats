@@ -31,8 +31,9 @@ reconstruct = function(ex, inds2drop, center=TRUE) {
      se
      }
 
-regressOut = function(sms, x, ...) {
+regressOut = function(x, rhs, ...) {
  stopifnot(is(x, "SummarizedExperiment")) 
+ stopifnot(is(rhs, "formula")) 
  mm = model.matrix(rhs, data=colData(x))
  message("using assay() to extract 'expression' matrix from SummarizedExperiment")
  ex = assay(x)
