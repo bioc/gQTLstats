@@ -9,7 +9,7 @@ queryVCF = function (gr, vcf.tf, samps, genome = "hg19", getSM=TRUE)
     if (!missing(samps)) {
       present = samples(scanVcfHeader(vcf.tf))
       if((dl <- length(setdiff(samps, present))) > 0) {
-        warning(paste0("there were ", dl, " samples not found (of ",
+        message(paste0("NOTE: there were ", dl, " samples not found (of ",
             length(samps)," requested)."))
         }
       vcfSamples(vp) = (int <- intersect(samps, present))
@@ -21,9 +21,7 @@ queryVCF = function (gr, vcf.tf, samps, genome = "hg19", getSM=TRUE)
     list(readout=readout, sm=sm)
 }
 
-eqBox2 = function (gene, se, tf, snpgr, radius = 1e+06, genome = "hg19", 
-    ...) 
-{
+prepEqData = function (gene, se, tf, snpgr, genome = "hg19") {
     stopifnot(gene %in% rownames(se))
     esamps = colnames(se)
     gtstuff = queryVCF(gr=snpgr, vcf.tf=tf, samps=esamps,
@@ -33,6 +31,17 @@ eqBox2 = function (gene, se, tf, snpgr, radius = 1e+06, genome = "hg19",
     okids = intersect(esamps, rownames(smat))
     ex = assay(se[gene, okids])
     gt = as.character(as(smat[okids,], "character"))
-    boxplot(split(ex, gt), xlab = colnames(smat), ylab = gene, ...)
+    list(ex=ex, gt=gt, coln=colnames(smat))
+}
+
+eqBox2 = function (gene, se, tf, snpgr, genome = "hg19", 
+    ...) {
+    ans = prepEqData( gene, se, tf, snpgr, genome )
+    boxplot(split(ans$ex, ans$gt), xlab = ans$coln, ylab = gene, ...)
+}
+
+eqDesc2 = function (gene, se, tf, snpgr, genome = "hg19") {
+    ans = prepEqData( gene, se, tf, snpgr, genome )
+    table(split(ans$ex, ans$gt))
 }
 

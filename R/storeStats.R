@@ -121,6 +121,10 @@ enumerateByFDR = function (store, fdrsupp, threshold = 0.05)
         x[which(x$estFDR <= threshold)]
     }
     ans = storeApply(store, selector)
-    unlist(GRangesList(unlist(ans,recursive=FALSE)))
+    ans = unlist(GRangesList(unlist(ans,recursive=FALSE)))
+    metadata(ans)$enumCall = match.call()
+    metadata(ans)$enumSess = sessionInfo()
+    metadata(ans)$fdrCall = fdrsupp@theCall
+    ans
 }
 

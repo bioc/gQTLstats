@@ -1,6 +1,7 @@
 import(methods)
 
 importFrom(limma, lmFit)
+importFrom(gam, gam, lo)
 
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importFrom(GenomicRanges, unlist, rowData, exptData, 
@@ -22,9 +23,8 @@ export(getFDRfunc, getTab, setFDRfunc, directPlot,
 
 importFrom(BiocGenerics, width)
 
-
 importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam,
-   genotypeToSnpMatrix, alt, ref)
+   genotypeToSnpMatrix, alt, ref, "vcfSamples", "vcfSamples<-")
 
 importFrom(Biobase, selectSome, pData, assayDataNew, exprs, samples)
 

@@ -168,7 +168,7 @@ SnpMatrixCisToSummex = function(summex, vcf.tf,
     genotypeToSnpMatrix(vdata)
 }
 
-eqBox = function( gene, snp, se, tf, radius=1e6, genome="hg19", ...) {
+.eqBox = function( gene, snp, se, tf, radius=1e6, genome="hg19", ...) {
   stopifnot(gene %in% rownames(se))
   LL = SnpMatrixCisToSummex(se[gene,], tf, radius=radius, genome=genome)[[1]]
   stopifnot(snp %in% colnames(LL))
@@ -179,7 +179,7 @@ eqBox = function( gene, snp, se, tf, radius=1e6, genome="hg19", ...) {
   boxplot(split(ex,gt), xlab=snp, ylab=gene, ...)
 }
 
-eqDesc = function (gene, snp, se, tf, radius=1e6, genome="hg19", ...) 
+.eqDesc = function (gene, snp, se, tf, radius=1e6, genome="hg19", ...) 
 {
     stopifnot(gene %in% rownames(se))
     LL = SnpMatrixCisToSummex(se[gene, ], tf, radius=radius)[[1]]

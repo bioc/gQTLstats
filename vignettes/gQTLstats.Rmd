@@ -131,7 +131,13 @@ the score:FDR relationship.
 ## Estimates of FDR at the probe level
 
 The `storeToFDRByProbe` FDR function examines the maximal association score
-by gene, for observed and permuted measures.
+by gene, for observed and permuted measures.  These functions
+can be slow, as they involve mapping the original set of
+jobs through a best-SNP-per-probe selection process for the observed
+and permuted scores.  Concurrent computing capabilities of
+BatchJobs are employed when available.  You will need suitable contents
+for `.BatchJobs.R` and any scheduler-dependent template files to
+take advantage of this.
 
 ```{r shobfu,cache=TRUE}
 fdbp = storeToFDRByProbe( prst, xprobs=c(seq(.025,.975,.025),.99))
