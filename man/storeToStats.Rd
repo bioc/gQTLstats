@@ -4,7 +4,7 @@
 \alias{storeToHist}
 \alias{storeToFDR}
 \alias{storeToFDRByProbe}
-%\alias{getTab)}
+\alias{getTab)}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 extract a vector from store results as ff (out of memory reference);
@@ -27,7 +27,7 @@ storeToFDR(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[,
        c("permScore_1", "permScore_2", "permScore_3")])), nperm=3,
 	filter=force) 
-getTab(x)
+getTab(x) # extract table from FDRsupp instance
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -82,6 +82,9 @@ to those returned by stats::quantile and graphics::hist
 
 storeToFDR and storeToFDRByProbe return an instance of
 FDRsupp class
+
+getTab retrieves table of association-scores, FDR estimates,
+and other features of FDR estimation process
 }
 %\references{
 %% ~put references to the literature/web site here ~
