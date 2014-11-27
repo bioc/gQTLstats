@@ -52,8 +52,8 @@ estimates.  See the example.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-data(FDRfilt)
-directPlot(FDRfilt)
+data(filtFDR)
+directPlot(filtFDR)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

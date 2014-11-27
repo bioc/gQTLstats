@@ -8,7 +8,7 @@ filter a ciseStore instance using an FDR threshold
 filter a ciseStore instance using an FDR threshold
 }
 \usage{
-enumerateByFDR(store, fdrsupp, threshold = 0.05)
+enumerateByFDR(store, fdrsupp, threshold = 0.05, filter=force)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,6 +20,13 @@ instance of \code{\link{FDRsupp-class}}
 }
   \item{threshold}{
 upper bound on FDR to be included
+}
+  \item{filter}{
+The FDR can be computed for any association score.  To
+return only records satisfying a given filter, supply
+the filter function here.  It may be desirable to 
+carry a filter function from the storeToFDR stage, and
+this may be considered in future versions.
 }
 }
 \details{
@@ -52,7 +59,8 @@ require(gQTLBase)
 re = partialRegistry()
 st = ciseStore(re, FALSE, FALSE)
 data(filtFDR)
-filtEnum = enumerateByFDR( st, filtFDR )
+filtEnum = enumerateByFDR( st, filtFDR,
+  filter=function(x)x[which(x$mindist <= 500000 & x$MAF >= 0.05)] )
 names(metadata(filtEnum))
 filtEnum[order(filtEnum$chisq, decreasing=TRUE)[1:2]]
 }
