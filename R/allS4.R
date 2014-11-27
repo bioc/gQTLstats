@@ -7,16 +7,18 @@ setClassUnion("gamORNULL", c("gam", "NULL"))
 
 setClass("FDRsupp", representation(tab="data.frame",
    FDRfunc="functionORNULL", FDRmodel="gamORNULL", theCall="call",
-   sessinfo="ANY"))
+   sessinfo="ANY", filterUsed="function"))
 
 setMethod("initialize", "FDRsupp", function(.Object, 
         tab=data.frame(), FDRfunc=NULL, FDRmodel=NULL, 
-        sessinfo=sessionInfo(), theCall=call(" "), ...) {
+        sessinfo=sessionInfo(), theCall=call(" "),
+        filterUsed=force, ...) {
  .Object@tab = tab
  .Object@FDRfunc = FDRfunc
  .Object@FDRmodel = FDRmodel
  .Object@sessinfo = sessinfo
  .Object@theCall = theCall
+ .Object@filterUsed = filterUsed
  .Object
 })
 

@@ -53,7 +53,8 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
  ncalls = ntests*(1-xprobs)
  fdr = oy/(nperm*ncalls)
  ans = data.frame(assoc=xq, fdr=pmin(1, fdr), ncalls=ncalls, avg.false=oy/nperm)
- new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo())
+ new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo(),
+    filterUsed=filter)
 }
 
 addFDRfunc = function(supp, f) {
@@ -105,8 +106,11 @@ storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-
     on.exit({unlink(tf, recursive=TRUE);
              options(BBmisc.ProgressBar.style=curbb)
              })
-    storeToFDR( newstore, xprobs = xprobs, xfield="chisq", getter=getter,
+    ans = storeToFDR( newstore, xprobs = xprobs, xfield="chisq", getter=getter,
         nperm=nperm )  # data already filtered
+    ans@filterUsed = filter
+    ans@theCall = match.call()
+    ans
 }
 
 enumerateByFDR = function (store, fdrsupp, threshold = 0.05,

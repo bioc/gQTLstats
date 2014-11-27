@@ -186,7 +186,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. .. ..$ Title      : chr "demonstrate storage discipline for eQTL enumerations" \cr
   .. .. .. ..$ Version    : chr "0.2.1" \cr
   .. .. .. ..$ Author     : chr "VJ Carey <stvjc@channing.harvard.edu>" \cr
-  .. .. .. ..$ Description: chr "demonstrate storage discipline for eQTL enumerations and analyses\tbased on a selection of GEUVADIS results" \cr
+  .. .. .. ..$ Description: chr "demonstrate storage discipline for eQTL enumerations and analyses based on a selection of GEUVADIS results" \cr
   .. .. .. ..$ Suggests   : chr "Homo.sapiens" \cr
   .. .. .. ..$ Depends    : chr "BatchJobs, GenomicRanges" \cr
   .. .. .. ..$ Maintainer : chr "VJ Carey <stvjc@channing.harvard.edu>" \cr
@@ -198,7 +198,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. ..$ GenomicRanges:List of 15 \cr
   .. .. .. ..$ Package    : chr "GenomicRanges" \cr
   .. .. .. ..$ Title      : chr "Representation and manipulation of genomic intervals" \cr
-  .. .. .. ..$ Description: chr "The ability to efficiently represent and manipulate genomic\tannotations and alignments is playing a central role when it com"| __truncated__ \cr
+  .. .. .. ..$ Description: chr "The ability to efficiently represent and manipulate genomic annotations and alignments is playing a central role when it com"| __truncated__ \cr
   .. .. .. ..$ Version    : chr "1.19.14" \cr
   .. .. .. ..$ Author     : chr "P. Aboyoun, H. Pages and M. Lawrence" \cr
   .. .. .. ..$ Maintainer : chr "Bioconductor Package Maintainer <maintainer@bioconductor.org>" \cr
@@ -216,7 +216,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. ..$ GenomeInfoDb :List of 16 \cr
   .. .. .. ..$ Package        : chr "GenomeInfoDb" \cr
   .. .. .. ..$ Title          : chr "Utilities for manipulating chromosome and other 'seqname'identifiers" \cr
-  .. .. .. ..$ Description    : chr "Contains data and functions that\tdefine and allow translation between different chromosome\tsequence naming conventions (e"| __truncated__ \cr
+  .. .. .. ..$ Description    : chr "Contains data and functions that define and allow translation between different chromosome sequence naming conventions (e"| __truncated__ \cr
   .. .. .. ..$ Version        : chr "1.3.7" \cr
   .. .. .. ..$ Author         : chr "Sonali Arora, Martin Morgan, Marc Carlson, H. Pages" \cr
   .. .. .. ..$ Maintainer     : chr "Bioconductor Package Maintainer <maintainer@bioconductor.org>" \cr
@@ -235,7 +235,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. ..$ IRanges      :List of 16 \cr
   .. .. .. ..$ Package      : chr "IRanges" \cr
   .. .. .. ..$ Title        : chr "Infrastructure for manipulating intervals on sequences" \cr
-  .. .. .. ..$ Description  : chr "The package provides efficient low-level and highly reusable S4\tclasses for storing ranges of integers, RLE vectors (Run-Len"| __truncated__ \cr
+  .. .. .. ..$ Description  : chr "The package provides efficient low-level and highly reusable S4 classes for storing ranges of integers, RLE vectors (Run-Len"| __truncated__ \cr
   .. .. .. ..$ Version      : chr "2.1.19" \cr
   .. .. .. ..$ Author       : chr "H. Pages, P. Aboyoun and M. Lawrence" \cr
   .. .. .. ..$ Maintainer   : chr "Bioconductor Package Maintainer <maintainer@bioconductor.org>" \cr
@@ -254,7 +254,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. ..$ S4Vectors    :List of 14 \cr
   .. .. .. ..$ Package    : chr "S4Vectors" \cr
   .. .. .. ..$ Title      : chr "S4 implementation of vectors and lists" \cr
-  .. .. .. ..$ Description: chr "The S4Vectors package defines the Vector and List virtual classes\tand a set of generic functions that extend the semantic of"| __truncated__ \cr
+  .. .. .. ..$ Description: chr "The S4Vectors package defines the Vector and List virtual classes and a set of generic functions that extend the semantic of"| __truncated__ \cr
   .. .. .. ..$ Version    : chr "0.5.10" \cr
   .. .. .. ..$ Author     : chr "H. Pages, M. Lawrence and P. Aboyoun" \cr
   .. .. .. ..$ Maintainer : chr "Bioconductor Package Maintainer <maintainer@bioconductor.org>" \cr
@@ -556,7 +556,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. ..$ Biostrings       :List of 17 \cr
   .. .. .. ..$ Package    : chr "Biostrings" \cr
   .. .. .. ..$ Title      : chr "String objects representing biological sequences, and matchingalgorithms" \cr
-  .. .. .. ..$ Description: chr "Memory efficient string containers, string matching\talgorithms, and other utilities, for fast manipulation of large\tbiolo"| __truncated__ \cr
+  .. .. .. ..$ Description: chr "Memory efficient string containers, string matching algorithms, and other utilities, for fast manipulation of large biolo"| __truncated__ \cr
   .. .. .. ..$ Version    : chr "2.35.4" \cr
   .. .. .. ..$ Author     : chr "H. Pages, P. Aboyoun, R. Gentleman, and S. DebRoy" \cr
   .. .. .. ..$ Maintainer : chr "H. Pages <hpages@fhcrc.org>" \cr
@@ -749,11 +749,11 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. .. ..$ Version         : chr "2.2-13" \cr
   .. .. .. ..$ Date            : chr "2012-03-29" \cr
   .. .. .. ..$ Title           : chr "memory-efficient storage of large data on disk and fast accessfunctions" \cr
-  .. .. .. ..$ Author          : chr "Daniel Adler <dadler@uni-goettingen.de>, \tChristian Gläser <christian_glaeser@gmx.de>,\tOleg Nenadic <onenadi@uni-goetting"| __truncated__ \cr
+  .. .. .. ..$ Author          : chr "Daniel Adler <dadler@uni-goettingen.de>,  Christian Gläser <christian_glaeser@gmx.de>, Oleg Nenadic <onenadi@uni-goetting"| __truncated__ \cr
   .. .. .. ..$ Maintainer      : chr "Jens Oehlschlägel <Jens.Oehlschlaegel@truecluster.com>" \cr
   .. .. .. ..$ Depends         : chr "R (>= 2.10.1), bit (>= 1.1-12), utils" \cr
   .. .. .. ..$ Suggests        : chr "biglm" \cr
-  .. .. .. ..$ Description     : chr "The ff package provides data structures that are stored on\tdisk but behave (almost) as if they were in RAM by transparently "| __truncated__ \cr
+  .. .. .. ..$ Description     : chr "The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently "| __truncated__ \cr
   .. .. .. ..$ License         : chr "GPL-2 | file LICENSE" \cr
   .. .. .. ..$ LazyLoad        : chr "yes" \cr
   .. .. .. ..$ ByteCompile     : chr "yes" \cr
@@ -843,7 +843,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. ..$ GenomicAlignments:List of 16 \cr
   .. .. .. ..$ Package    : chr "GenomicAlignments" \cr
   .. .. .. ..$ Title      : chr "Representation and manipulation of short genomic alignments" \cr
-  .. .. .. ..$ Description: chr "Provides efficient containers for storing and manipulating\tshort genomic alignments (typically obtained by aligning short re"| __truncated__ \cr
+  .. .. .. ..$ Description: chr "Provides efficient containers for storing and manipulating short genomic alignments (typically obtained by aligning short re"| __truncated__ \cr
   .. .. .. ..$ Version    : chr "1.3.10" \cr
   .. .. .. ..$ Author     : chr "Herv\\'e Pag\\`es, Valerie Obenchain, Martin Morgan" \cr
   .. .. .. ..$ Maintainer : chr "Bioconductor Package Maintainer <maintainer@bioconductor.org>" \cr
@@ -1169,7 +1169,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. .. ..$ LazyData        : chr "Yes" \cr
   .. .. .. ..$ LazyLoad        : chr "Yes" \cr
   .. .. .. ..$ ByteCompile     : chr "Yes" \cr
-  .. .. .. ..$ Authors@R       : chr "c(person(c(\"Terry\", \"M\"), \"Therneau\",                    email=\"therneau.terry@mayo.edu\",\t            role=c(\"aut"| __truncated__ \cr
+  .. .. .. ..$ Authors@R       : chr "c(person(c(\"Terry\", \"M\"), \"Therneau\",                    email=\"therneau.terry@mayo.edu\",             role=c(\"aut"| __truncated__ \cr
   .. .. .. ..$ Description     : chr "survival analysis: descriptive statistics, two-sample  tests, parametric accelerated failure models, Cox model. Delayed entry"| __truncated__ \cr
   .. .. .. ..$ License         : chr "LGPL (>= 2)" \cr
   .. .. .. ..$ URL             : chr "http://r-forge.r-project.org" \cr
@@ -1227,7 +1227,7 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. ..$ XVector          :List of 15 \cr
   .. .. .. ..$ Package    : chr "XVector" \cr
   .. .. .. ..$ Title      : chr "Representation and manpulation of external sequences" \cr
-  .. .. .. ..$ Description: chr "Memory efficient S4 classes for storing sequences \"externally\"\t(behind an R external pointer, or on disk)." \cr
+  .. .. .. ..$ Description: chr "Memory efficient S4 classes for storing sequences \"externally\" (behind an R external pointer, or on disk)." \cr
   .. .. .. ..$ Version    : chr "0.7.2" \cr
   .. .. .. ..$ Author     : chr "H. Pages and P. Aboyoun" \cr
   .. .. .. ..$ Maintainer : chr "H. Pages <hpages@fhcrc.org>" \cr

@@ -95,10 +95,13 @@ is at least 5 per cent.
 rawFDR = storeToFDR(prst, 
    xprobs=c(seq(.05,.95,.05),.975,.990,.995,.9975,.999, 
    .9995, .9999, .99999) )
+```{r makefilt}
+dmfilt = function(x)  # define the filtering function
+     x[ which(x$MAF >= 0.05 & x$mindist <= 500000) ] 
+```{r runfilt, cache=TRUE}
 filtFDR = storeToFDR(prst, 
    xprobs=c(seq(.05,.95,.05),.975,.990,.995,.9975,.999, 
-   .9995, .9999, .99999), filter = function(x)
-     x[ which(x$MAF >= 0.05 & x$mindist <= 500000) ] )
+   .9995, .9999, .99999), filter = dmfilt )
 ```
 ```{r lktails}
 rawFDR
@@ -189,7 +192,8 @@ to list the SNP-probe pairs meeting specific FDR conditions.
 ```{r doenums,cache=TRUE}
 rawEnum = enumerateByFDR(prst, rawFDR, threshold=.05) 
 GenomicRanges::unlist(GRangesList(rawEnum))
-filtEnum = enumerateByFDR(prst, filtFDR, threshold=.05) 
+filtEnum = enumerateByFDR(prst, filtFDR, threshold=.05,
+   filter=dmfilt) 
 GenomicRanges::unlist(GRangesList(filtEnum))
 ```
 
