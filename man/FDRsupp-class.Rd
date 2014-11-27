@@ -22,12 +22,22 @@ selected score values }
     \item{\code{FDRfunc}:}{Object of class \code{"function"} a
 function of one argument with input association score and output
 the corresponding FDR estimate }
+    \item{\code{FDRmodel}:}{Object of class \code{"gam"} 
+that was fit to elements of \code{tab}}
+    \item{\code{sessinfo}:}{sessionInfo() value at time
+of construction}
+    \item{\code{theCall}:}{instance of class \code{"call"}
+showing call leading to construction}
   }
 }
 \section{Methods}{
   \describe{
-    \item{getFDRfunc}{\code{signature(x = "FDRsupp")}: ... }
-    \item{getTab}{\code{signature(x = "FDRsupp")}: ... }
+    \item{getFDRfunc}{\code{signature(x = "FDRsupp")}: extract
+the FDR approximating function, a function of one (vector) argument
+assumed to represent association scores, evaluating to the
+plug-in FDR estimates corresponding to these scores  }
+    \item{getTab}{\code{signature(x = "FDRsupp")}: extract the
+table of association scores and empirical FDR estimates }
 	 }
 }
 %\references{

@@ -1,5 +1,6 @@
 \name{eqBox2}
 \alias{eqBox2}
+\alias{eqDesc2}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 visualization of expression or other assay measure

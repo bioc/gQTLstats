@@ -42,6 +42,6 @@ eqBox2 = function (gene, se, tf, snpgr, genome = "hg19",
 
 eqDesc2 = function (gene, se, tf, snpgr, genome = "hg19") {
     ans = prepEqData( gene, se, tf, snpgr, genome )
-    table(split(ans$ex, ans$gt))
+    sapply(split(ans$ex, ans$gt),length)
 }
 

@@ -19,7 +19,7 @@ export( storeToQuantiles,  storeToHist, storeToFDR,
      storeToFDRByProbe )
 exportClasses("FDRsupp")
 export(getFDRfunc, getTab, setFDRfunc, directPlot,
-       txsPlot, eqBox2, enumerateByFDR)
+       txsPlot, eqBox2, eqDesc2, enumerateByFDR)
 
 importFrom(BiocGenerics, width)
 
