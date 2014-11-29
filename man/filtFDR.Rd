@@ -579,8 +579,8 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. .. ..$ Title           : chr "A class for vectors of 1-bit booleans" \cr
   .. .. .. ..$ Version         : chr "1.1-12" \cr
   .. .. .. ..$ Date            : chr "2012-01-17" \cr
-  .. .. .. ..$ Author          : chr "Jens Oehlschlägel <Jens.Oehlschlaegel@truecluster.com>" \cr
-  .. .. .. ..$ Maintainer      : chr "Jens Oehlschlägel <Jens.Oehlschlaegel@truecluster.com>" \cr
+  .. .. .. ..$ Author          : chr "Jens Oehlschlaegel <Jens.Oehlschlaegel@truecluster.com>" \cr
+  .. .. .. ..$ Maintainer      : chr "Jens Oehlschlaegel <Jens.Oehlschlaegel@truecluster.com>" \cr
   .. .. .. ..$ Depends         : chr "R (>= 2.9.2)" \cr
   .. .. .. ..$ Description     : chr "bitmapped vectors of booleans (no NAs),   coercion from and to logicals, integers and integer subscripts;   fast boolean op"| __truncated__ \cr
   .. .. .. ..$ License         : chr "GPL-2" \cr
@@ -749,8 +749,8 @@ Formal class 'FDRsupp' [package "gQTLstats"] with 5 slots \cr
   .. .. .. ..$ Version         : chr "2.2-13" \cr
   .. .. .. ..$ Date            : chr "2012-03-29" \cr
   .. .. .. ..$ Title           : chr "memory-efficient storage of large data on disk and fast accessfunctions" \cr
-  .. .. .. ..$ Author          : chr "Daniel Adler <dadler@uni-goettingen.de>,  Christian Gläser <christian_glaeser@gmx.de>, Oleg Nenadic <onenadi@uni-goetting"| __truncated__ \cr
-  .. .. .. ..$ Maintainer      : chr "Jens Oehlschlägel <Jens.Oehlschlaegel@truecluster.com>" \cr
+  .. .. .. ..$ Author          : chr "Daniel Adler <dadler@uni-goettingen.de>,  Christian Glaeser <christian_glaeser@gmx.de>, Oleg Nenadic <onenadi@uni-goetting"| __truncated__ \cr
+  .. .. .. ..$ Maintainer      : chr "Jens Oehlschlaegel <Jens.Oehlschlaegel@truecluster.com>" \cr
   .. .. .. ..$ Depends         : chr "R (>= 2.10.1), bit (>= 1.1-12), utils" \cr
   .. .. .. ..$ Suggests        : chr "biglm" \cr
   .. .. .. ..$ Description     : chr "The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently "| __truncated__ \cr

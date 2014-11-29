@@ -4,7 +4,7 @@
 \alias{storeToHist}
 \alias{storeToFDR}
 \alias{storeToFDRByProbe}
-\alias{getTab)}
+\alias{getTab}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 extract a vector from store results as ff (out of memory reference);

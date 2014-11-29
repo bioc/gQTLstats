@@ -24,6 +24,9 @@ function of one argument with input association score and output
 the corresponding FDR estimate }
     \item{\code{FDRmodel}:}{Object of class \code{"gam"} 
 that was fit to elements of \code{tab}}
+    \item{\code{filterUsed}:}{Object of class \code{"function"} 
+a copy of the function used for filtering the store to
+create the FDRfunc element.}
     \item{\code{sessinfo}:}{sessionInfo() value at time
 of construction}
     \item{\code{theCall}:}{instance of class \code{"call"}

@@ -8,7 +8,8 @@ filter a ciseStore instance using an FDR threshold
 filter a ciseStore instance using an FDR threshold
 }
 \usage{
-enumerateByFDR(store, fdrsupp, threshold = 0.05, filter=force)
+enumerateByFDR(store, fdrsupp, threshold = 0.05, filter=force,
+   ids=NULL, trimToUnit=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,6 +29,12 @@ the filter function here.  It may be desirable to
 carry a filter function from the storeToFDR stage, and
 this may be considered in future versions.
 }
+  \item{ids}{if NULL, process all results in store, otherwise
+limit attention to jobs with id values in \code{ids}}
+  \item{trimToUnit}{plug-in FDR estimates can sometimes
+lie outside [0,1] owing to sparsity or defects of extrapolation;
+if this parameter is TRUE, estimated FDR values outside [0,1] are moved to
+the nearest boundary}
 }
 \details{
 uses \code{\link{storeApply}}, which will
