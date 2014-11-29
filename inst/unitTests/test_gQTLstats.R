@@ -73,5 +73,58 @@ checkStats = function() {
 #
      checkTrue(is.function(getFDRfunc(filtFDR)))
      checkTrue(names(formals(getFDRfunc(filtFDR)))=="assoc")
+#
+# test getTab
+#
+     checkTrue(all(dim(getTab(filtFDR)) == c(27,4)))
+#
+#    test regressOut
+#
+     ro = regressOut(geuFPKM, ~popcode)
+     checkTrue(max(abs(coef(lm(assay(ro)[1,]~geuFPKM$popcode))))<1e-16)
+#
+#    test setFDRfunc
+#
+     filtFDR@FDRfunc = NULL
+     filtFDR = setFDRfunc( filtFDR )
+     checkTrue(is.function(getFDRfunc(filtFDR)))
+     checkTrue(max(abs(coef(filtFDR@FDRmodel)-
+          c(-0.147156183359907, -0.0712895014838215))) < 1e-6 )
+#
+# test storeToFDR
+#
+      reg = partialRegistry()
+      store = ciseStore(reg, addProbeMap=FALSE, addRangeMap=FALSE)
+      stf = storeToFDR(store)
+      checkTrue(all(dim(getTab(stf))==c(1004,4)))
+      checkTrue(is.null(getFDRfunc(stf)))
+      checkTrue(max(getTab(stf)$assoc)>252.89)
+#
+# skip storeToFDRByProbe as currently slow
+#
+# test storeToHist
+#
+      hh = storeToHist( store, breaks=c(0,1,2,4,8,350))
+#      checkTrue(sum(hh$counts) == 3*5656290)
+      checkTrue(all(hh$counts == c(11677429L, 2691328L, 1832875L, 667539L, 99699L)))
+      dmfilt = function(x) x[ which(x$MAF >= .05 & x$mindist <= 5e4) ]
+      hf = storeToHist( store, breaks = c(0,1,2,4,8,350), filter=dmfilt )
+      checkTrue( sum(hf$counts) == 692397)
+#
+# test storeToQuantiles
+#
+      sq = storeToQuantiles(store, "chisq", seq(.1,.9,.1))
+      qtarg = structure(c(0.0146886028850068, 0.0600514288350784, 0.13982186386647, 
+0.261229560601213, 0.435622826467435, 0.682153612200419, 1.04084584125386, 
+1.61960915615195, 2.76456101386141), .Names = c("10%", "20%", 
+"30%", "40%", "50%", "60%", "70%", "80%", "90%"))
+      checkTrue(max(abs(sq-qtarg))<1e-6)
+      sqf = storeToQuantiles(store, "chisq", seq(.1,.9,.1), filter=dmfilt)
+
+      targ2 = structure(c(0.0237787672262377, 0.0989828833729177, 0.233430426470715, 
+0.434455200684701, 0.740987113540066, 1.1698714242342, 1.8634039013722, 
+3.05695105975853, 6.1302713856499), .Names = c("10%", "20%", 
+"30%", "40%", "50%", "60%", "70%", "80%", "90%"))
+      checkTrue(max(abs(sqf-targ2))<1e-6)
 
 }

@@ -14,6 +14,7 @@ storeToHist = function( store, getter =
    function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[,c("permScore_1",
             "permScore_2", "permScore_3")])), breaks, ids=NULL,
             filter=force ) {
+   if (missing(breaks)) stop("breaks must be supplied and must cover range of data")
    if (is.null(ids)) ids=store@validJobs
    tmp = bplapply(ids, function(x) {
       getter(loadAndFilterResult(reg=store@reg, id=x, filter=filter))
