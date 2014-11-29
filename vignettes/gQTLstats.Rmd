@@ -186,14 +186,27 @@ error in FDR interpolation.
 
 # Enumerating significant cis-eQTL in a store
 
-We can use the `FDRsupp` instances with `ciseStore`
-to list the SNP-probe pairs meeting specific FDR conditions.
+Recall that `dmfilt` is a function that obtains the
+SNP-probe pairs for which SNP has MAF at least five percent
+and SNP-probe distance at most 500kbp.
 
+We use the `FDRsupp` instances with `ciseStore`
+to list the SNP-probe pairs with FDR lying
+beneath a given upper bound.
+
+Unfiltered pairs:
 ```{r doenums,cache=TRUE}
 rawEnum = enumerateByFDR(prst, rawFDR, threshold=.05) 
-GenomicRanges::unlist(GRangesList(rawEnum))
+rawEnum[order(rawEnum$chisq,decreasing=TRUE)[1:3]]
+length(rawEnum)
+names(metadata(rawEnum))
+```
+
+Pairs meeting MAF and distance conditions.
+```{r dofenum,cache=TRUE}
 filtEnum = enumerateByFDR(prst, filtFDR, threshold=.05,
    filter=dmfilt) 
-GenomicRanges::unlist(GRangesList(filtEnum))
+filtEnum[order(filtEnum$chisq,decreasing=TRUE)[1:3]]
+length(filtEnum)
 ```
 

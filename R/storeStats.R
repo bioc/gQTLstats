@@ -51,8 +51,9 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
  yh[2:length(yh)] = yh.orig[-c(1,2)] # transfer
  oy = nperm*ntests - cumsum(yh) # how many perm scores exceed cuts in assoc score
  ncalls = ntests*(1-xprobs)
- fdr = oy/(nperm*ncalls)
- ans = data.frame(assoc=xq, fdr=pmin(1, fdr), ncalls=ncalls, avg.false=oy/nperm)
+ trimToUnit = function(x) pmax(0, pmin(1, x))
+ fdr = trimToUnit(oy/(nperm*ncalls))
+ ans = data.frame(assoc=xq, fdr=fdr, ncalls=ncalls, avg.false=oy/nperm)
  new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo(),
     filterUsed=filter)
 }
@@ -114,18 +115,21 @@ storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-
 }
 
 enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
-    filter=force) 
+    filter=force, ids=NULL, trimToUnit=TRUE) 
 {
     if (!is.function(getFDRfunc(fdrsupp))) {
        message("error: fdrsupp has no FDR interpolating function.")
        message("please add one using setFDRfunc().")
        stop("cannot find FDRfunc element in fdrsupp.")
        }
+    trimmer = force
+    if (trimToUnit) trimmer = function(x) pmax(0,pmin(1,x))
     selector = function(x) {
         x$estFDR = getFDRfunc(fdrsupp)(x$chisq)
+        x$estFDR = trimmer(x$estFDR)
         x[which(x$estFDR <= threshold)]
     }
-    ans = storeApply(store, function(x) filter(selector(x)))
+    ans = storeApply(store, function(x) filter(selector(x)), ids=ids)
     ans = unlist(GRangesList(unlist(ans,recursive=FALSE)))
     metadata(ans)$enumCall = match.call()
     metadata(ans)$enumSess = sessionInfo()
