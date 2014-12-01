@@ -218,7 +218,10 @@ filtEnum[order(filtEnum$chisq,decreasing=TRUE)[1:3]]
 length(filtEnum)
 ```
 
-# Annotating significant loci
+
+
+# Visualizing and annotating significant loci
+
 
 ## Re-binding probe annotation from SummarizedExperiment
 
@@ -237,6 +240,35 @@ mcols(filtEnum) = cbind(mcols(filtEnum), extr)
 stopifnot(all.equal(filtEnum$probeid, filtEnum$gene_id))
 filtEnum[1:3]
 ```
+## Static visualization of FDR patterns
+
+We have a utility to create an annotated Manhattan
+plot for a search cis to a gene.
+The basic ingredients are
+
+- a `ciseStore` instance for basic location and association information
+- a gene identifier that works for that store
+- an `FDRsupp` instance that includes the function that maps from association scores to FDR, and the filter employed during FDR estimation
+- an annotation resource; here we use ChromHMM labeling based on NA12878, in the `hmm878` GRanges instance in gQTLstats/data.
+
+It is important to recognize that, given
+an `FDRsupp` instance we can compute the FDR for any
+association score, but validity of the
+FDR attribution requires that we refrain
+from computing it for any locus excluded by filtering.
+the `manhW878` executes the `FDRsupp`-resident filter
+by default.
+
+```{r lkscores,fig=TRUE}
+data(hmm878)
+library(geuvStore)
+prst = ciseStore(partialRegistry(), TRUE, FALSE)
+myg = "ENSG00000183814.10" # LIN9
+data(filtFDR)
+library(ggplot2)
+manhW878( store = prst, probeid = myg, sym="LIN9",
+  fdrsupp=filtFDR )
+```
 
 ## Basic structural variant annotation
 
@@ -244,11 +276,14 @@ We can use `r Biocpkg("VariantAnnotation")` to establish
 basic structural characteristics for all filtered variants.
 
 ```{r dovaranno,cache=TRUE}
+suppressPackageStartupMessages({
 library(VariantAnnotation)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+})
 txdb = TxDb.Hsapiens.UCSC.hg19.knownGene
 seqlevelsStyle(filtEnum) = "UCSC"
 allv = locateVariants(filtEnum, txdb, AllVariants()) # multiple recs per eQTL 
+table(allv$LOCATION)
 hits = findOverlaps( filtEnum, allv )
 filtEex = filtEnum[ queryHits(hits) ]
 mcols(filtEex) = cbind(mcols(filtEex), mcols(allv[subjectHits(hits)])[,1:7])
