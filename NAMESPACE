@@ -20,7 +20,7 @@ export( storeToQuantiles,  storeToHist, storeToFDR,
 exportClasses("FDRsupp")
 export(getFDRfunc, getTab, setFDRfunc, directPlot,
        txsPlot, eqBox2, eqDesc2, enumerateByFDR, gmod2,
-	manhW878)
+	manhWngr)
 
 importFrom(BiocGenerics, width)
 

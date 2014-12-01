@@ -131,7 +131,14 @@ enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
         x[which(x$estFDR <= threshold)]
     }
     ans = storeApply(store, function(x) filter(selector(x)), ids=ids)
-    ans = unlist(GRangesList(unlist(ans,recursive=FALSE)))
+#
+# it is possible that an empty range will result, if no pair
+# has sufficiently low FDR
+#
+    ul = unlist(ans, recursive=FALSE)
+    zl = sapply(ul,length)
+    if (any(zl==0)) ul=ul[-which(zl==0)]
+    ans = unlist(GRangesList(ul))
     metadata(ans)$enumCall = match.call()
     metadata(ans)$enumSess = sessionInfo()
     metadata(ans)$fdrCall = fdrsupp@theCall

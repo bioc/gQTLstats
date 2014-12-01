@@ -267,7 +267,7 @@ myg = "ENSG00000183814.10" # LIN9
 data(filtFDR)
 library(ggplot2)
 manhW878( store = prst, probeid = myg, sym="LIN9",
-  fdrsupp=filtFDR )
+  fdrsupp=filtFDR, namedGR=hmm878 )
 ```
 
 ## Basic structural variant annotation
