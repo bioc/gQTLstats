@@ -45,6 +45,9 @@ We work with a `ciseStore` instance based on a small subset
 of transcriptome-wide cis-eQTL tests for GEUVADIS FPKM data.
 ```{r setup,echo=FALSE}
 suppressPackageStartupMessages({
+library(GenomicRanges)
+library(Homo.sapiens)
+library(org.Hs.eg.db)
 library(geuvStore)
 library(gQTLBase)
 library(gQTLstats)
