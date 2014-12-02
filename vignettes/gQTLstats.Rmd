@@ -256,7 +256,7 @@ an `FDRsupp` instance we can compute the FDR for any
 association score, but validity of the
 FDR attribution requires that we refrain
 from computing it for any locus excluded by filtering.
-the `manhW878` executes the `FDRsupp`-resident filter
+the `manhWngr` executes the `FDRsupp`-resident filter
 by default.
 
 ```{r lkscores,fig=TRUE}
@@ -266,7 +266,7 @@ prst = ciseStore(partialRegistry(), TRUE, FALSE)
 myg = "ENSG00000183814.10" # LIN9
 data(filtFDR)
 library(ggplot2)
-manhW878( store = prst, probeid = myg, sym="LIN9",
+manhWngr( store = prst, probeid = myg, sym="LIN9",
   fdrsupp=filtFDR, namedGR=hmm878 )
 ```
 
