@@ -1,13 +1,14 @@
 Package: gQTLstats
 Title: gQTLstats: computationally efficient analysis for eQTL and allied studies
-Version: 0.1.12
+Version: 0.1.13
 Author: VJ Carey <stvjc@channing.harvard.edu>
 Description: computationally efficient analysis of eQTL, mQTL, dsQTL, etc.
 Suggests: geuvPack, geuvStore, Rsamtools, knitr, rmarkdown, ggbio
 Depends: R (>= 3.1.0)
 Imports: snpStats, GenomicRanges, VariantAnnotation, methods, Biobase,
 	BiocParallel, BatchJobs, gQTLBase, GenomeInfoDb, S4Vectors, limma,
-	BiocGenerics, gam
+	BiocGenerics, gam, dplyr, AnnotationDbi, Homo.sapiens, IRanges,
+	GenomicFeatures, ggplot2
 Maintainer: VJ Carey <stvjc@channing.harvard.edu>
 License: Artistic-2.0
 LazyLoad: yes

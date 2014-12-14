@@ -76,7 +76,12 @@ reduceResults could be used for a sequential solution
 }
 \value{
 storeToQuantiles and storeToHist return objects analogous
-to those returned by stats::quantile and graphics::hist
+to those returned by stats::quantile and graphics::hist.
+
+However, it should be noted that storeToQuantiles will use
+the \code{\link[ffbase]{quantile.ff}} of ffbase.  For
+vectors of modest length, this can disagree with results of
+base::quantile by a few percent.
 
 storeToFDR and storeToFDRByProbe return an instance of
 FDRsupp class

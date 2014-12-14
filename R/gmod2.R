@@ -10,7 +10,7 @@ gmod2 = function (sym, genome = "hg19", orgDb=Homo.sapiens,
     require(deparse(substitute(orgDb)), character.only=TRUE)
     })
     txdb = get(txn)
-    num = select(orgDb, keys=sym, keytype="SYMBOL", 
+    num = AnnotationDbi::select(orgDb, keys=sym, keytype="SYMBOL", 
           columns="ENTREZID")$ENTREZID
     collector(txdb, by = "gene")[[num]]
 }

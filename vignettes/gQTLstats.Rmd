@@ -301,29 +301,35 @@ The following tasks need to be addressed in the modeling
 of phenorelevance
 
 - Definition of outcome for a variant.  In this example we consider identification of a variant as an NHGRI GWAS catalog hit.
-- Definition of variant context.  In this example we use ChromHMM states for NA12878, along with other information assembled in the store on MAF and distance
+- Definition of variant context.  In this example we use Broad Institute
+ChromHMM states for NA12878, along with other information assembled in the store on MAF and distance
 - Definition of the statistical model.  We consider logistic regression modeling of the probability that a variant is a GWAS hit, employing LD-pruned variants only.
 - Identification of a tractable approach to fitting and evaluating the statistical model.  We'll use a test-train framework.
 
 ## Visiting variants and updating with the relevant context and outcomes
 
-```{r defineUpdate}
-updateJob = function(store, id) {
- if (!exists("hmm878")) data(hmm878)
- library(gwascat)
- if (!exists("gwrngs19")) data(gwrngs19)
- seqlevelsStyle(hmm878) = "NCBI"
- seqlevelsStyle(gwrngs19) = "NCBI"
- tmp = loadResult(store@reg, id)
- tmp$isGwasHit = 1*(tmp %in% gwrngs19)
- levs = unique(hmm878$name)
- tmp$hmmState = factor(rep("13_Heterochrom/lo", length(tmp)),levels=levs)
- ov = findOverlaps(tmp, hmm878)
- tmp$hmmState[ queryHits(ov) ] = factor(hmm878$name[ subjectHits(ov) ],
-   levels=levs)
- tmp
-}
-#updateJob(prst, 1)
+We will make a temporary reconstruction of geuvStore
+contents with the enhanced information.
 
+```{r rebuildG}
+library(BatchJobs)
+inireg = prst@reg
+reg2 = makeRegistry("decoG", file.dir=tempfile(),
+  packages=c("BatchJobs", "gwascat", "gQTLstats", "gQTLBase",
+             "GenomeInfoDb", "GenomicRanges"))
+batchMapResults(inireg, reg2, function(job, res, ...) {
+  data(hmm878)
+  if (!exists("gwrngs19")) data(gwrngs19)
+  seqlevelsStyle(hmm878) = "NCBI"
+  seqlevelsStyle(gwrngs19) = "NCBI"
+  tmp = res
+  tmp$isGwasHit = 1*(tmp %in% gwrngs19)
+  levs = unique(hmm878$name)
+  tmp$hmmState = factor(rep("13_Heterochrom/lo", length(tmp)),levels=levs)
+  ov = findOverlaps(tmp, hmm878)
+  tmp$hmmState[ queryHits(ov) ] = factor(hmm878$name[ subjectHits(ov) ],
+    levels=levs)
+  as(tmp, "data.frame")
+  })
 ```
 

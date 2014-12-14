@@ -3,20 +3,27 @@ import(methods)
 importFrom(limma, lmFit)
 importFrom(gam, gam, lo)
 
+importFrom(AnnotationDbi, select)
+importFrom(IRanges, "%over%", nearest)
+
+importFrom(GenomicFeatures, transcriptsBy)
+importFrom(ggplot2, ggplot, aes, geom_point, xlab, ylab)
+
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importFrom(GenomicRanges, unlist, rowData, exptData, 
    "exptData<-", assays,
    "assays<-", colData, GRangesList, assay, mcols,
    "mcols<-", "assay<-")
 
-importFrom(GenomeInfoDb, seqnames, seqlevels, "seqlevels<-")
+importFrom(GenomeInfoDb, seqnames, seqlevels, "seqlevels<-",
+  "seqlevelsStyle<-")
 
 importFrom(gQTLBase, storeToFf, loadAndFilterResult, ciseStore,
-	storeApply)
+	storeApply, extractByProbes)
 
 export(cisAssoc, clipPCs, regressOut) #, pifdr)
 export( storeToQuantiles,  storeToHist, storeToFDR,
-     storeToFDRByProbe )
+     storeToFDRByProbe)
 exportClasses("FDRsupp")
 export(getFDRfunc, getTab, setFDRfunc, directPlot,
        txsPlot, eqBox2, eqDesc2, enumerateByFDR, gmod2,
@@ -37,3 +44,6 @@ importFrom(BatchJobs, batchMapResults, makeRegistry, submitJobs,
 importFrom(snpStats, snp.rhs.tests, col.summary, chi.squared)
 
 importFrom(S4Vectors, metadata, "metadata<-")
+
+importFrom(dplyr, filter, select, group_by, summarize, "%>%",
+  rbind_all)

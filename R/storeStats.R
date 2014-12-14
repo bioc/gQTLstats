@@ -70,7 +70,7 @@ addFDRmodel = function(supp, m) {
   supp
 }
  
-maxByProbe = function (job, res, filter)
+.maxByProbe = function (job, res, filter)
 {
     cur = filter(res)
     sr = split(cur, cur$probeid)
@@ -85,6 +85,15 @@ maxByProbe = function (job, res, filter)
     unlist(GRangesList(tmpp))
 }
 
+maxByProbe = function (job, res, filter)
+{
+    as(filter(res), "data.frame") %>% dplyr::select(snp, probeid,
+           chisq, permScore_1, permScore_2, permScore_3,
+           seqnames, start) %>% group_by(probeid) %>%
+      summarize(chisq=max(chisq), permScore_1=max(permScore_1),
+            permScore_2=max(permScore_2), permScore_3=max(permScore_3))
+}
+
 storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     1e-05, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
@@ -95,7 +104,7 @@ storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-
     suppressMessages({
     newreg = makeRegistry("byp", file.dir=tf)
     batchMapResults( store@reg, newreg, ids=store@validJobs,
-       fun=function(job, res, filter) maxByProbe(job, res, filter), 
+       fun=function(job, res, filter) .maxByProbe(job, res, filter), 
        more.args=list(filter=filter) )
     submitJobs( newreg )#, store@validJobs )
     waitForJobs( newreg )
@@ -145,3 +154,44 @@ enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
     ans
 }
 
+dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
+    1e-06, 1e-06, 1e-07))), xfield = "chisq",
+    getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
+       c("permScore_1", "permScore_2", "permScore_3")])), nperm=3,
+    filter=force) {
+#
+# when in-memory is OK
+#
+# data.frame method
+ theCall = match.call()
+ dfr = filter(dfr)
+ stopifnot("chisq" %in% names(dfr))
+ message("counting tests...")
+ ntests = sum(!is.na(dfr$chisq))
+ message("counting #NA...")
+ nna = sum(is.na(dfr$chisq))
+ ntests = ntests - nna
+ message("obtaining assoc quantiles...")
+ xq = quantile(dfr$chisq, probs=xprobs) # storeToQuantiles(store, field=xfield, probs=xprobs, filter=filter) # nxq
+ message("computing perm_assoc histogram....")
+ yh.orig = hist( c(dfr$permScore_1, dfr$permScore_2, dfr$permScore_3), breaks=c(0,xq,1e10), plot=FALSE)$counts   #storeToHist(store, getter=getter, breaks=c(0,xq,1e10), filter=filter)$counts # nxq+2
+ yh = numeric(length(yh.orig)-1)
+ yh[1] = yh.orig[1] + yh.orig[2]  # fuse first 2 elements for left boundary
+ yh[2:length(yh)] = yh.orig[-c(1,2)] # transfer
+ oy = nperm*ntests - cumsum(yh) # how many perm scores exceed cuts in assoc score
+ ncalls = ntests*(1-xprobs)
+ trimToUnit = function(x) pmax(0, pmin(1, x))
+ fdr = trimToUnit(oy/(nperm*ncalls))
+ ans = data.frame(assoc=xq, fdr=fdr, ncalls=ncalls, avg.false=oy/nperm)
+ new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo(),
+    filterUsed=filter)
+}
+
+storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
+    1e-05, 1e-06, 1e-07))), xfield = "chisq",
+       nperm=3, filter=force) {
+    maxbp = unlist(storeApply(store, function(x) {
+       maxByProbe(1, filter(x), force) }), recursive=FALSE)
+    maxbp = rbind_all(maxbp)  # note filter was already applied
+    dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
+}
