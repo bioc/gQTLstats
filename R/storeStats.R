@@ -94,6 +94,18 @@ maxByProbe = function (job, res, filter)
             permScore_2=max(permScore_2), permScore_3=max(permScore_3))
 }
 
+maxBySNP = function (job, res, filter)
+{
+#
+# you probably need to use ffdf for this...
+#
+    as(filter(res), "data.frame") %>% dplyr::select(snp, probeid,
+           chisq, permScore_1, permScore_2, permScore_3,
+           seqnames, start) %>% group_by(snp) %>%
+      summarize(chisq=max(chisq), permScore_1=max(permScore_1),
+            permScore_2=max(permScore_2), permScore_3=max(permScore_3))
+}
+
 storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     1e-05, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
@@ -187,11 +199,38 @@ dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     filterUsed=filter)
 }
 
-storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
-    1e-05, 1e-06, 1e-07))), xfield = "chisq",
-       nperm=3, filter=force) {
+storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
+       xfield = "chisq", nperm=3, filter=force) {
     maxbp = unlist(storeApply(store, function(x) {
        maxByProbe(1, filter(x), force) }), recursive=FALSE)
     maxbp = rbind_all(maxbp)  # note filter was already applied
     dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
+}
+
+storeToFDRBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
+    xfield = "chisq", nperm=3, filter=force) {
+    if (length(store@rangeMap)==0) stop("please use a store with valid rangeMap component.")
+    rmap = store@rangeMap
+    ac = as.character
+    jobsToDo = as.integer(rmap[ which(ac(seqnames(rmap))==ac(chr)) ]$jobid)
+    stopifnot(length(jobsToDo)>0)
+    maxbsByJob = unlist(storeApply(store, function(x) {
+       maxBySNP(1, filter(x), force) }, ids=jobsToDo ), recursive=FALSE)
+ #   maxbp = rbind_all(maxbsByJob)  # note filter was already applied
+ #  here you need to group by once more and max by snp
+ #   maxbp  #dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
+ #   aggr = maxbsByJob[[1]]
+ #   for (i in 2:length(maxbsByJob)) {
+ #       cat(i)
+ #       aggr = rbind( aggr, maxbsByJob[[i]] )
+ #       }
+    message("binding all jobs")
+    aggr = do.call(rbind, maxbsByJob)
+    message("group by and max")
+    aggr = (aggr %>% group_by(snp) %>%
+               summarize( chisq = max(chisq),
+                 permScore_1 = max(permScore_1),
+                 permScore_2 = max(permScore_2),
+                 permScore_3 = max(permScore_3)))
+    dfrToFDR( aggr, xprobs = xprobs, xfield=xfield )
 }
