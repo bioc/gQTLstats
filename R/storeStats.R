@@ -207,8 +207,9 @@ storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
     dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
 }
 
-storeToFDRBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
+storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
     xfield = "chisq", nperm=3, filter=force) {
+    stopifnot(is.atomic(chr) & length(chr)==1)
     if (length(store@rangeMap)==0) stop("please use a store with valid rangeMap component.")
     rmap = store@rangeMap
     ac = as.character
@@ -227,10 +228,11 @@ storeToFDRBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
     message("binding all jobs")
     aggr = do.call(rbind, maxbsByJob)
     message("group by and max")
-    aggr = (aggr %>% group_by(snp) %>%
+    # after collecting, use
+    #dfrToFDR( aggr, xprobs = xprobs, xfield=xfield )
+    aggr %>% group_by(snp) %>%
                summarize( chisq = max(chisq),
                  permScore_1 = max(permScore_1),
                  permScore_2 = max(permScore_2),
-                 permScore_3 = max(permScore_3)))
-    dfrToFDR( aggr, xprobs = xprobs, xfield=xfield )
+                 permScore_3 = max(permScore_3))
 }

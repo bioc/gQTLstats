@@ -23,7 +23,7 @@ importFrom(gQTLBase, storeToFf, loadAndFilterResult, ciseStore,
 
 export(cisAssoc, clipPCs, regressOut) #, pifdr)
 export( storeToQuantiles,  storeToHist, storeToFDR,
-     storeToFDRByProbe, storeToFDRBySNP)
+     storeToFDRByProbe, storeToMaxAssocBySNP)
 exportClasses("FDRsupp")
 export(getFDRfunc, getTab, setFDRfunc, directPlot,
        txsPlot, eqBox2, eqDesc2, enumerateByFDR, gmod2,
