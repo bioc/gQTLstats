@@ -43,6 +43,11 @@ packages.
 
 We work with a `ciseStore` instance based on a small subset
 of transcriptome-wide cis-eQTL tests for GEUVADIS FPKM data.
+The overall testing procedure was conducted for all SNP:probe
+pairs for which SNP minor allele frequency (MAF) is
+at least 1\% and for which the minimum distance between SNP and
+either boundary of the gene coding region
+for the probe is at most 1 million bp.
 ```{r setup,echo=FALSE}
 suppressPackageStartupMessages({
 library(GenomicRanges)
@@ -137,10 +142,10 @@ the score:FDR relationship.
 ## Estimates of FDR at the probe level
 
 The `storeToFDRByProbe` FDR function examines the maximal association score
-by gene, for observed and permuted measures.  These functions
-can be slow, as they involve mapping the original set of
-jobs through a best-SNP-per-probe selection process for the observed
-and permuted scores.  Concurrent computing capabilities of
+by gene, for observed and permuted measures.  
+Good performance of this procedure is obtained by using
+`group_by` and `summarize` utilities of \CRANpkg{dplyr}.
+Concurrent computing capabilities of
 BatchJobs are employed when available.  You will need suitable contents
 for `.BatchJobs.R` and any scheduler-dependent template files to
 take advantage of this.
