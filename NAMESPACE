@@ -7,7 +7,7 @@ importFrom(AnnotationDbi, select)
 importFrom(IRanges, "%over%", nearest)
 
 importFrom(GenomicFeatures, transcriptsBy)
-importFrom(ggplot2, ggplot, aes, geom_point, xlab, ylab)
+importFrom(ggplot2, ggplot, aes, geom_point, xlab, ylab, facet_grid)
 
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importFrom(GenomicRanges, unlist, rowData, exptData, 
