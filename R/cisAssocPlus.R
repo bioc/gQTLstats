@@ -7,16 +7,25 @@ sampsInVCF = function(tf) {
  samples(scanVcfHeader(tf))
 }
 
-snvsOnly = function(v) {
+#snvsOnly = function(v) {
 #
 # confine VCF instance to loci with single nucleotide REF and ALT
 #
-  v[ width(ref(v)) == 1 & width(GenomicRanges::unlist(alt(v)))==1, ]
-  }
+# 12/25 use new utility
+#  v[ width(ref(v)) == 1 & width(GenomicRanges::unlist(alt(v)))==1, ]
+#  v[ which(isSNV(v)), ] -- seems unduly limited
+#   ev = expand(v)
+#   ev[ which(width(ref(ev))==1 & nchar(alt(ev))==1), ] 
+#  }
 
 
 cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000, 
-    genome="hg19", assayind=1, lbmaf=1e-6, dropUnivHet=TRUE ) {
+    genome="hg19", assayind=1, lbmaf=1e-6, dropUnivHet=TRUE,
+    infoFields = c("LDAF", "SVTYPE") ) {
+#
+# LDAF is concession to bug in readVcf where specifying only SVTYPE
+# leads to error on 1KG VCF data
+#
  #
  # take all features from SummarizedExperiment
  # harmonize samples between summex and vcf.tf (TabixFile)
@@ -46,14 +55,32 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  #
  # first pass at genotype data retrieval
  #
- vp = ScanVcfParam(fixed="ALT", info=NA, geno="GT", 
+ vp = ScanVcfParam(fixed="ALT", info=infoFields, geno="GT", 
      samples=oksamp, which=cisr)  # which will sort variants into groups defined by probes
  vdata = readVcf(vcf.tf, genome=genome, param=vp) # compressed
  #
  # retain only SNVs with MAF > lbmaf
- #
- rdd = rowData(vdata)
- vdata = snvsOnly(vdata)
+ # 12/26/2014 -- the exclusion of non-SNVs has become complex
+ # we introduce attempt to capture SVTYPE field above.  this may need
+ # to be moved up to interface
+ svinfo = info(vdata)$SVTYPE
+ if (length(svinfo)>0) {
+   ok = which(is.na(svinfo))
+   vdata = vdata[ok,]
+#
+# but the example extract has an ALT entry of <DEL> for which SVTYPE is NA
+#
+   ael = elementLengths(alt(vdata))
+   vdata = vdata[ which(ael==1), ]
+   stopifnot(length(alt(vdata)) == length(unlist(alt(vdata))))
+   todrop = which(!(unlist(alt(vdata)) %in% c("A", "C", "T", "G")))
+   if (length(todrop)>0) vdata = vdata[-todrop,]
+   tmpalt = try( DNAStringSetList(alt(vdata)) )
+   if (inherits( tmpalt, "try-error" )) stop("attempt to reclass ALT fails after SV exclusion")
+   alt(vdata) = tmpalt
+   }
+ nonSNV = which(!isSNV(vdata))
+ if (length(nonSNV)>0) vdata = vdata[-nonSNV,]
  gtdata = genotypeToSnpMatrix(vdata)
  uhetinds = NULL
  if (dropUnivHet) {

@@ -27,6 +27,7 @@ storeToHist = function( store, getter =
       return(tmp)
       }
    ans = tmp[[1]]
+   if (length(tmp)==1) return(ans)
    for (i in 2:length(tmp)) ans$counts = ans$counts + tmp[[i]]$counts
    ans
 }

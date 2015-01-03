@@ -23,8 +23,9 @@ manhWngr = function( store, probeid="ENSG00000183814.10",
  genem$ml10fdr = -.25 # FAKE
  okn = intersect(names(df), names(genem))
  df2 = rbind( df[,okn], genem[,okn] )
+ xlab2 = paste0( xlab.in, " (", genem$seqnames[1], ")")
  ggplot( data=df2, aes(y=ml10fdr, x=start, colour=lab)) + 
-     geom_point() + xlab(xlab.in) + ylab(ylab.in)
+     geom_point() + xlab(xlab2) + ylab(ylab.in)
 }
 
 

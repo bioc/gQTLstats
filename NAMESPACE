@@ -48,5 +48,5 @@ importFrom(S4Vectors, metadata, "metadata<-")
 importFrom(dplyr, filter, select, group_by, summarize, "%>%",
   rbind_all)
 
-export( table.sensobj.thresh )
+export( table.sensobj.thresh, queryVCF )
 S3method( plot, table.sensobj )
