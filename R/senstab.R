@@ -17,7 +17,7 @@ require(reshape2)
 mm = melt(dfr, id.vars=c("MAF", "radius"))
 vind = which(names(mm) == "variable")
 names(mm)[vind] = "criterion"
-ggplot(mm, aes(x=MAF, y=value, shape=variable)) + geom_point() +
+ggplot(mm, aes(x=MAF, y=value, shape=criterion)) + geom_point() +
   facet_grid(~radius) + 
   ylab("genes with significant eQTL at given FDR after filtering") + 
   xlab("upper bound on MAF") + ggtitle("cis radius (bp)") +
