@@ -226,6 +226,19 @@ filtEnum[order(filtEnum$chisq,decreasing=TRUE)[1:3]]
 length(filtEnum)
 ```
 
+# Sensitivity analysis for eQTL enumeration
+
+The yield of an enumeration procedure depends on filtering
+based on SNP-gene distance and SNP MAF.  This can be illustrated
+as follows, with minimal computational effort owing to the
+retention of genome-scale permutations and the use of the plug-in
+FDR algorithm.
+
+```{r dosens,fig=TRUE}
+data(sensByProbe) # see example(senstab) for construction approach
+tab = senstab( sensByProbe )
+plot(tab)
+```
 
 
 # Visualizing and annotating significant loci
@@ -315,26 +328,5 @@ ChromHMM states for NA12878, along with other information assembled in the store
 
 We will make a temporary reconstruction of geuvStore
 contents with the enhanced information.
-
-```{r rebuildG}
-library(BatchJobs)
-inireg = prst@reg
-reg2 = makeRegistry("decoG", file.dir=tempfile(),
-  packages=c("BatchJobs", "gwascat", "gQTLstats", "gQTLBase",
-             "GenomeInfoDb", "GenomicRanges"))
-batchMapResults(inireg, reg2, function(job, res, ...) {
-  data(hmm878)
-  if (!exists("gwrngs19")) data(gwrngs19)
-  seqlevelsStyle(hmm878) = "NCBI"
-  seqlevelsStyle(gwrngs19) = "NCBI"
-  tmp = res
-  tmp$isGwasHit = 1*(tmp %in% gwrngs19)
-  levs = unique(hmm878$name)
-  tmp$hmmState = factor(rep("13_Heterochrom/lo", length(tmp)),levels=levs)
-  ov = findOverlaps(tmp, hmm878)
-  tmp$hmmState[ queryHits(ov) ] = factor(hmm878$name[ subjectHits(ov) ],
-    levels=levs)
-  as(tmp, "data.frame")
-  })
-```
-
+ 
+<!-- was rebuildG -->
