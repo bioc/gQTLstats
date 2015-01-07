@@ -11,10 +11,8 @@ senstab = function(x, filt=force) {
  ans
 }
 
-plot.senstab = function(dfr) {
-require(ggplot2)
-require(reshape2)
-mm = melt(dfr, id.vars=c("MAF", "radius"))
+plot.senstab = function(x, ...) {
+mm = melt(x, id.vars=c("MAF", "radius"))
 vind = which(names(mm) == "variable")
 names(mm)[vind] = "criterion"
 ggplot(mm, aes(x=MAF, y=value, shape=criterion)) + geom_point() +

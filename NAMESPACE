@@ -8,6 +8,7 @@ importFrom(IRanges, "%over%", nearest)
 
 importFrom(GenomicFeatures, transcriptsBy)
 importFrom(ggplot2, ggplot, aes, geom_point, xlab, ylab, facet_grid)
+importFrom(reshape2, melt)
 
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importFrom(GenomicRanges, unlist, rowData, exptData, 

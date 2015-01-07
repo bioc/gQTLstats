@@ -173,7 +173,8 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  varrd
 }
 
-SnpMatrixCisToSummex = function(summex, vcf.tf,
+# use queryVCF
+.SnpMatrixCisToSummex = function(summex, vcf.tf,
    radius=50000L, genome="hg19") {
     usn = unique(seqnames(summex))
     if (length(usn) > 1) 
@@ -191,7 +192,7 @@ SnpMatrixCisToSummex = function(summex, vcf.tf,
         samples = oksamp, which = cisr)
     vdata = readVcf(vcf.tf, genome = genome, param = vp)
     rdd = rowData(vdata)
-    vdata = snvsOnly(vdata)
+#    vdata = snvsOnly(vdata) -- dead function
     genotypeToSnpMatrix(vdata)
 }
 

@@ -8,7 +8,7 @@ Depends: R (>= 3.1.0)
 Imports: snpStats, GenomicRanges, VariantAnnotation, methods, Biobase,
 	BiocParallel, BatchJobs, gQTLBase, GenomeInfoDb, S4Vectors, limma,
 	BiocGenerics, gam, dplyr, AnnotationDbi, Homo.sapiens, IRanges,
-	GenomicFeatures, ggplot2
+	GenomicFeatures, ggplot2, reshape2
 Maintainer: VJ Carey <stvjc@channing.harvard.edu>
 License: Artistic-2.0
 LazyLoad: yes
