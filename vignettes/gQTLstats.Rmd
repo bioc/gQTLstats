@@ -5,14 +5,14 @@ title: "gQTLstats: computationally efficient analysis and
 author: "Vincent J. Carey, stvjc at channing.harvard.edu"
 date: "November 2014"
 output:
-  BiocStyle::pdf_document:
-    toc: yes
-    number_sections: yes
   BiocStyle::html_document:
     highlight: pygments
     number_sections: yes
     theme: united
     toc: yes
+  BiocStyle::pdf_document:
+    toc: yes
+    number_sections: yes
 ---
 
 <!--
