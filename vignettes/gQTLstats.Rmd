@@ -240,6 +240,19 @@ tab = senstab( sensByProbe )
 plot(tab)
 ```
 
+If we wish to maximize the yield of eQTL enumeration at FDR at
+most 0.05, we can apply a filter to the store.
+
+```{r counts,cache=TRUE}
+flens = storeApply( prst, function(x) {
+    length(x[ which(x$MAF >= .08 & x$mindist <= 25000), ] )
+})
+```{r lklen}
+sum(unlist(flens))
+```
+This is a count of gene-snp pairs satisfying structural and
+genetic criteria.
+
 
 # Visualizing and annotating significant loci
 
@@ -290,6 +303,9 @@ library(ggplot2)
 manhWngr( store = prst, probeid = myg, sym="LIN9",
   fdrsupp=filtFDR, namedGR=hmm878 )
 ```
+
+For a dynamic visualization procedure, see the
+vjcitn/gQTLbrowse github archive.
 
 ## Basic structural variant annotation
 

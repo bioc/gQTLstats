@@ -1,6 +1,7 @@
 \name{senstab}
 \alias{senstab}
 \alias{plot.senstab}
+\alias{sensByProbe}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 create a plottable table for eQTL sensitivity analysis visualization
@@ -23,7 +24,9 @@ a function that operates on and returns a data.frame; typically
 will select rows based on values of fields 'MAF' and 'radius'}
 }
 \details{
-See extensive non-executed code in example below
+\code{sensByProbe} is a list structure; for information on this and
+other elements of sensitivity analysis workflow,
+see extensive non-executed code in example below
 }
 \value{
 an instance of the S3 class 'senstab', 'data.frame'
@@ -87,6 +90,7 @@ submitJobs(sens1)
 # now loadResult(sens1) or the equivalent can be the input to senstab()
 # as in the example to continue here:
 }
+library(gQTLstats)
 data(sensByProbe)
 ptab = t(sapply(sensByProbe, function(x)as.numeric(x[[2]])))
 unique(ptab[,1]) # MAFs used

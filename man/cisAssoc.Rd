@@ -12,7 +12,7 @@ and SummarizedExperiment representations
 cisAssoc(summex, vcf.tf, rhs = ~1, 
    nperm = 3, cisradius = 50000, 
    genome = "hg19", assayind = 1, lbmaf = 1e-06,
-   dropUnivHet = TRUE)
+   dropUnivHet = TRUE, infoFields = c("LDAF", "SVTYPE"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -49,6 +49,7 @@ logical, if TRUE, will check for columns of SnpMatrix instance
 that possess no values other than "NA" and "A/B".
 See \url{http://www.biostars.org/p/117155/#117270}
 }
+  \item{infoFields}{character -- VCF fields to retain in vcfInfo() part of query}
 }
 \details{
 \code{\link[snpStats]{snp.rhs.tests}} is the 
