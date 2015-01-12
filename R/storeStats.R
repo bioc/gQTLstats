@@ -100,12 +100,12 @@ maxBySNP = function (job, res, filter)
 #
 # you probably need to use ffdf for this...
 #
-    as(filter(res), "data.frame") %>% dplyr::select(snp, probeid,
+    as(filter(res), "data.frame") %>% dplyr::select(snp, probeid, MAF,
            chisq, permScore_1, permScore_2, permScore_3,
            seqnames, start) %>% group_by(snp) %>%
       summarize(chisq=max(chisq), permScore_1=max(permScore_1),
             permScore_2=max(permScore_2), permScore_3=max(permScore_3),
-            seqnames=nth(seqnames,1), start=nth(start,1))  # last 2 const within SNP
+            seqnames=nth(seqnames,1), start=nth(start,1), MAF=nth(MAF,1))  # last 3 const within SNP
 }
 
 storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
@@ -237,9 +237,10 @@ storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
                  permScore_1 = max(permScore_1),
                  permScore_2 = max(permScore_2),
                  permScore_3 = max(permScore_3),
-                 start=nth(start,1), seqnames=nth(seqnames,1))
+                 start=nth(start,1), seqnames=nth(seqnames,1),
+                 MAF = max(MAF))
     GRanges(seqnames=ans$seqnames, IRanges(ans$start, width=1),  # to allow standard 'store' ops
              chisq=ans$chisq, permScore_1=ans$permScore_1,
              permScore_2=ans$permScore_2,
-             permScore_3=ans$permScore_3, snp=ans$snp)
+             permScore_3=ans$permScore_3, snp=ans$snp, MAF=ans$MAF)
 }
