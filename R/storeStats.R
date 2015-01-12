@@ -95,17 +95,30 @@ maxByProbe = function (job, res, filter)
             permScore_2=max(permScore_2), permScore_3=max(permScore_3))
 }
 
-maxBySNP = function (job, res, filter)
+maxBySNP = function (job, res, resfilter)
 {
 #
 # you probably need to use ffdf for this...
 #
-    as(filter(res), "data.frame") %>% dplyr::select(snp, probeid, MAF,
-           chisq, permScore_1, permScore_2, permScore_3,
-           seqnames, start) %>% group_by(snp) %>%
-      summarize(chisq=max(chisq), permScore_1=max(permScore_1),
+    ans = as(resfilter(res), "data.frame") %>% dplyr::select(snp, probeid, MAF,
+           chisq, permScore_1, permScore_2, permScore_3, mindist,
+           seqnames, start) %>% group_by(snp) %>% arrange(desc(chisq),snp) %>%
+           summarize(chisq=max(chisq), permScore_1=max(permScore_1),
             permScore_2=max(permScore_2), permScore_3=max(permScore_3),
-            seqnames=nth(seqnames,1), start=nth(start,1), MAF=nth(MAF,1))  # last 3 const within SNP
+            seqnames=nth(seqnames,1), start=nth(start,1), MAF=nth(MAF,1),
+            probeid=nth(probeid,1), mindist=nth(mindist,1))
+#    schis = split( res$chisq, res$snp )
+#    maxinds = sapply(schis, which.max)
+#    sprs = split( res$probeid, res$snp )
+#    sds = split( res$mindist, res$snp )
+#    mind = pids = rep(NA, length(sds))
+#    for (i in 1:length(schis)) {
+#          mind[i] = sds[[i]][ maxinds[i] ]
+#          pids[i] = sprs[[i]][ maxinds[i] ]
+#          }
+#    ans$mindist = mind
+#    ans$probeid = pids
+    ans
 }
 
 storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
@@ -210,7 +223,7 @@ storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
 }
 
 storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
-    xfield = "chisq", nperm=3, filter=force) {
+    xfield = "chisq", nperm=3, resfilter=force) {
     stopifnot(is.atomic(chr) & length(chr)==1)
     if (length(store@rangeMap)==0) stop("please use a store with valid rangeMap component.")
     rmap = store@rangeMap
@@ -218,7 +231,7 @@ storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
     jobsToDo = as.integer(rmap[ which(ac(seqnames(rmap))==ac(chr)) ]$jobid)
     stopifnot(length(jobsToDo)>0)
     maxbsByJob = unlist(storeApply(store, function(x) {
-       maxBySNP(1, filter(x), force) }, ids=jobsToDo ), recursive=FALSE)
+       maxBySNP(1, resfilter(x), force) }, ids=jobsToDo ), recursive=FALSE)
  #   maxbp = rbind_all(maxbsByJob)  # note filter was already applied
  #  here you need to group by once more and max by snp
  #   maxbp  #dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
@@ -227,20 +240,38 @@ storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
  #       cat(i)
  #       aggr = rbind( aggr, maxbsByJob[[i]] )
  #       }
-    message("binding all jobs")
+    message("binding all jobs")  # SNPs may occupy different jobs so another agg
     aggr = do.call(rbind, maxbsByJob)
+#    inr = nrow(aggr)
+#    message("finish persnp summ.")
+#    schis = split( aggr$chisq, aggr$snp )
+#    maxinds = sapply(schis, which.max)
+#    sprs = split( aggr$probeid, aggr$snp )
+#    sds = split( aggr$mindist, aggr$snp )
+#    mind = pids = rep(NA, length(sds))
+#    for (i in 1:length(schis)) {
+#          mind[i] = sds[[i]][ maxinds[i] ]
+#          pids[i] = sprs[[i]][ maxinds[i] ]
+#          }
+#    xdf = data.frame(snp=names(schis), probeid=pids, mindist=mind)
+    message("done.")
+#    drops = which(names(aggr) %in% c("probeid", "mindist"))
+#    aggr = aggr[,-drops]
+#    aggr = merge(aggr, xdf, by="snp")
+#    stopifnot(nrow(aggr)==inr)
     message("group by and max")
     # after collecting, use
     #dfrToFDR( aggr, xprobs = xprobs, xfield=xfield )
-    ans <- aggr %>% group_by(snp) %>%
+    ans <- aggr %>% group_by(snp) %>% arrange(desc(chisq),snp) %>%
                summarize( chisq = max(chisq),
                  permScore_1 = max(permScore_1),
                  permScore_2 = max(permScore_2),
                  permScore_3 = max(permScore_3),
                  start=nth(start,1), seqnames=nth(seqnames,1),
-                 MAF = max(MAF))
+                 MAF = max(MAF), probeid=nth(probeid,1), mindist=nth(mindist,1))
     GRanges(seqnames=ans$seqnames, IRanges(ans$start, width=1),  # to allow standard 'store' ops
              chisq=ans$chisq, permScore_1=ans$permScore_1,
              permScore_2=ans$permScore_2,
-             permScore_3=ans$permScore_3, snp=ans$snp, MAF=ans$MAF)
+             permScore_3=ans$permScore_3, snp=ans$snp, MAF=ans$MAF,
+             probeid=ans$probeid, mindist=ans$mindist)
 }
