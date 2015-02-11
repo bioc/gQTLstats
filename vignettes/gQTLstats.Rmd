@@ -71,6 +71,11 @@ temporary ff representation of the vector of
 all association test results.
 
 ```{r getqs, cache=TRUE}
+if (.Platform$OS.type == "windows") {
+ library(BiocParallel)
+ p = SerialParam()
+ register(p)
+ }
 qassoc = storeToQuantiles(prst, field="chisq",
     probs=c(seq(0,.999,.001), 1-(c(1e-4,1e-5,1e-6))))
 tail(qassoc)
