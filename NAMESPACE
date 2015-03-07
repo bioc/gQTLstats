@@ -34,8 +34,8 @@ export(getFDRfunc, getTab, setFDRfunc, directPlot,
 
 importFrom(BiocGenerics, width)
 
-importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam,
-   genotypeToSnpMatrix, alt, ref, "vcfSamples", "vcfSamples<-")
+importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam, isSNV,
+   genotypeToSnpMatrix, alt, ref, "vcfSamples", "vcfSamples<-", info, "alt<-")
 
 importFrom(Biobase, selectSome, pData, assayDataNew, exprs, samples)
 

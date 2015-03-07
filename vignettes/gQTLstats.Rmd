@@ -265,13 +265,13 @@ genetic criteria.
 ## Re-binding probe annotation from SummarizedExperiment
 
 In the case of `geuFPKM` there is some relevant metadata
-in the `rowData` element.  We will bind that into the 
+in the `rowRanges` element.  We will bind that into the 
 collection of significant findings.
 
 ```{r bindback}
 library(geuvPack)
 data(geuFPKM)
-basic = mcols(rowData(geuFPKM))[, c("gene_id", "gene_status", "gene_type",
+basic = mcols(rowRanges(geuFPKM))[, c("gene_id", "gene_status", "gene_type",
     "gene_name")]
 rownames(basic) = basic$gene_id
 extr = basic[ filtEnum$probeid, ]

@@ -105,26 +105,29 @@ checkStats = function() {
 # test storeToHist
 #
       hh = storeToHist( store, breaks=c(0,1,2,4,8,350))
-#      checkTrue(sum(hh$counts) == 3*5656290)
-      checkTrue(all(hh$counts == c(11677429L, 2691328L, 1832875L, 667539L, 99699L)))
+      newstorecounts = c(15582916L, 3592722L, 2461700L, 904046L, 137785L)
+      checkTrue(sum(hh$counts) == sum(newstorecounts))
+      checkTrue(all(hh$counts == newstorecounts))
       dmfilt = function(x) x[ which(x$MAF >= .05 & x$mindist <= 5e4) ]
       hf = storeToHist( store, breaks = c(0,1,2,4,8,350), filter=dmfilt )
-      checkTrue( sum(hf$counts) == 692397)
+      newhfcounts = c(632070L, 149027L, 103395L, 37868L, 3935L)
+
+      checkTrue( sum(hf$counts) == sum(newhfcounts) )
 #
 # test storeToQuantiles
 #
       sq = storeToQuantiles(store, "chisq", seq(.1,.9,.1))
-      qtarg = structure(c(0.0146886028850068, 0.0600514288350784, 0.13982186386647, 
-0.261229560601213, 0.435622826467435, 0.682153612200419, 1.04084584125386, 
-1.61960915615195, 2.76456101386141), .Names = c("10%", "20%", 
+      newqtarg = structure(c(0.0145729036691334, 0.059507411503856, 0.138602665492259, 
+0.259056257161181, 0.432764031150833, 0.678874459188632, 1.03676697244147, 
+1.61278757520928, 2.75027501216392), .Names = c("10%", "20%", 
 "30%", "40%", "50%", "60%", "70%", "80%", "90%"))
-      checkTrue(max(abs(sq-qtarg))<1e-6)
+      checkTrue(max(abs(sq-newqtarg))<1e-6)
       sqf = storeToQuantiles(store, "chisq", seq(.1,.9,.1), filter=dmfilt)
-
-      targ2 = structure(c(0.0237787672262377, 0.0989828833729177, 0.233430426470715, 
-0.434455200684701, 0.740987113540066, 1.1698714242342, 1.8634039013722, 
-3.05695105975853, 6.1302713856499), .Names = c("10%", "20%", 
+      targ2 = structure(c(0.0238002728305329, 0.0975227152995595, 0.231149672841349, 
+0.431143547260528, 0.734012342061044, 1.15492887826088, 1.83770873937214, 
+2.97718801263292, 5.8457690544901), .Names = c("10%", "20%", 
 "30%", "40%", "50%", "60%", "70%", "80%", "90%"))
       checkTrue(max(abs(sqf-targ2))<1e-6)
 
 }
+checkStats()
