@@ -52,11 +52,11 @@ checkStats = function() {
         ids=1:3 )
      checkTrue( all(c("enumCall", "enumSess", "fdrCall") %in% 
            names(metadata(filtEnum))))
-#     checkTrue( length(filtEnum) == 2387 )
+     checkTrue( length(filtEnum) == 2387 )
      checkTrue( max(filtEnum$estFDR) < 0.05 )
      checkTrue( min(filtEnum$estFDR) >= 0.0 )
-#     checkTrue( length(unique(filtEnum$probeid)) == 29 )
-#     checkTrue( length(unique(filtEnum$snp)) == 2366 )
+     checkTrue( length(unique(filtEnum$probeid)) == 29 )
+     checkTrue( length(unique(filtEnum$snp)) == 2366 )
 
 #
 # test eqDesc2 (related eqBox2)

@@ -61,6 +61,10 @@ library(gQTLstats)
 library(geuvStore)
 library(gQTLBase)
 library(gQTLstats)
+library(parallel)
+nco = detectCores()
+library(doParallel)
+registerDoParallel(cores=max(c(1, floor(nco/2))))
 prst = ciseStore(partialRegistry(), FALSE, FALSE)
 ```
 
@@ -71,11 +75,6 @@ temporary ff representation of the vector of
 all association test results.
 
 ```{r getqs, cache=TRUE}
-if (.Platform$OS.type == "windows") {
- library(BiocParallel)
- p = SerialParam()
- register(p)
- }
 qassoc = storeToQuantiles(prst, field="chisq",
     probs=c(seq(0,.999,.001), 1-(c(1e-4,1e-5,1e-6))))
 tail(qassoc)

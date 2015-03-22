@@ -1,4 +1,6 @@
 import(methods)
+import(foreach)
+import(doParallel)
 
 importFrom(limma, lmFit)
 importFrom(gam, gam, lo)
@@ -39,7 +41,7 @@ importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam, isSNV,
 
 importFrom(Biobase, selectSome, pData, assayDataNew, exprs, samples)
 
-importFrom(BiocParallel, bpparam, bpworkers, bplapply)
+#importFrom(BiocParallel, bpparam, bpworkers, bplapply)
 
 importFrom(BatchJobs, batchMapResults, makeRegistry, submitJobs,
 	waitForJobs, findNotDone)

@@ -16,10 +16,15 @@ storeToHist = function( store, getter =
             filter=force ) {
    if (missing(breaks)) stop("breaks must be supplied and must cover range of data")
    if (is.null(ids)) ids=store@validJobs
-   tmp = bplapply(ids, function(x) {
+##BP   tmp = bplapply(ids, function(x) {
+   tmp = foreach(x=ids) %dopar% { #bplapply(ids, function(x) {
       getter(loadAndFilterResult(reg=store@reg, id=x, filter=filter))
-      })
-   tmp = bplapply(tmp, function(x) try(hist(x , breaks=breaks, plot=FALSE )))
+##BP      })
+   }
+##BP   tmp = bplapply(tmp, function(x) try(hist(x , breaks=breaks, plot=FALSE )))
+   tmp = foreach(x=tmp) %dopar% {
+         try(hist(x , breaks=breaks, plot=FALSE ))
+   }
      # can fail with NAs in x
    st = sapply(tmp, class)
    if (any(st == "try-error")) {
