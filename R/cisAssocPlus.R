@@ -309,7 +309,6 @@ prep.cisAssocNB = function( summex, vcf.tf, geneind=1, snpind=1, rhs=~1, nperm=3
 # fo = findOverlaps( rowRanges(summex), rad )
 # stopifnot(length(subjectHits(fo))>0)
 # summex = summex[ subjectHits(fo), ]
- require(DESeq2)
  colData(summex)$snp = as(gtdata[[1]], "numeric")[,snpind]
  metadata(colData(summex))$snpgrange = varrd[snpind]
  #list(gtdata=gtdata[[1]][,snpind], varrd=varrd[snpind], summex=summex)

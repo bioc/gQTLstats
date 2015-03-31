@@ -1,6 +1,7 @@
 \name{senstab}
 \alias{senstab}
 \alias{plot.senstab}
+\alias{plot}
 \alias{sensByProbe}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
@@ -11,7 +12,7 @@ create a plottable table for eQTL sensitivity analysis visualization
 }
 \usage{
 senstab(x, filt = force)
-plot(x)
+\S3method{plot}{senstab}(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +23,9 @@ sensitivity survey exhibited in the example below
   \item{filt}{
 a function that operates on and returns a data.frame; typically
 will select rows based on values of fields 'MAF' and 'radius'}
+  \item{\dots}{
+extra arguments passed to plot
+}
 }
 \details{
 \code{sensByProbe} is a list structure; for information on this and
@@ -58,7 +62,6 @@ an instance of the S3 class 'senstab', 'data.frame'
 # parms = expand.grid(MAFS, dists)
 library(BatchJobs)  # for bigStore manip
 library(gQTLstats)
-library(BiocParallel)
 
 # could use multilevel parallelism here
 # because it is a somewhat large, fragile job, BatchJobs
@@ -66,16 +69,12 @@ library(BiocParallel)
 # already using bplapply.  so register 3 cores for it 
 # and specify 15 cpu for BatchJobs in .BatchJobs.R
 
-register(MulticoreParam(workers=3))
-
 sens1 = makeRegistry("sens1", file.dir="sens1", 
-    packages=c("BiocParallel", "gQTLstats", "dplyr"),
+    packages=c("gQTLstats", "dplyr"),
     src.files="parms.R")  # note parms.R
 
 sens4One = function(z) {
-      library(BiocParallel)
       load("../bigStore.rda")  # get a ciseStore instance
-      register(MulticoreParam(workers=3))  
       ans = storeToFDRByProbe(bigStore, xprobs=seq(.01,.99,.01), # xprobs
                                           # needs to be chosen with care
       filter=function(x) x[which(x$MAF >= parms[z,1] & 

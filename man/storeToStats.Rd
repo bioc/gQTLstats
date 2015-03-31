@@ -109,11 +109,11 @@ is no guarantee of order among elements
  require(gQTLBase)
  reg = partialRegistry()
  store = ciseStore(reg, addProbeMap=FALSE, addRangeMap=FALSE)
+ library(doParallel)
  if (.Platform$OS.type == "windows") {
-   library(BiocParallel)
-   p = SerialParam()
-   register(p)
+   registerDoSEQ()
    }
+ registerDoParallel(cores=max(c(detectCores()-1,1)))
  smchisq = storeToFf( store, "chisq", ids=store@validJobs[1:3]) 
  smchisq
  qs = storeToQuantiles( store, "chisq", ids = store@validJobs[1:5],
