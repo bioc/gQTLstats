@@ -64,7 +64,10 @@ library(gQTLstats)
 library(parallel)
 nco = detectCores()
 library(doParallel)
-registerDoParallel(cores=max(c(1, floor(nco/2))))
+registerDoSEQ()
+if (.Platform$OS.type != "windows") {
+  registerDoParallel(cores=max(c(1, floor(nco/2))))
+}
 prst = ciseStore(partialRegistry(), FALSE, FALSE)
 ```
 
