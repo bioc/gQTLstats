@@ -112,8 +112,7 @@ is no guarantee of order among elements
  library(doParallel)
  if (.Platform$OS.type == "windows") {
    registerDoSEQ()
-   }
- registerDoParallel(cores=max(c(detectCores()-1,1)))
+   } else registerDoParallel(cores=max(c(detectCores()-1,1)))
  smchisq = storeToFf( store, "chisq", ids=store@validJobs[1:3]) 
  smchisq
  qs = storeToQuantiles( store, "chisq", ids = store@validJobs[1:5],
