@@ -21,6 +21,8 @@ reconstruct = function(ex, inds2drop, center=TRUE) {
 }
 
 .clipPCs.SE = function(se, inds2drop, center=TRUE) {
+     cn = colnames(se)
+     rn = rownames(se)
      assn = names(assays(se))
      message(paste("clipping PCs", 
           paste0(selectSome(inds2drop),collapse=","), "from", assn[1], collapse=""))
@@ -28,6 +30,8 @@ reconstruct = function(ex, inds2drop, center=TRUE) {
      recon = reconstruct(ex, inds2drop, center)
      assays(se)[[1]] = recon
      exptData(se)$PCsClipped = inds2drop
+     colnames(se)=cn
+     rownames(se)=rn
      se
      }
 
