@@ -1,4 +1,8 @@
-
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{gQTLstats: statistics for genetics of genomic features}
+%\VignettePackage{gQTLstats}
+-->
 ---
 title: "gQTLstats: computationally efficient analysis and
  	interpretation of large eQTL, mQTL, etc. archives"
@@ -17,8 +21,7 @@ output:
 
 <!--
 %\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{gQTLstats: computationally efficient analysis and
- 	interpretation of large eQTL, mQTL, etc. archives}
+%\VignetteIndexEntry{gQTLstats: statistics for genetics of genomic features}
 -->
 
 ```{r style, echo = FALSE, results = 'asis'}
