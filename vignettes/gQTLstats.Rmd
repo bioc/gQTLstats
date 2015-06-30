@@ -7,7 +7,7 @@
 title: "gQTLstats: computationally efficient analysis and
  	interpretation of large eQTL, mQTL, etc. archives"
 author: "Vincent J. Carey, stvjc at channing.harvard.edu"
-date: "November 2014"
+date: "Jun 2015"
 output:
   BiocStyle::html_document:
     highlight: pygments
