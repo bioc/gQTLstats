@@ -53,7 +53,7 @@ either boundary of the gene coding region
 for the probe is at most 1 million bp.
 ```{r setup,echo=FALSE}
 suppressPackageStartupMessages({
-library(GenomicRanges)
+library(SummarizedExperiment)
 library(Homo.sapiens)
 library(org.Hs.eg.db)
 library(geuvStore)
@@ -267,7 +267,7 @@ genetic criteria.
 # Visualizing and annotating significant loci
 
 
-## Re-binding probe annotation from SummarizedExperiment
+## Re-binding probe annotation from RangedSummarizedExperiment
 
 In the case of `geuFPKM` there is some relevant metadata
 in the `rowRanges` element.  We will bind that into the 

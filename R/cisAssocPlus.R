@@ -27,7 +27,7 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
 # leads to error on 1KG VCF data
 #
  #
- # take all features from SummarizedExperiment
+ # take all features from RangedSummarizedExperiment
  # harmonize samples between summex and vcf.tf (TabixFile)
  # obtain genotypes of variants cis to features in summex -- using only SNVs!!
  # compute associations between stx(features) and vtx(genotypes)
@@ -232,7 +232,7 @@ prep.cisAssocNB = function( summex, vcf.tf, geneind=1, snpind=1, rhs=~1, nperm=3
 # leads to error on 1KG VCF data
 #
  #
- # take all features from SummarizedExperiment
+ # take all features from RangedSummarizedExperiment
  # harmonize samples between summex and vcf.tf (TabixFile)
  # obtain genotypes of variants cis to features in summex -- using only SNVs!!
  # compute associations between stx(features) and vtx(genotypes)

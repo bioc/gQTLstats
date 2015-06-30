@@ -21,7 +21,7 @@ an element of rownames(se) from which a vector of assay
 values will be created
 }
   \item{se}{
-instance of class \code{\link[GenomicRanges]{SummarizedExperiment-class}}
+a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
 }
   \item{tf}{
 instance of class \code{\link[Rsamtools]{TabixFile-class}}, defining
@@ -65,7 +65,7 @@ extra arguments passed to boxplot
 %}
 \examples{
 require(Rsamtools)
-require(GenomicRanges)
+require(RangedSummarizedExperiment)
 mygr = GRanges("1", IRanges(54683925, width=1))
 gene = "ENSG00000231581.1"
 library(geuvPack)

@@ -1,5 +1,4 @@
 setOldClass("function")
-setClassUnion("functionORNULL", c("function", "NULL"))
 setOldClass("gam") # may be too restrictive to assume GAM in use
 .nullgam = ""
 class(.nullgam) = "gam"

@@ -62,7 +62,7 @@ checkStats = function() {
 # test eqDesc2 (related eqBox2)
 #
 
-     require(GenomicRanges)
+     require(SummarizedExperiment)
      mygr = GRanges("1", IRanges(54683925, width=1))
      gene = "ENSG00000231581.1"
      library(geuvPack)

@@ -6,7 +6,7 @@ test for variant-expression associations in cis, using VCF
 }
 \description{
 test for variant-expression associations in cis, using VCF
-and SummarizedExperiment representations
+and RangedSummarizedExperiment representations
 }
 \usage{
 cisAssoc(summex, vcf.tf, rhs = ~1, 
@@ -17,7 +17,7 @@ cisAssoc(summex, vcf.tf, rhs = ~1,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{summex}{
-instance of \code{\link[GenomicRanges]{SummarizedExperiment-class}}
+a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
 }
   \item{vcf.tf}{
 instance of \code{\link[Rsamtools]{TabixFile}}, referring to a

@@ -7,7 +7,17 @@ setMethod("clipPCs",
 })
 
 setMethod("clipPCs", 
+  c("RangedSummarizedExperiment", "numeric", "logical"), function(x, inds2drop, center=TRUE){
+   .clipPCs.SE(se=x, inds2drop, center)
+})
+
+setMethod("clipPCs", 
   c("SummarizedExperiment", "numeric", "missing"), function(x, inds2drop, center=TRUE){
+   .clipPCs.SE(se=x, inds2drop, TRUE)
+})
+
+setMethod("clipPCs", 
+  c("RangedSummarizedExperiment", "numeric", "missing"), function(x, inds2drop, center=TRUE){
    .clipPCs.SE(se=x, inds2drop, TRUE)
 })
 
@@ -36,12 +46,13 @@ reconstruct = function(ex, inds2drop, center=TRUE) {
      }
 
 regressOut = function(x, rhs, ...) {
- stopifnot(is(x, "SummarizedExperiment")) 
+ stopifnot(is(x, "SummarizedExperiment") ||
+           is(x, "RangedSummarizedExperiment")) 
  stopifnot(is(rhs, "formula")) 
  rn = rownames(x)
  cn = colnames(x)
  mm = model.matrix(rhs, data=colData(x))
- message("using assay() to extract 'expression' matrix from SummarizedExperiment")
+ message("using assay() to extract 'expression' matrix from RangedSummarizedExperiment")
  ex = assay(x)
  f = lmFit(ex, mm, ...)
  r = ex - (f$coef %*% t(f$design))

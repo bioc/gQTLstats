@@ -1,7 +1,9 @@
 \name{clipPCs}
 \alias{clipPCs}
 \alias{clipPCs,SummarizedExperiment,numeric,logical-method}
+\alias{clipPCs,RangedSummarizedExperiment,numeric,logical-method}
 \alias{clipPCs,SummarizedExperiment,numeric,missing-method}
+\alias{clipPCs,RangedSummarizedExperiment,numeric,missing-method}
 \alias{regressOut}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
@@ -9,7 +11,7 @@ transformations of expression data in smlSet instances
 }
 \description{
 transformations of expression data in smlSet instances
-or assay data in SummarizedExperiment
+or assay data in RangedSummarizedExperiment
 }
 \usage{
 clipPCs(x, inds2drop, center = TRUE)
@@ -19,8 +21,7 @@ regressOut(x, rhs, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-instance of 
-\code{\link[GenomicRanges]{SummarizedExperiment}}
+a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
 }
   \item{inds2drop}{
 Vector of PCs to be eliminated by setting the associated diagonal elements in the
@@ -32,7 +33,7 @@ logical, passed to \code{\link[stats]{prcomp}}
 }
   \item{rhs}{formula fragment (no dependent variable) used to form residuals
 in a reexpression of the expression matrix; variable bindings
-found in pData of an ExpressionSet or colData of a SummarizedExperiment}
+found in pData of an ExpressionSet or colData of a RangedSummarizedExperiment}
   \item{\dots}{arguments passed to \code{\link[limma]{lmFit}}}
 }
 \details{
@@ -46,7 +47,7 @@ the design matrix specified by the \code{rhs}; \code{\link[limma]{lmFit}} is use
 compute coefficients, linear predictions and residuals.
 }
 \value{
-an instance of \code{\link[GenomicRanges]{SummarizedExperiment-class}}
+a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
 }
 
 \references{
