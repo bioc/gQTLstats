@@ -65,7 +65,7 @@ extra arguments passed to boxplot
 %}
 \examples{
 require(Rsamtools)
-require(RangedSummarizedExperiment)
+require(SummarizedExperiment)
 mygr = GRanges("1", IRanges(54683925, width=1))
 gene = "ENSG00000231581.1"
 library(geuvPack)

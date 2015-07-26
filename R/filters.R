@@ -39,7 +39,7 @@ reconstruct = function(ex, inds2drop, center=TRUE) {
      ex = t(assays(se)[[1]])
      recon = reconstruct(ex, inds2drop, center)
      assays(se)[[1]] = recon   # BAD ... assay(x) seems to do better
-     exptData(se)$PCsClipped = inds2drop
+     metadata(se)$PCsClipped = inds2drop
      colnames(se)=cn
      rownames(se)=rn
      se
