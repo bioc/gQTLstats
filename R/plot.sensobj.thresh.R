@@ -14,7 +14,7 @@
 #         xlab("lower bound on MAF")
 #}
 
-table.sensobj.thresh = function(sensobj, thresh=.05) {
+table_sensobj_thresh = function(sensobj, thresh=.05) {
   require(gQTLstats)  # for getTab etc
   ncalls = sapply(sensobj, 
      function(x) approx(getTab(x[[1]])$fdr, 

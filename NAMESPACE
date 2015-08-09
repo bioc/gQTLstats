@@ -8,6 +8,7 @@ import(IRanges)
 import(GenomeInfoDb)
 import(GenomicRanges)
 import(SummarizedExperiment)
+import(ffbase)
 
 importFrom(limma, lmFit)
 importFrom(gam, gam, lo)
@@ -46,7 +47,7 @@ importFrom(snpStats, snp.rhs.tests, col.summary, chi.squared)
 importFrom(dplyr, filter, group_by, summarize, "%>%",
   rbind_all, arrange)
 
-export( table.sensobj.thresh, queryVCF, senstab )
+export( table_sensobj_thresh, queryVCF, senstab )
 S3method( plot, table.sensobj )
 S3method( plot, senstab )
 

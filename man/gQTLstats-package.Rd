@@ -3,7 +3,7 @@
 \alias{gQTLstats}
 \alias{prep.cisAssocNB} 
 \alias{storeToMaxAssocBySNP} 
-\alias{table.sensobj.thresh}
+\alias{table_sensobj_thresh}
 
 \docType{package}
 \title{
@@ -28,7 +28,7 @@ current version of the package:
 prep.cisAssocNB (assembles information to assess negative
 binomial regression in cis association testing),
 storeToMaxAssocBySNP (progress towards SNP-specific FDR),
-table.sensobj.thresh (reporting on sensitivity analysis).
+table_sensobj_thresh (reporting on sensitivity analysis).
 }
 \author{
 \packageAuthor{gQTLstats}
