@@ -145,7 +145,7 @@ storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-
       warning("could not finish maxByProbe; returning recipient registry")
       return(newreg)
       }
-    newstore = ciseStore( newreg, FALSE, FALSE )
+    newstore = ciseStore( reg=newreg, validJobs=findDone(newreg), FALSE, FALSE )
     on.exit({unlink(tf, recursive=TRUE);
              options(BBmisc.ProgressBar.style=curbb)
              })

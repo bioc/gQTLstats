@@ -45,7 +45,7 @@ checkStats = function() {
      require(geuvStore)
      require(gQTLBase)
      re = partialRegistry()
-     st = ciseStore(re, FALSE, FALSE)
+     st = ciseStore(re, partialIds(), FALSE, FALSE)
      data(filtFDR)
      filtEnum = enumerateByFDR( st, filtFDR,
         filter=function(x)x[which(x$mindist <= 500000 & x$MAF >= 0.05)],
@@ -97,7 +97,7 @@ checkStats = function() {
 # test storeToFDR
 #
       reg = partialRegistry()
-      store = ciseStore(reg, addProbeMap=FALSE, addRangeMap=FALSE)
+      store = ciseStore(reg, partialIds(), addProbeMap=FALSE, addRangeMap=FALSE)
       stf = storeToFDR(store)
 #      checkTrue(all(dim(getTab(stf))==c(1004,4)))
 #      checkTrue(is.null(getFDRfunc(stf)))

@@ -71,7 +71,7 @@ registerDoSEQ()
 if (.Platform$OS.type != "windows") {
   registerDoParallel(cores=max(c(1, floor(nco/2))))
 }
-prst = ciseStore(partialRegistry(), FALSE, FALSE)
+prst = ciseStore(partialRegistry(), partialIds(), FALSE, FALSE)
 ```
 
 ## Estimation of quantiles of the distribution of observed associations
@@ -306,7 +306,7 @@ by default.
 ```{r lkscores,fig=TRUE}
 data(hmm878)
 library(geuvStore)
-prst = ciseStore(partialRegistry(), TRUE, FALSE)
+prst = ciseStore(partialRegistry(), partialIds(), TRUE, FALSE)
 myg = "ENSG00000183814.10" # LIN9
 data(filtFDR)
 library(ggplot2)

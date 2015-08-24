@@ -108,7 +108,7 @@ is no guarantee of order among elements
  require(BatchJobs)
  require(gQTLBase)
  reg = partialRegistry()
- store = ciseStore(reg, addProbeMap=FALSE, addRangeMap=FALSE)
+ store = ciseStore(reg, validJobs=partialIds(), addProbeMap=FALSE, addRangeMap=FALSE)
  library(doParallel)
  if (.Platform$OS.type == "windows") {
    registerDoSEQ()

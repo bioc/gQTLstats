@@ -72,7 +72,7 @@ on the output
 require(geuvStore)
 require(gQTLBase)
 reg = partialRegistry()
-store = ciseStore(reg, addProbeMap=TRUE, addRangeMap=FALSE)
+store = ciseStore(reg, partialIds(), addProbeMap=TRUE, addRangeMap=FALSE)
 data(hmm878)
 data(filtFDR)
 manhWngr(store, fdrsupp=filtFDR, namedGR=hmm878)
