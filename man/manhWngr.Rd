@@ -71,8 +71,7 @@ on the output
 \examples{
 require(geuvStore)
 require(gQTLBase)
-reg = partialRegistry()
-store = ciseStore(reg, partialIds(), addProbeMap=TRUE, addRangeMap=FALSE)
+store = makeGeuvStore()
 data(hmm878)
 data(filtFDR)
 manhWngr(store, fdrsupp=filtFDR, namedGR=hmm878)

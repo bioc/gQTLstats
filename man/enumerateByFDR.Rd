@@ -63,8 +63,7 @@ predicted using the GAM model held in the FDRsupp instance.
 \examples{
 require(geuvStore)
 require(gQTLBase)
-re = partialRegistry()
-st = ciseStore(re, partialIds(), FALSE, FALSE)
+st = makeGeuvStore()
 data(filtFDR)
 filtEnum = enumerateByFDR( st, filtFDR,
   filter=function(x)x[which(x$mindist <= 500000 & x$MAF >= 0.05)] )

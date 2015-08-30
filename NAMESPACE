@@ -8,7 +8,7 @@ import(IRanges)
 import(GenomeInfoDb)
 import(GenomicRanges)
 import(SummarizedExperiment)
-import(ffbase)
+importFrom(ffbase, hist.ff, quantile.ff) #, ffappend)
 
 importFrom(limma, lmFit)
 importFrom(gam, gam, lo)

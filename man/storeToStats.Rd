@@ -107,8 +107,7 @@ is no guarantee of order among elements
  stopifnot(require(geuvStore)) 
  require(BatchJobs)
  require(gQTLBase)
- reg = partialRegistry()
- store = ciseStore(reg, validJobs=partialIds(), addProbeMap=FALSE, addRangeMap=FALSE)
+ store = makeGeuvStore()
  library(doParallel)
  if (.Platform$OS.type == "windows") {
    registerDoSEQ()
