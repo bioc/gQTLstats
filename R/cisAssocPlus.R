@@ -103,10 +103,15 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  # use a list mapping probes to SNVs in cis to organize the testing
  #
  uo = unique(varrd$paramRangeID)
- vdl = split(varrd, varrd$paramRangeID)[uo] # will reorder without uo
- snpbyprobe = sapply(vdl, names)
+ snpbyprobe = split(names(varrd), varrd$paramRangeID)[uo] # will reorder without uo
+# snpbyprobe = sapply(vdl, names)
+# if (ncol(snpbyprobe)==1) {
+#    cn = colnames(snpbyprobe)
+#    snpbyprobe = list(as.character(snpbyprobe))
+#    names(snpbyprobe) = cn
+#    }
  probes2test = names(snpbyprobe)
- numdata = assays(summex)[[assayind]][probes2test,]
+ numdata = assays(summex)[[assayind]][probes2test,,drop=FALSE]
  #
  # force the formula to have form ex~[rhs]
  #
