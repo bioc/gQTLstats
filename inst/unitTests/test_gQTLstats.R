@@ -21,7 +21,7 @@ checkStats = function() {
    tf20 = TabixFile(system.file("vcf/lit20.vcf.gz", package="gQTLstats"))
    lgeue = clipPCs(lgeu[,which(lgeu$popcode=="CEU")], 1:2)
    litc = cisAssoc(lgeue[c(162,201),], tf20, nperm=2, 
-         lbmaf=.05, cisradius=50000)
+         lbmaf=.05, cisradius=50000, lbgtf=-.01)
    checkTrue(length(litc)==497)
    checkTrue(min(litc$MAF)>=.05)
    checkTrue(max(litc$mindist) <= 50000)

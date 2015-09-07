@@ -20,8 +20,9 @@ sampsInVCF = function(tf) {
 
 
 cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000, 
-    genome="hg19", assayind=1, lbmaf=1e-6, dropUnivHet=TRUE,
-    infoFields = c("LDAF", "SVTYPE") ) {
+    genome="hg19", assayind=1, lbmaf=1e-6, lbgtf = 1e-6, dropUnivHet=TRUE,
+    infoFields = c("LDAF", "SVTYPE"),
+    simpleSNV=TRUE ) {
 #
 # LDAF is concession to bug in readVcf where specifying only SVTYPE
 # leads to error on 1KG VCF data
@@ -63,6 +64,10 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  # 12/26/2014 -- the exclusion of non-SNVs has become complex
  # we introduce attempt to capture SVTYPE field above.  this may need
  # to be moved up to interface
+#
+# if we can avoid complex SNV handling
+#
+ if (!simpleSNV) {
  svinfo = info(vdata)$SVTYPE
  if (length(svinfo)>0) {
    ok = which(is.na(svinfo))
@@ -79,6 +84,7 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
    if (inherits( tmpalt, "try-error" )) stop("attempt to reclass ALT fails after SV exclusion")
    alt(vdata) = tmpalt
    }
+ }
  nonSNV = which(!isSNV(vdata))
  if (length(nonSNV)>0) vdata = vdata[-nonSNV,]
  gtdata = genotypeToSnpMatrix(vdata)
@@ -93,7 +99,9 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
     }
  csumm = col.summary(gtdata[[1]])
  inmafs = csumm[,"MAF"]
- bad = union(which(inmafs<lbmaf), uhetinds)
+ ingtmat = csumm[,c("P.AA", "P.AB", "P.BB")]
+ lowgt = apply(ingtmat,1,min,na.rm=TRUE)
+ bad = union(which(inmafs<lbmaf | lowgt<lbgtf), uhetinds)
  if (length(bad)>0) {
    vdata = vdata[-bad,]
    gtdata = genotypeToSnpMatrix(vdata)

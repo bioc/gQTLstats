@@ -9,10 +9,10 @@ test for variant-expression associations in cis, using VCF
 and RangedSummarizedExperiment representations
 }
 \usage{
-cisAssoc(summex, vcf.tf, rhs = ~1, 
-   nperm = 3, cisradius = 50000, 
-   genome = "hg19", assayind = 1, lbmaf = 1e-06,
-   dropUnivHet = TRUE, infoFields = c("LDAF", "SVTYPE"))
+cisAssoc(summex, vcf.tf, rhs = ~1, nperm = 3, cisradius =
+                 50000, genome = "hg19", assayind = 1, lbmaf = 1e-06,
+                 lbgtf = 1e-06, dropUnivHet = TRUE, infoFields =
+                 c("LDAF", "SVTYPE"), simpleSNV = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -42,7 +42,11 @@ tag suitable for use in GenomeInfoDb structures
 index of \code{assays(summex)} to use for expression data retrieval
 }
   \item{lbmaf}{
-lower bound on MAF of SNP to use
+lower bound on MAF of SNP to retain for analysis, computed using
+\code{\link[snpStats]{col.summary}}
+}
+  \item{lbgtf}{
+lower bound on genotype frequency of SNP to retain for analysis
 }
   \item{dropUnivHet}{
 logical, if TRUE, will check for columns of SnpMatrix instance
@@ -50,6 +54,9 @@ that possess no values other than "NA" and "A/B".
 See \url{http://www.biostars.org/p/117155/#117270}
 }
   \item{infoFields}{character -- VCF fields to retain in vcfInfo() part of query}
+  \item{simpleSNV}{logical -- will use simple computation of
+\code{\link[VariantAnnotation]{isSNV}} to filter variants for
+analysis to SNV
 }
 \details{
 \code{\link[snpStats]{snp.rhs.tests}} is the 
