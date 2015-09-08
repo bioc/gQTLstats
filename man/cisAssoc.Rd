@@ -56,7 +56,7 @@ See \url{http://www.biostars.org/p/117155/#117270}
   \item{infoFields}{character -- VCF fields to retain in vcfInfo() part of query}
   \item{simpleSNV}{logical -- will use simple computation of
 \code{\link[VariantAnnotation]{isSNV}} to filter variants for
-analysis to SNV
+analysis to SNV }
 }
 \details{
 \code{\link[snpStats]{snp.rhs.tests}} is the 
