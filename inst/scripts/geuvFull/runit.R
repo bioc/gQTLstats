@@ -13,7 +13,7 @@ myf = function(i) {
    curti = tg_250k[i]
    if (!exists("geuFPKM")) data(geuFPKM)
    seqlevelsStyle(geuFPKM) = "NCBI"
-   curse = subsetByOverlaps(geuFPKM, curti)
+   curse = subsetByOverlaps(geuFPKM, curti)  # not good to just subset, some gene regions overlap tiles
    if (nrow(curse)==0) return(NA)
    load("gsvs.rda")
    svmat = gsvs$sv
