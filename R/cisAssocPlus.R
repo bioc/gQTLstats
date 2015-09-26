@@ -95,6 +95,10 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
     uhetinds = which(apply(gtchar,2, function(x) all(x %in% c("A/B", "NA"))))
     if ((nu <- length(uhetinds))>0) 
       warning(paste0("found ", nu, " universally heterozygous loci."))
+    if (nu == ncol(gtdata[[1]])) {
+        warning("all loci universally heterozygous, returning NULL")
+        return(NULL)
+        }
     message("done checking.")
     }
  csumm = col.summary(gtdata[[1]])
