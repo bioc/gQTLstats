@@ -93,12 +93,13 @@ seqlevelsStyle for summex and vcf.tf content must agree
  tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="GGtools"))
  if (require(VariantAnnotation)) scanVcfHeader(tf20)
  lgeue = clipPCs(lgeu[,which(lgeu$popcode=="CEU")], 1:2)
+ set.seed(1234)
  litc = cisAssoc(lgeue[c(162,201),], tf20, nperm=2, lbmaf=.05, cisradius=50000)
  summary(litc$chisq)
- \dontrun{
+# \dontrun{
  litc$pifdr = gQTLstats:::pifdr(litc$chisq, c(litc$permScore_1, litc$permScore_2))
  litc[which(litc$pifdr < .01)]
- }
+# }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
