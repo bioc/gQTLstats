@@ -149,15 +149,14 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  # test under permutation for plug-in FDR
  #
  perms = vector("list", nperm)
- permit = function(x) x[sample(1:length(x), size=length(x), replace=FALSE)]
  for (j in 1:nperm) {
    perms[[j]] = vector("list", length(probes2test))
    suppressWarnings({
    for (i in 1:length(probes2test)) {
-     ex = permit(as.numeric(numdata[ probes2test[i], ]))
+     ex = as.numeric(numdata[ probes2test[i], ])
      perms[[j]][[i]] = snp.rhs.tests( formula=infmla, 
              snp.data=gtdata$genotypes[, snpbyprobe[[ probes2test[i] ]] ], family="gaussian",
-             data=data.frame(ex=ex, as(colData(summex), "data.frame") ), uncertain=TRUE )
+             data=data.frame(ex=sample(ex), as(colData(summex), "data.frame") ), uncertain=TRUE )
      }
     })
    }
@@ -332,77 +331,3 @@ prep.cisAssocNB = function( summex, vcf.tf, geneind=1, snpind=1, rhs=~1, nperm=3
  summex
 }
 
-bag = function() {
- #
- # use a list mapping probes to SNVs in cis to organize the testing
- #
- uo = unique(varrd$paramRangeID)
- vdl = split(varrd, varrd$paramRangeID)[uo] # will reorder without uo
- snpbyprobe = sapply(vdl, names)
- probes2test = names(snpbyprobe)
- numdata = assays(summex)[[assayind]][probes2test,]
- #
- # force the formula to have form ex~[rhs]
- #
- infmla = as.formula(paste("ex", paste(as.character(rhs), collapse="")))
- tsts = vector("list", length(probes2test) )
- summs = col.summary(gtdata$genotypes)
- mafs = summs[,"MAF"]
- names(mafs) = rownames(summs)
- #
- # loop over cis map to collect tests
- #
- if (!exists(".Random.seed")) .xyzzy = runif(1)
- iniSeed = .Random.seed
- suppressWarnings({
- for (i in 1:length(probes2test)) {
-   ex = numdata[ probes2test[i], ]
-   tsts[[i]] = snp.rhs.tests( formula=infmla, 
-           snp.data=gtdata$genotypes[, snpbyprobe[[ probes2test[i] ]] ], family="gaussian",
-           data=data.frame(ex=ex, as(colData(summex), "data.frame") ), uncertain=TRUE )
-   }
-  })
- #
- # test under permutation for plug-in FDR
- #
- perms = vector("list", nperm)
- permit = function(x) x[sample(1:length(x), size=length(x), replace=FALSE)]
- for (j in 1:nperm) {
-   perms[[j]] = vector("list", length(probes2test))
-   suppressWarnings({
-   for (i in 1:length(probes2test)) {
-     ex = permit(as.numeric(numdata[ probes2test[i], ]))
-     perms[[j]][[i]] = snp.rhs.tests( formula=infmla, 
-             snp.data=gtdata$genotypes[, snpbyprobe[[ probes2test[i] ]] ], family="gaussian",
-             data=data.frame(ex=ex, as(colData(summex), "data.frame") ), uncertain=TRUE )
-     }
-    })
-   }
- names(tsts) = probes2test
- #
- # bind test results to varrd GRanges instance -- note that ALT may be either
- # CharacterList or DNAStringSetList and this may need attention on collection
- #
- chisqs = unlist(lapply(tsts, chi.squared))
- varrd$chisq = chisqs
- pnames = paste0("permScore_", 1:nperm)
- for (i in 1:nperm) {
-   mcols(varrd)[ ,pnames[i] ] = unlist(lapply(perms[[i]], chi.squared))
-   }
- varrd$snp = names(varrd)
- varrd$MAF = as.numeric(mafs[varrd$snp])
- varrd$probeid = as.character(varrd$paramRangeID)
- metadata(varrd)$sessInfo = sessionInfo()
- metadata(varrd)$init.Random.seed = iniSeed
- names(varrd) = NULL
- 
- snpl = start(varrd)
- gstart = abs(start(summex[varrd$probeid,]))
- gend = abs(end(summex[varrd$probeid,]))
-
- dists = pmin(abs(snpl-gstart), abs(snpl-gend))
- dists[ which((snpl >= gstart) & (snpl <= gend))] = 0
- varrd$mindist = dists
-
- varrd
-}
