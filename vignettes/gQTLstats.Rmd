@@ -154,11 +154,8 @@ the score:FDR relationship.
 The `storeToFDRByProbe` FDR function examines the maximal association score
 by gene, for observed and permuted measures.  
 Good performance of this procedure is obtained by using
-`group_by` and `summarize` utilities of \CRANpkg{dplyr}.
-Concurrent computing capabilities of
-BatchJobs are employed when available.  You will need suitable contents
-for `.BatchJobs.R` and any scheduler-dependent template files to
-take advantage of this.
+`group_by` and `summarize` utilities of `r CRANpkg("dplyr")`.
+Iteration employs `r CRANpkg("foreach")`.
 
 ```{r shobfu,cache=TRUE}
 fdbp = storeToFDRByProbe( prst, xprobs=c(seq(.025,.975,.025),.99))

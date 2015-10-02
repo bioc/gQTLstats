@@ -76,22 +76,8 @@ addFDRmodel = function(supp, m) {
   supp
 }
  
-.maxByProbe = function (job, res, filter)
-{
-    cur = filter(res)
-    sr = split(cur, cur$probeid)
-    tmpp = vector("list", length(sr))
-    for (i in 1:length(sr)) {
-        tmp = sr[[i]][which.max(sr[[i]]$chisq)]
-        mcols(tmp)[, "permScore_1"] = max(sr[[i]]$permScore_1)
-        mcols(tmp)[, "permScore_2"] = max(sr[[i]]$permScore_2)
-        mcols(tmp)[, "permScore_3"] = max(sr[[i]]$permScore_3)
-        tmpp[[i]] = tmp
-    }
-    unlist(GRangesList(tmpp))
-}
 
-maxByProbe = function (job, res, filter)
+maxByProbeOLD = function (job, res, filter)
 {
     as(filter(res), "data.frame") %>% dplyr::select(snp, probeid,
            chisq, permScore_1, permScore_2, permScore_3,
@@ -100,61 +86,64 @@ maxByProbe = function (job, res, filter)
             permScore_2=max(permScore_2), permScore_3=max(permScore_3))
 }
 
-maxBySNP = function (job, res, resfilter)
+maxByFeature = function (job, res, resfilter, feature="SNP")
 {
 #
 # you probably need to use ffdf for this...
+# a problem is that a given SNP might reside in multiple jobs?
 #
-    ans = as(resfilter(res), "data.frame") %>% dplyr::select(snp, probeid, MAF,
-           chisq, permScore_1, permScore_2, permScore_3, mindist,
-           seqnames, start) %>% group_by(snp) %>% arrange(desc(chisq),snp) %>%
-           summarize(chisq=max(chisq), permScore_1=max(permScore_1),
-            permScore_2=max(permScore_2), permScore_3=max(permScore_3),
-            seqnames=nth(seqnames,1), start=nth(start,1), MAF=nth(MAF,1),
-            probeid=nth(probeid,1), mindist=nth(mindist,1))
-#    schis = split( res$chisq, res$snp )
-#    maxinds = sapply(schis, which.max)
-#    sprs = split( res$probeid, res$snp )
-#    sds = split( res$mindist, res$snp )
-#    mind = pids = rep(NA, length(sds))
-#    for (i in 1:length(schis)) {
-#          mind[i] = sds[[i]][ maxinds[i] ]
-#          pids[i] = sprs[[i]][ maxinds[i] ]
-#          }
-#    ans$mindist = mind
-#    ans$probeid = pids
-    ans
+#
+# modifications 1 Oct 2015 -- address variable numbers of permutations
+#
+#
+# two helper functions that naively assist in the creation of
+# unpredictable select predicates.  we precompute to cater for
+# up to 10 permutations.  probably will not need more
+#
+gennl = function(in1 =
+    list(~snp, ~probeid, ~MAF, ~chisq, ~mindist, ~seqnames, 
+             ~start, ~permScore_1, ~permScore_2, ~permScore_3, 
+             ~permScore_4, ~permScore_5, ~permScore_6, ~permScore_7,
+             ~permScore_8, ~permScore_9, ~permScore_10), permn) {
+ if (permn > 10) stop("doesn't handle > 10 perms ... simple fix available")
+ if (permn < 1) stop("doesn't handle < 1 perms")
+ in1[1:(7+permn)]
 }
 
-storeToFDRByProbe = function( store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
-    1e-05, 1e-06, 1e-07))), xfield = "chisq",
-    getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
-       c("permScore_1", "permScore_2", "permScore_3")])), nperm=3, filter=force) {
-    curbb = options()$BBmisc.ProgressBar.style
-    options(BBmisc.ProgressBar.style="off")
-    tf = tempfile()
-    suppressMessages({
-    newreg = makeRegistry("byp", file.dir=tf)
-    batchMapResults( store@reg, newreg, ids=store@validJobs,
-       fun=function(job, res, filter) .maxByProbe(job, res, filter), 
-       more.args=list(filter=filter) )
-    submitJobs( newreg )#, store@validJobs )
-    waitForJobs( newreg )
-    })
-    if (length(findNotDone(newreg))>0) {
-      warning("could not finish maxByProbe; returning recipient registry")
-      return(newreg)
-      }
-    newstore = ciseStore( reg=newreg, validJobs=findDone(newreg), FALSE, FALSE )
-    on.exit({unlink(tf, recursive=TRUE);
-             options(BBmisc.ProgressBar.style=curbb)
-             })
-    ans = storeToFDR( newstore, xprobs = xprobs, xfield="chisq", getter=getter,
-        nperm=nperm )  # data already filtered
-    ans@filterUsed = filter
-    ans@theCall = match.call()
-    ans
+genmaxl = function(n) {
+ l1 = list(permScore_1=~max(permScore_1), permScore_2=~max(permScore_2), 
+           permScore_3=~max(permScore_3), permScore_4=~max(permScore_4),
+           permScore_5=~max(permScore_5), permScore_6=~max(permScore_6),
+           permScore_7=~max(permScore_7), permScore_8=~max(permScore_8),
+           permScore_9=~max(permScore_9), permScore_10=~max(permScore_10))[1:n]
+ addit = list(chisq=~max(chisq), seqnames=~nth(seqnames,1), start=~nth(start,1),
+               MAF=~nth(MAF,1), mindist=~nth(mindist,1))
+ c(l1, addit)
 }
+
+    permnms = grep("permScore", names(mcols(res)), value=TRUE)
+    nperm = length(grep("permScore", names(mcols(res))))
+
+ndots = gennl(permn=nperm)
+maxdots = genmaxl(n=nperm)
+
+    pregroup = as(resfilter(res), "data.frame") %>% dplyr::select_(
+            .dots=ndots) 
+    if (feature=="SNP") {
+        postg = pregroup %>% group_by(snp) %>% arrange(desc(chisq),snp) 
+        maxdots = c(maxdots, list(probeid=~nth(probeid,1)))
+        }
+    else if (feature=="probeid") {
+        postg = pregroup %>% group_by(probeid) %>% arrange(desc(chisq),probeid)
+        maxdots = c(maxdots, list(snp=~nth(snp,1)))
+        }
+    postg %>% dplyr::summarise_(.dots=maxdots)
+}
+
+maxBySNP = function(job, res, resfilter)
+  maxByFeature(job, res, resfilter, feature="SNP")
+maxByProbe = function(job, res, resfilter)
+  maxByFeature(job, res, resfilter, feature="probeid")
 
 enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
     filter=force, ids=NULL, trimToUnit=TRUE) 
