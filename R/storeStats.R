@@ -11,9 +11,9 @@ storeToQuantiles = function( store, field,
 }
 
 storeToHist = function( store, getter =
-   function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[,c("permScore_1",
-            "permScore_2", "permScore_3")])), breaks, ids=NULL,
-            filter=force ) {
+   function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[,grep("permScore",
+                         names(mcols(x)))])),
+            breaks, ids=NULL, filter=force ) {
    if (missing(breaks)) stop("breaks must be supplied and must cover range of data")
    if (is.null(ids)) ids=store@validJobs
 ##BP   tmp = bplapply(ids, function(x) {
@@ -41,8 +41,8 @@ storeToHist = function( store, getter =
 storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     1e-06, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
-       c("permScore_1", "permScore_2", "permScore_3")])), nperm=3,
-    filter=force) {
+       grep("permScore", names(mcols(x)))])),
+       nperm, filter=force) {
  theCall = match.call()
  message("counting tests...")
  ntests = sum(unlist(storeApply( store, function(x) length(filter(x)) )) , na.rm=TRUE)
@@ -89,9 +89,9 @@ maxByProbeOLD = function (job, res, filter)
 maxByFeature = function (job, res, resfilter, feature="SNP")
 {
 #
-# you probably need to use ffdf for this...
 # a problem is that a given SNP might reside in multiple jobs?
 #
+# currently assumes a field 'chisq' holds the quantity of interest
 #
 # modifications 1 Oct 2015 -- address variable numbers of permutations
 #
@@ -178,7 +178,7 @@ enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
 dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     1e-06, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
-       c("permScore_1", "permScore_2", "permScore_3")])), nperm=3,
+       grep("permScore", names(mcols(x)))])), nperm,
     filter=force) {
 #
 # when in-memory is OK
@@ -209,7 +209,7 @@ dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
 }
 
 storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
-       xfield = "chisq", nperm=3, filter=force) {
+       xfield = "chisq", filter=force) {
     maxbp = unlist(storeApply(store, function(x) {
        maxByProbe(1, filter(x), force) }), recursive=FALSE)
     maxbp = rbind_all(maxbp)  # note filter was already applied
@@ -226,33 +226,9 @@ storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
     stopifnot(length(jobsToDo)>0)
     maxbsByJob = unlist(storeApply(store, function(x) {
        maxBySNP(1, resfilter(x), force) }, ids=jobsToDo ), recursive=FALSE)
- #   maxbp = rbind_all(maxbsByJob)  # note filter was already applied
- #  here you need to group by once more and max by snp
- #   maxbp  #dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
- #   aggr = maxbsByJob[[1]]
- #   for (i in 2:length(maxbsByJob)) {
- #       cat(i)
- #       aggr = rbind( aggr, maxbsByJob[[i]] )
- #       }
     message("binding all jobs")  # SNPs may occupy different jobs so another agg
     aggr = do.call(rbind, maxbsByJob)
-#    inr = nrow(aggr)
-#    message("finish persnp summ.")
-#    schis = split( aggr$chisq, aggr$snp )
-#    maxinds = sapply(schis, which.max)
-#    sprs = split( aggr$probeid, aggr$snp )
-#    sds = split( aggr$mindist, aggr$snp )
-#    mind = pids = rep(NA, length(sds))
-#    for (i in 1:length(schis)) {
-#          mind[i] = sds[[i]][ maxinds[i] ]
-#          pids[i] = sprs[[i]][ maxinds[i] ]
-#          }
-#    xdf = data.frame(snp=names(schis), probeid=pids, mindist=mind)
     message("done.")
-#    drops = which(names(aggr) %in% c("probeid", "mindist"))
-#    aggr = aggr[,-drops]
-#    aggr = merge(aggr, xdf, by="snp")
-#    stopifnot(nrow(aggr)==inr)
     message("group by and max")
     # after collecting, use
     #dfrToFDR( aggr, xprobs = xprobs, xfield=xfield )

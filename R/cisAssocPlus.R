@@ -4,7 +4,9 @@ sampsInVCF = function(tf) {
 # probe into VCF file to determine sample names
 #  perhaps you don't need the chr?  can determine from header?
 #
- samples(scanVcfHeader(tf))
+ ss <- samples(vh <- scanVcfHeader(tf))
+ attr(ss, "vh") <- vh
+ ss
 }
 
 #snvsOnly = function(v) {
@@ -40,6 +42,7 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  if(length(usn)>1) stop("current implementation insists that length(unique(seqnames(summex)))==1 as VCF assumed chr-specific")
  sampidsInSumm = colnames(summex)
  sampidsInVCF = sampsInVCF(vcf.tf)
+ vh = attr(sampidsInVCF, "vh")
  oksamp = intersect(sampidsInSumm, sampidsInVCF)
  stopifnot(length(oksamp)>0)
  summex = summex[, oksamp]
@@ -51,7 +54,7 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  #
  # generate cis search space for assay probes
  #
- cisr = rowRanges(summex)+cisradius
+ cisr = trim(rowRanges(summex)+cisradius)
  seqlevels(cisr) = force(seqlevels(cisr)) # must use VCF-oriented seqlevels
  #
  # first pass at genotype data retrieval
@@ -176,6 +179,10 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  varrd$probeid = as.character(varrd$paramRangeID)
  metadata(varrd)$sessInfo = sessionInfo()
  metadata(varrd)$init.Random.seed = iniSeed
+ metadata(varrd)$dimSummex = dim(summex)
+ metadata(varrd)$rowRangesSummex = rowRanges(summex) # should be small
+ metadata(varrd)$vcf.tf = vcf.tf # should be small
+ metadata(varrd)$vcfHeader = vh # should be small
  names(varrd) = NULL
  
  snpl = start(varrd)
