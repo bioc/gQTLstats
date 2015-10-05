@@ -1,5 +1,6 @@
 \name{cisAssoc}
 \alias{cisAssoc}
+\alias{cisCount}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 test for variant-expression associations in cis, using VCF
@@ -10,6 +11,10 @@ and RangedSummarizedExperiment representations
 }
 \usage{
 cisAssoc(summex, vcf.tf, rhs = ~1, nperm = 3, cisradius =
+                 50000, genome = "hg19", assayind = 1, lbmaf = 1e-06,
+                 lbgtf = 1e-06, dropUnivHet = TRUE, infoFields =
+                 c("LDAF", "SVTYPE"), simpleSNV = TRUE)
+cisCount(summex, vcf.tf, rhs = ~1, cisradius =
                  50000, genome = "hg19", assayind = 1, lbmaf = 1e-06,
                  lbgtf = 1e-06, dropUnivHet = TRUE, infoFields =
                  c("LDAF", "SVTYPE"), simpleSNV = TRUE)
@@ -65,8 +70,10 @@ transformed to the byte-code (which allows for uncertain imputation)
 and used in fast testing.
 }
 \value{
-a \code{\link[GenomicRanges]{GRanges-class}} instance
+cisAssoc: a \code{\link[GenomicRanges]{GRanges-class}} instance
 with mcols including chisq, permScore...
+
+cisCount: enumerate locations in VCF that would be tested
 }
 %\references{
 %% ~put references to the literature/web site here ~
