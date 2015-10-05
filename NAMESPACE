@@ -51,4 +51,4 @@ export( table_sensobj_thresh, queryVCF, senstab )
 S3method( plot, table.sensobj )
 S3method( plot, senstab )
 
-export(prep.cisAssocNB)
+export(prep.cisAssocNB, cisCount)
