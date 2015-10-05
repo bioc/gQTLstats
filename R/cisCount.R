@@ -35,6 +35,9 @@ cisCount = function( summex, vcf.tf, rhs=~1, cisradius=50000,
  # generate cis search space for assay probes
  #
  cisr = trim(rowRanges(summex)+cisradius)
+ rm(summex)
+ gc()
+
  seqlevels(cisr) = force(seqlevels(cisr)) # must use VCF-oriented seqlevels
  #
  # first pass at genotype data retrieval
@@ -91,8 +94,13 @@ cisCount = function( summex, vcf.tf, rhs=~1, cisradius=50000,
  bad = union(which(inmafs<lbmaf | lowgt<lbgtf), uhetinds)
  if (length(bad)>0) {
    vdata = vdata[-bad,]
-   gtdata = genotypeToSnpMatrix(vdata)
    }
- varrd = rowRanges(vdata)  # would like to use this as the backbone of test result report
- length(varrd)
+ ans = length(vdata)
+ rm(vdata)
+ gc()
+ ans
+#   gtdata = genotypeToSnpMatrix(vdata)
+#   }
+# varrd = rowRanges(vdata)  # would like to use this as the backbone of test result report
+# length(varrd)
 }
