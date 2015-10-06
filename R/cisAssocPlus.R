@@ -24,7 +24,7 @@ sampsInVCF = function(tf) {
 cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000, 
     genome="hg19", assayind=1, lbmaf=1e-6, lbgtf = 1e-6, dropUnivHet=TRUE,
     infoFields = c("LDAF", "SVTYPE"),
-    simpleSNV=TRUE ) {
+    simpleSNV=TRUE) {
 #
 # LDAF is concession to bug in readVcf where specifying only SVTYPE
 # leads to error on 1KG VCF data
@@ -55,13 +55,16 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  # generate cis search space for assay probes
  #
  cisr = trim(rowRanges(summex)+cisradius)
+ requestSize = length(cisr)
  seqlevels(cisr) = force(seqlevels(cisr)) # must use VCF-oriented seqlevels
  #
  # first pass at genotype data retrieval
  #
  vp = ScanVcfParam(fixed="ALT", info=infoFields, geno="GT", 
      samples=oksamp, which=cisr)  # which will sort variants into groups defined by probes
+ vp2 = ScanVcfParam(samples=oksamp[1], which=cisr)  #  lightweight 
  vdata = readVcf(vcf.tf, genome=genome, param=vp) # compressed
+ liteGT = readGT(vcf.tf, param=vp2)  # for verification of readVcf
  #
  # retain only SNVs with MAF > lbmaf
  # 12/26/2014 -- the exclusion of non-SNVs has become complex
@@ -89,7 +92,10 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
    }
  }
  nonSNV = which(!isSNV(vdata))
- if (length(nonSNV)>0) vdata = vdata[-nonSNV,]
+ if (length(nonSNV)>0) {
+    vdata = vdata[-nonSNV,]
+    liteGT = liteGT[-nonSNV,,drop=FALSE]
+    }
  gtdata = genotypeToSnpMatrix(vdata)
  uhetinds = NULL
  if (dropUnivHet) {
@@ -111,6 +117,7 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  bad = union(which(inmafs<lbmaf | lowgt<lbgtf), uhetinds)
  if (length(bad)>0) {
    vdata = vdata[-bad,]
+   liteGT = liteGT[-bad,,drop=FALSE]
    gtdata = genotypeToSnpMatrix(vdata)
    }
  varrd = rowRanges(vdata)  # would like to use this as the backbone of test result report
@@ -118,13 +125,9 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  # use a list mapping probes to SNVs in cis to organize the testing
  #
  uo = unique(varrd$paramRangeID)
+ nRequestsSatisfied = length(uo)
+ if (requestSize != nRequestsSatisfied) warning("number unique values of paramRangeID returned differs from number requested")
  snpbyprobe = split(names(varrd), varrd$paramRangeID)[uo] # will reorder without uo
-# snpbyprobe = sapply(vdl, names)
-# if (ncol(snpbyprobe)==1) {
-#    cn = colnames(snpbyprobe)
-#    snpbyprobe = list(as.character(snpbyprobe))
-#    names(snpbyprobe) = cn
-#    }
  probes2test = names(snpbyprobe)
  numdata = assays(summex)[[assayind]][probes2test,,drop=FALSE]
  #
@@ -183,6 +186,10 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
  metadata(varrd)$rowRangesSummex = rowRanges(summex) # should be small
  metadata(varrd)$vcf.tf = vcf.tf # should be small
  metadata(varrd)$vcfHeader = vh # should be small
+ metadata(varrd)$requestSize = requestSize
+ metadata(varrd)$nRequestsSatisfied = nRequestsSatisfied
+ metadata(varrd)$dimliteGT = dim(liteGT)
+ rm(liteGT)
  names(varrd) = NULL
  
  snpl = start(varrd)

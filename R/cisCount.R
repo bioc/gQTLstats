@@ -99,8 +99,4 @@ cisCount = function( summex, vcf.tf, rhs=~1, cisradius=50000,
  rm(vdata)
  gc()
  ans
-#   gtdata = genotypeToSnpMatrix(vdata)
-#   }
-# varrd = rowRanges(vdata)  # would like to use this as the backbone of test result report
-# length(varrd)
 }
