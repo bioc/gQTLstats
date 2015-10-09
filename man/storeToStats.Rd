@@ -17,15 +17,14 @@ support statistical reductions
 storeToQuantiles(store, field, 
     probs=c(seq(0,.999,.001), 1-(c(1e-4,1e-6,1e-6,1e-7))),
     ids = NULL, ..., checkField = FALSE, filter=force)
-storeToHist(store, 
-    getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
-    c("permScore_1", "permScore_2", "permScore_3")])), breaks, ids=NULL,
-	filter=force)
+storeToHist(store, getter = function(x)
+             as.numeric(S4Vectors::as.matrix(mcols(x)[,
+             grep("permScore", names(mcols(x)))])), breaks, ids =
+             NULL, filter = force)
 storeToFDR(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
-    1e-06, 1e-06, 1e-07))), xfield = "chisq",
-    getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[,
-       c("permScore_1", "permScore_2", "permScore_3")])), nperm=3,
-	filter=force) 
+             1e-06, 1e-06, 1e-07))), xfield = "chisq", getter =
+             function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[,
+             grep("permScore", names(mcols(x)))])), filter = force)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -63,8 +62,6 @@ at which FDR estimates are recorded.
 }
   \item{getter}{function of a single argument that extracts a numeric
 vector of association scores obtained under permutation}
-  \item{nperm}{number of genome-wide permutations recorded in the store (or,
-in special cases, retrieved for nonstandard versions of \code{getter}}
   \item{x}{instance of FDRsupp}
   \item{filter}{function accepting and returning GRanges instance,
     executed when cisAssoc result is loaded to modify that result,

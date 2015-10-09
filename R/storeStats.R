@@ -42,8 +42,11 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     1e-06, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
        grep("permScore", names(mcols(x)))])),
-       nperm, filter=force) {
+       filter=force) {
  theCall = match.call()
+ r1 = storeApply(store, force, ids=1, flatten1=TRUE)[[1]]
+ nperm = length(grep("permScore", names(mcols(r1))))
+ stopifnot(nperm>0)
  message("counting tests...")
  ntests = sum(unlist(storeApply( store, function(x) length(filter(x)) )) , na.rm=TRUE)
  message("counting #NA...")
@@ -178,8 +181,7 @@ enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
 dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     1e-06, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
-       grep("permScore", names(mcols(x)))])), nperm,
-    filter=force) {
+       grep("permScore", names(mcols(x)))])), filter=force) {
 #
 # when in-memory is OK
 #
@@ -187,6 +189,7 @@ dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
  theCall = match.call()
  dfr = filter(dfr)
  stopifnot("chisq" %in% names(dfr))
+ nperm = length(grep("permScore", names(dfr)))
  message("counting tests...")
  ntests = sum(!is.na(dfr$chisq))
  message("counting #NA...")
@@ -212,7 +215,9 @@ storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
        xfield = "chisq", filter=force) {
     maxbp = unlist(storeApply(store, function(x) {
        maxByProbe(1, filter(x), force) }), recursive=FALSE)
+suppressWarnings({  # expected unequal factor levels
     maxbp = rbind_all(maxbp)  # note filter was already applied
+})
     dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
 }
 
