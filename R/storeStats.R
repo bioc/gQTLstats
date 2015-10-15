@@ -39,7 +39,7 @@ storeToHist = function( store, getter =
   
 
 storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
-    1e-06, 1e-06, 1e-07))), xfield = "chisq",
+    1e-05, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
        grep("permScore", names(mcols(x)))])),
        filter=force) {
