@@ -42,20 +42,20 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     1e-05, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
        grep("permScore", names(mcols(x)))])),
-       filter=force) {
+       filter=force, .id4coln=1, ids=NULL) {
  theCall = match.call()
- r1 = storeApply(store, force, ids=1, flatten1=TRUE)[[1]]
+ r1 = storeApply(store, force, ids=.id4coln, flatten1=TRUE)[[1]]
  nperm = length(grep("permScore", names(mcols(r1))))
  stopifnot(nperm>0)
  message("counting tests...")
- ntests = sum(unlist(storeApply( store, function(x) length(filter(x)) )) , na.rm=TRUE)
+ ntests = sum(unlist(storeApply( store, function(x) length(filter(x)), ids=ids )) , na.rm=TRUE)
  message("counting #NA...")
- nna = sum(unlist(storeApply( store, function(x)sum(is.na(filter(x)$chisq)) )) , na.rm=TRUE)
+ nna = sum(unlist(storeApply( store, function(x)sum(is.na(filter(x)$chisq)), ids=ids )) , na.rm=TRUE)
  ntests = ntests - nna
  message("obtaining assoc quantiles...")
- xq = storeToQuantiles(store, field=xfield, probs=xprobs, filter=filter) # nxq
+ xq = storeToQuantiles(store, field=xfield, probs=xprobs, filter=filter, ids=ids) # nxq
  message("computing perm_assoc histogram....")
- yh.orig = storeToHist(store, getter=getter, breaks=c(0,xq,1e10), filter=filter)$counts # nxq+2
+ yh.orig = storeToHist(store, getter=getter, breaks=c(0,xq,1e10), filter=filter, ids=ids)$counts # nxq+2
  yh = numeric(length(yh.orig)-1)
  yh[1] = yh.orig[1] + yh.orig[2]  # fuse first 2 elements for left boundary
  yh[2:length(yh)] = yh.orig[-c(1,2)] # transfer
@@ -102,6 +102,9 @@ maxByFeature = function (job, res, resfilter, feature="SNP")
 # two helper functions that naively assist in the creation of
 # unpredictable select predicates.  we precompute to cater for
 # up to 10 permutations.  probably will not need more
+#
+# the idea here is that we get the largest observed per-gene score
+# statistic, and the largest per-gene statistic for each permutation
 #
 gennl = function(in1 =
     list(~snp, ~probeid, ~MAF, ~chisq, ~mindist, ~seqnames, 
@@ -179,7 +182,7 @@ enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
 }
 
 dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
-    1e-06, 1e-06, 1e-07))), xfield = "chisq",
+    1e-05, 1e-06, 1e-07))), xfield = "chisq",
     getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
        grep("permScore", names(mcols(x)))])), filter=force) {
 #
@@ -211,14 +214,16 @@ dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
     filterUsed=filter)
 }
 
+# we use dplyr here for group_by performance
+#
 storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
-       xfield = "chisq", filter=force) {
+       xfield = "chisq", filter=force, ids=NULL) {
     maxbp = unlist(storeApply(store, function(x) {
-       maxByProbe(1, filter(x), force) }), recursive=FALSE)
+       maxByProbe(1, filter(x), force) }, ids=ids), recursive=FALSE)
 suppressWarnings({  # expected unequal factor levels
     maxbp = rbind_all(maxbp)  # note filter was already applied
 })
-    dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=force)
+    dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=filter)
 }
 
 storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),

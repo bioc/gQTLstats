@@ -22,9 +22,10 @@ storeToHist(store, getter = function(x)
              grep("permScore", names(mcols(x)))])), breaks, ids =
              NULL, filter = force)
 storeToFDR(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
-             1e-06, 1e-06, 1e-07))), xfield = "chisq", getter =
+             1e-05, 1e-06, 1e-07))), xfield = "chisq", getter =
              function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[,
-             grep("permScore", names(mcols(x)))])), filter = force)
+             grep("permScore", names(mcols(x)))])), filter = force,
+            .id4coln=1, ids=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -66,6 +67,8 @@ vector of association scores obtained under permutation}
   \item{filter}{function accepting and returning GRanges instance,
     executed when cisAssoc result is loaded to modify that result,
     defaults to no-op}
+  \item{.id4coln}{job id to be used for initial probe to determine
+names of fields in mcols of all jobs}
 }
 \details{
 uses current BatchJobs configuration to parallelize extraction;
