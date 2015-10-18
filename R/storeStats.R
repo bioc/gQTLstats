@@ -1,7 +1,7 @@
 
 
 storeToQuantiles = function( store, field, 
-     probs=c(seq(0,.999,.001), 1-(c(1e-4,1e-6,1e-6,1e-7))), 
+     probs=c(seq(0,.999,.001), 1-(c(1e-4,1e-5,1e-6,1e-7))), 
      ids=NULL, ..., checkField=FALSE, filter=force ) {
 #
 # uses ff for interim storage of data for summarization
