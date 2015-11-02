@@ -50,7 +50,7 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
  message("counting tests...")
  ntests = sum(unlist(storeApply( store, function(x) length(filter(x)), ids=ids )) , na.rm=TRUE)
  message("counting #NA...")
- nna = sum(unlist(storeApply( store, function(x)sum(is.na(filter(x)$chisq)), ids=ids )) , na.rm=TRUE)
+ nna = sum(unlist(storeApply( store, function(x)sum(is.na(mcols(filter(x))[,xfield])), ids=ids )) , na.rm=TRUE)
  ntests = ntests - nna
  message("obtaining assoc quantiles...")
  xq = storeToQuantiles(store, field=xfield, probs=xprobs, filter=filter, ids=ids) # nxq
