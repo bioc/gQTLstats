@@ -1,5 +1,6 @@
 \name{cisAssoc}
 \alias{cisAssoc}
+\alias{AllAssoc}
 \alias{cisCount}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
@@ -18,6 +19,9 @@ cisCount(summex, vcf.tf, rhs = ~1, cisradius =
                  50000, genome = "hg19", assayind = 1, lbmaf = 1e-06,
                  lbgtf = 1e-06, dropUnivHet = TRUE, infoFields =
                  c("LDAF", "SVTYPE"), simpleSNV = TRUE)
+AllAssoc(summex, vcf.tf, variantRange, rhs = ~1, nperm = 3, 
+    genome = "hg19", assayind = 1, lbmaf = 1e-06, lbgtf = 1e-06, 
+    dropUnivHet = TRUE, infoFields = c("LDAF", "SVTYPE")) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -62,6 +66,8 @@ See \url{http://www.biostars.org/p/117155/#117270}
   \item{simpleSNV}{logical -- will use simple computation of
 \code{\link[VariantAnnotation]{isSNV}} to filter variants for
 analysis to SNV }
+  \item{variantRange}{GRanges instance that defines the
+scope of the VCF to be used for testing against all features on summex}
 }
 \details{
 \code{\link[snpStats]{snp.rhs.tests}} is the 
@@ -103,10 +109,16 @@ seqlevelsStyle for summex and vcf.tf content must agree
  set.seed(1234)
  litc = cisAssoc(lgeue[c(162,201),], tf20, nperm=2, lbmaf=.05, cisradius=50000)
  summary(litc$chisq)
-# \dontrun{
+ mysr = range(litc)
+ lita = AllAssoc(geuFPKM[1:10,], tf20, mysr)
  litc$pifdr = gQTLstats:::pifdr(litc$chisq, c(litc$permScore_1, litc$permScore_2))
  litc[which(litc$pifdr < .01)]
-# }
+\dontrun{
+  mysr2 = GRanges("20", IRanges(33000055, 33010055))
+  lita2 = AllAssoc(geuFPKM[1:10,], tf20, mysr2)
+  lita3 = AllAssoc(geuFPKM[11:20,], tf20, mysr)
+  lita4 = AllAssoc(geuFPKM[11:20,], tf20, mysr2)
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
