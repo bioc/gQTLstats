@@ -489,7 +489,7 @@ AllAssoc = function( summex, vcf.tf, variantRange, rhs=~1, nperm=3,
  metadata(varrd)$dimliteGT = dim(liteGT)
  metadata(varrd)$theCall = thecall
  rm(liteGT)
- names(varrd) = NULL
+# names(varrd) = NULL
  
 # dropping distance calcs as they can be done post hoc with metadata
 # snpl = start(varrd)

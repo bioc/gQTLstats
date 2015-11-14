@@ -110,15 +110,13 @@ seqlevelsStyle for summex and vcf.tf content must agree
  litc = cisAssoc(lgeue[c(162,201),], tf20, nperm=2, lbmaf=.05, cisradius=50000)
  summary(litc$chisq)
  mysr = range(litc)
- lita = AllAssoc(geuFPKM[1:10,], tf20, mysr)
  litc$pifdr = gQTLstats:::pifdr(litc$chisq, c(litc$permScore_1, litc$permScore_2))
  litc[which(litc$pifdr < .01)]
-\dontrun{
-  mysr2 = GRanges("20", IRanges(33000055, 33010055))
-  lita2 = AllAssoc(geuFPKM[1:10,], tf20, mysr2)
-  lita3 = AllAssoc(geuFPKM[11:20,], tf20, mysr)
-  lita4 = AllAssoc(geuFPKM[11:20,], tf20, mysr2)
-  }
+ lita = AllAssoc(geuFPKM[1:10,], tf20, mysr)
+ lita3 = AllAssoc(geuFPKM[11:20,], tf20, mysr)
+ lita5 = AllAssoc(geuFPKM[21:30,], tf20, mysr)
+ n1 = collapseToBuf(lita, lita3)
+ n1 = collapseToBuf(n1, lita5)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
