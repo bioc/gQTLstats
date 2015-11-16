@@ -53,4 +53,6 @@ export( table_sensobj_thresh, queryVCF, senstab )
 S3method( plot, table.sensobj )
 S3method( plot, senstab )
 
-export(prep.cisAssocNB, cisCount, qqStore, collapseToBuf, transAssoc)
+export(prep.cisAssocNB, cisCount, qqStore, collapseToBuf, transAssoc,
+   paths1kg, VcfStack)
+exportClasses("VcfStack")
