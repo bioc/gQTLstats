@@ -171,10 +171,10 @@ enumerateByFDR = function (store, fdrsupp, threshold = 0.05,
 # it is possible that an empty range will result, if no pair
 # has sufficiently low FDR
 #
-    ul = unlist(ans, recursive=FALSE)
-    zl = sapply(ul,length)
-    if (any(zl==0)) ul=ul[-which(zl==0)]
-    ans = unlist(GRangesList(ul))
+#    ul = ans  # revision to storeApply that flattens should remove need for this
+#    zl = sapply(ul,length)
+#    if (any(zl==0)) ul=ul[-which(zl==0)]
+    ans = unlist(GRangesList(ans))
     metadata(ans)$enumCall = match.call()
     metadata(ans)$enumSess = sessionInfo()
     metadata(ans)$fdrCall = fdrsupp@theCall
@@ -218,8 +218,10 @@ dfrToFDR = function(dfr, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
 #
 storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
        xfield = "chisq", filter=force, ids=NULL) {
-    maxbp = unlist(storeApply(store, function(x) {
-       maxByProbe(1, filter(x), force) }, ids=ids), recursive=FALSE)
+#    maxbp = unlist(storeApply(store, function(x) {
+#       maxByProbe(1, filter(x), force) }, ids=ids), recursive=FALSE)
+    maxbp = storeApply(store, function(x) {
+       maxByProbe(1, filter(x), force) }, ids=ids)
 suppressWarnings({  # expected unequal factor levels
     maxbp = rbind_all(maxbp)  # note filter was already applied
 })
@@ -234,8 +236,10 @@ storeToMaxAssocBySNP = function( store, chr=1, xprobs = seq(0, 0.999, 0.001),
     ac = as.character
     jobsToDo = as.integer(rmap[ which(ac(seqnames(rmap))==ac(chr)) ]$jobid)
     stopifnot(length(jobsToDo)>0)
-    maxbsByJob = unlist(storeApply(store, function(x) {
-       maxBySNP(1, resfilter(x), force) }, ids=jobsToDo ), recursive=FALSE)
+    #maxbsByJob = unlist(storeApply(store, function(x) {  # new storeApply defaults
+    #   maxBySNP(1, resfilter(x), force) }, ids=jobsToDo ), recursive=FALSE)
+    maxbsByJob = storeApply(store, function(x) {
+       maxBySNP(1, resfilter(x), force) }, ids=jobsToDo )
     message("binding all jobs")  # SNPs may occupy different jobs so another agg
     aggr = do.call(rbind, maxbsByJob)
     message("done.")

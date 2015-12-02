@@ -1,20 +1,20 @@
 setGeneric("clipPCs", 
  function(x, inds2drop, center=TRUE) standardGeneric("clipPCs"))
  
-setMethod("clipPCs", 
-  c("SummarizedExperiment", "numeric", "logical"), function(x, inds2drop, center=TRUE){
-   .clipPCs.SE(se=x, inds2drop, center)
-})
+#setMethod("clipPCs", 
+#  c("SummarizedExperiment", "numeric", "logical"), function(x, inds2drop, center=TRUE){
+#   .clipPCs.SE(se=x, inds2drop, center)
+#})
 
 setMethod("clipPCs", 
   c("RangedSummarizedExperiment", "numeric", "logical"), function(x, inds2drop, center=TRUE){
    .clipPCs.SE(se=x, inds2drop, center)
 })
 
-setMethod("clipPCs", 
-  c("SummarizedExperiment", "numeric", "missing"), function(x, inds2drop, center=TRUE){
-   .clipPCs.SE(se=x, inds2drop, TRUE)
-})
+#setMethod("clipPCs", 
+#  c("SummarizedExperiment", "numeric", "missing"), function(x, inds2drop, center=TRUE){
+#   .clipPCs.SE(se=x, inds2drop, TRUE)
+#})
 
 setMethod("clipPCs", 
   c("RangedSummarizedExperiment", "numeric", "missing"), function(x, inds2drop, center=TRUE){

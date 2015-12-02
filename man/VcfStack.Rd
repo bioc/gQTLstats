@@ -1,6 +1,23 @@
 \name{VcfStack}
 \alias{VcfStack}
+\alias{VcfStack-class}
+\alias{RangedVcfStack-class}
 \alias{paths1kg}
+\alias{bindRanges}
+\alias{bindSampleNames}
+\alias{[,RangedVcfStack,GRanges,character,missing-method}
+\alias{[,RangedVcfStack,missing,missing,missing-method}
+\alias{[,RangedVcfStack,GRanges,ANY,missing-method}
+\alias{[,VcfStack,GenomicRanges,character,missing-method}
+\alias{[,VcfStack,GenomicRanges,missing,missing-method}
+\alias{assay,RangedVcfStack,missing-method}
+\alias{bindRanges,RangedVcfStack,GRanges-method}
+\alias{bindRanges,VcfStack,GRanges-method}
+\alias{bindSampleNames,RangedVcfStack,character-method}
+\alias{features,RangedVcfStack-method}
+\alias{samples,RangedVcfStack-method}
+\alias{subsetSample,RangedVcfStack-method}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 manage a collection of VCF files that are split over chromosomes for a set of samples
@@ -70,7 +87,11 @@ library(Homo.sapiens)  # necessary?
 stopifnot(requireNamespace("GenomeInfoDb"))
 ob = VcfStack(pa, seqinfo(Homo.sapiens))
 myr = GRanges("22", IRanges(20e6,20.01e6))
-ob[ myr, "NA12878" ]
+\dontrun{
+if (!is.null(nsl("www.r-project.org"))) { # test for connection
+    ob[ myr, "NA12878" ]
+    }
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

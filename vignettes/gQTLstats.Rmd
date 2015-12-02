@@ -39,7 +39,7 @@ provide a basis for refinement or functional interpretation.
 We take for granted the use of the gQTL* infrastructure
 for testing and management of test results.  We
 use for examples elements of the `r Biocexptpkg("geuvPack")` and 
-`r Biocexptpkg("geuvStore")`
+`r Biocexptpkg("geuvStore2")`
 packages.
 
 # Basic infrastructure for statistics on a distributed store of eQTL results
@@ -56,12 +56,12 @@ suppressPackageStartupMessages({
 library(SummarizedExperiment)
 library(Homo.sapiens)
 library(org.Hs.eg.db)
-library(geuvStore)
+library(geuvStore2)
 library(gQTLBase)
 library(gQTLstats)
 })
 ```{r contset}
-library(geuvStore)
+library(geuvStore2)
 library(gQTLBase)
 library(gQTLstats)
 library(parallel)
@@ -71,7 +71,7 @@ registerDoSEQ()
 if (.Platform$OS.type != "windows") {
   registerDoParallel(cores=max(c(1, floor(nco/2))))
 }
-prst = ciseStore(partialRegistry(), partialIds(), FALSE, FALSE)
+prst = makeGeuvStore2() #ciseStore(partialRegistry(), partialIds(), FALSE, FALSE)
 ```
 
 ## Estimation of quantiles of the distribution of observed associations
@@ -101,7 +101,7 @@ tail(hh$counts)
 
 FDR computation is post-hoc relative to filtering
 that need not be specified prior to testing.  For
-illustration, we survey the results in `r Biocexptpkg("geuvStore")`
+illustration, we survey the results in `r Biocexptpkg("geuvStore2")`
 to obtain FDRs for each SNP:probe
 pair in two forms.  First, we obtain FDR without
 any filtering.  Second, we compute an
@@ -302,8 +302,8 @@ by default.
 
 ```{r lkscores,fig=TRUE}
 data(hmm878)
-library(geuvStore)
-prst = ciseStore(partialRegistry(), partialIds(), TRUE, FALSE)
+library(geuvStore2)
+prst = makeGeuvStore2() #ciseStore(partialRegistry(), partialIds(), TRUE, FALSE)
 myg = "ENSG00000183814.10" # LIN9
 data(filtFDR)
 library(ggplot2)
@@ -349,7 +349,7 @@ ChromHMM states for NA12878, along with other information assembled in the store
 
 ## Visiting variants and updating with the relevant context and outcomes
 
-We will make a temporary reconstruction of geuvStore
+We will make a temporary reconstruction of geuvStore2
 contents with the enhanced information.
  
 <!-- was rebuildG -->

@@ -15,7 +15,9 @@
   dat = sapply(1:nsnp, function(z) XYO[z, obufinds[z,]])
   topn = sapply(1:nsnp, function(z) fnames[obufinds[z,]])
   cl = x
-  mcols(cl) = mcols(cl)[,c("REF", "ALT", "snp", "MAF")]
+  nmc= names(mcols(cl))
+  if (all(c("REF", "ALT") %in% nmc)) mcols(cl) = mcols(cl)[,c("REF", "ALT", "snp", "MAF")]
+  else mcols(cl) = mcols(cl)[,c("snp", "MAF")]
   mcols(cl)$scorebuf = t(dat)
   mcols(cl)$elnames = t(topn)
   cl
@@ -52,7 +54,8 @@ collapseToBuf = function(x, y, bufsize=5, frag="_obs") {
   dat = sapply(1:nsnp, function(z) XYO[z, obufinds[z,]])
   topn = sapply(1:nsnp, function(z) alln[z, obufinds[z,]])
   cl = x
-  mcols(cl) = mcols(cl)[,c("REF", "ALT", "snp", "MAF")] # restart
+  nmc = names(mcols(cl))
+  mcols(cl) = mcols(cl)[,intersect(nmc, c("REF", "ALT", "snp", "MAF"))] # restart
   mcols(cl)$scorebuf = t(dat)
   mcols(cl)$elnames = t(topn)
   cl
