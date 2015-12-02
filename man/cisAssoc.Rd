@@ -114,9 +114,9 @@ seqlevelsStyle for summex and vcf.tf content must agree
  litc[which(litc$pifdr < .01)]
  lita = AllAssoc(geuFPKM[1:10,], tf20, mysr)
  lita3 = AllAssoc(geuFPKM[11:20,], tf20, mysr)
- lita5 = AllAssoc(geuFPKM[21:30,], tf20, mysr)
- n1 = collapseToBuf(lita, lita3)
- n1 = collapseToBuf(n1, lita5)
+ #lita5 = AllAssoc(geuFPKM[21:30,], tf20, mysr)
+ n1 = gQTLstats:::collapseToBuf(lita, lita3)
+ #n1 = collapseToBuf(n1, lita5)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

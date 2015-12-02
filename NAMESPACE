@@ -53,8 +53,9 @@ export( table_sensobj_thresh, queryVCF, senstab )
 S3method( plot, table.sensobj )
 S3method( plot, senstab )
 
-export(prep.cisAssocNB, cisCount, qqStore, collapseToBuf, transAssoc,
-   paths1kg, VcfStack, getVCFPath)
+export(prep.cisAssocNB, cisCount, qqStore, #collapseToBuf, 
+   transAssoc,
+   paths1kg, VcfStack) #, getVCFPath)
 exportClasses("VcfStack")
 exportClasses("RangedVcfStack")
 exportMethods("bindRanges", "[")

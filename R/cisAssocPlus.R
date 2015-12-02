@@ -161,6 +161,12 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
    suppressWarnings({
    for (i in 1:length(probes2test)) {
      ex = as.numeric(numdata[ probes2test[i], ])
+     if (any(is.na(ex))) {
+         print("perm")
+         print(j)
+         print(probes2test[i])
+         stop("NA sneaks in")
+         }
      perms[[j]][[i]] = snp.rhs.tests( formula=infmla, 
              snp.data=gtdata$genotypes[, snpbyprobe[[ probes2test[i] ]] ], family="gaussian",
              data=data.frame(ex=sample(ex), as(colData(summex), "data.frame") ), uncertain=TRUE )

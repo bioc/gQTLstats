@@ -62,3 +62,5 @@ regressOut = function(x, rhs, ...) {
  x
 }
 
+chantmpl = function() "/proj/rerefs/reref00/1000Genomes/Phase3_v5/ALL/ALL.%%N%%.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz"
+

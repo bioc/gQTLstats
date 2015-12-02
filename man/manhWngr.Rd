@@ -69,9 +69,9 @@ on the output
 %%% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-require(geuvStore)
+require(geuvStore2)
 require(gQTLBase)
-store = makeGeuvStore()
+store = makeGeuvStore2()
 data(hmm878)
 data(filtFDR)
 manhWngr(store, fdrsupp=filtFDR, namedGR=hmm878)

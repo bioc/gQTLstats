@@ -61,9 +61,9 @@ predicted using the GAM model held in the FDRsupp instance.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-require(geuvStore)
+require(geuvStore2)
 require(gQTLBase)
-st = makeGeuvStore()
+st = makeGeuvStore2()
 data(filtFDR)
 filtEnum = enumerateByFDR( st, filtFDR,
   filter=function(x)x[which(x$mindist <= 500000 & x$MAF >= 0.05)] )

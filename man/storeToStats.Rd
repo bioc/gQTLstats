@@ -104,10 +104,10 @@ is no guarantee of order among elements
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
- stopifnot(require(geuvStore)) 
+ stopifnot(require(geuvStore2)) 
  require(BatchJobs)
  require(gQTLBase)
- store = makeGeuvStore()
+ store = makeGeuvStore2()
  library(doParallel)
  if (.Platform$OS.type == "windows") {
    registerDoSEQ()

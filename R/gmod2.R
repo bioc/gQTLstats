@@ -1,7 +1,11 @@
 
-gmod2 = function (sym, genome = "hg19", orgDb=Homo.sapiens,
+gmod2 = function (sym, genome = "hg19", orgDb, #=Homo.sapiens,
    collector=exonsBy, verbose=FALSE) 
 {
+    if (missing(orgDb)) {
+       require("Homo.sapiens")
+       orgDb = Homo.sapiens
+       }
     rend = suppressPackageStartupMessages
     if (verbose) rend = force
     rend({

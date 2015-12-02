@@ -92,10 +92,10 @@ invisibly returns list with
 %}
 \examples{
 \dontrun{
-library(geuvStore)
+library(geuvStore2)
 library(gQTLBase)
-gs = makeGeuvStore()
-qqStore(gs, ids=partialIds()[1:20])
+gs = makeGeuvStore2()
+qqStore(gs) #, ids=partialIds()[1:20])
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
