@@ -81,6 +81,7 @@ setMethod("samples", "RangedVcfStack", function(object) {
   if (length(sn <- object@sampleNames)>0) return(sn)
   samples(scanVcfHeader(object@paths[[1]]))
 })
+setGeneric("subsetSample", function(x, j, ...) standardGeneric("subsetSample"))
 setMethod("subsetSample", c("RangedVcfStack"), function(x, j, ...) {
   if (length(sn <- x@sampleNames)>0) {
       x@sampleNames = intersect(j, x@sampleNames)
@@ -101,6 +102,7 @@ setMethod("[", c("RangedVcfStack", "missing", "missing", "missing"),
      x
 })  # above needed for biocMultiAssay validity method checker which runs x[]
 #
+setGeneric("features", function(x)standardGeneric("features"))
 setMethod("features", "RangedVcfStack", function(x) {
   x@rowRanges
 })

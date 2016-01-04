@@ -63,4 +63,4 @@ exportMethods("bindSampleNames")
 export(samples)
 exportMethods("features", "samples", "subsetSample", "assay")
 
-importFrom(biocMultiAssay, subsetSample, features)
+#importFrom(biocMultiAssay, subsetSample, features)
