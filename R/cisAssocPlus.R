@@ -398,6 +398,12 @@ AllAssoc = function( summex, vcf.tf, variantRange, rhs=~1, nperm=3,
     vdata = vdata[-nonSNV,]
     liteGT = liteGT[-nonSNV,,drop=FALSE]
     }
+ if (length(vdata) == 0) {
+    message("no SNP identified in range:")
+    show(variantRange)
+    message("returning NULL")
+    return(NULL)
+    }
  gtdata = genotypeToSnpMatrix(vdata)
  uhetinds = NULL
  if (dropUnivHet) {
