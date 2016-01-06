@@ -353,3 +353,73 @@ We will make a temporary reconstruction of geuvStore2
 contents with the enhanced information.
  
 <!-- was rebuildG -->
+
+
+# Support for trans-eQTL identification
+
+The workhorse function is AllAssoc.  The interface is
+```{r lkall}
+args(AllAssoc)
+```
+This differs from cisAssoc through the addition of a
+`variantRange` argument.  
+
+The basic operation will be as follows.  For a given
+RangedSummarizedExperiment instance `summex`, all features will
+be tested for association with all SNP in the `variantRange`
+restriction of the VCF identified in `vcf.tf`.  The basic
+iteration strategy is
+
+a) tile the genome to obtain chunks of SNPs
+
+b) decompose the SE into chunks of transcriptome (or other 'ome)
+
+c) for each chunk of SNPs, for each chunk of transcriptome,
+ seek associations and retain the top K in a buffering structure
+
+Management of this buffering structure needs work.
+
+```{r demoit}
+require(GenomeInfoDb)
+require(geuvPack)
+require(Rsamtools)
+data(geuFPKM)  # get a ranged summarized expt
+lgeu = geuFPKM[ which(seqnames(geuFPKM)=="chr20"), ] # limit to chr20
+seqlevelsStyle(lgeu) = "NCBI"
+tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="GGtools"))
+if (require(VariantAnnotation)) scanVcfHeader(tf20)
+set.seed(1234)
+mysr = GRanges("20", IRanges(33.099e6, 33.52e6))
+lita = AllAssoc(geuFPKM[1:10,], tf20, mysr)
+names(mcols(lita))
+```
+
+The trans search for this segment of chr20 proceeds by obtaining
+additional association scores for additional genes.
+```{r dem2}
+litb = AllAssoc(geuFPKM[11:20,], tf20, mysr)
+litc = AllAssoc(geuFPKM[21:30,], tf20, mysr)
+```
+Now we want to reduce this information by collecting the
+strongest associations over the 30 genes tested.
+```{r docoll}
+buf = gQTLstats:::collapseToBuf(lita, litb, frag="_obs")
+buf
+buf = gQTLstats:::collapseToBuf(buf, litc, frag="_obs")
+buf
+```
+Let's do the same buffering process for the first permutation.
+```{r doperm}
+pbuf = gQTLstats:::collapseToBuf(lita, litb, frag="_permScore_1")
+pbuf = gQTLstats:::collapseToBuf(pbuf, litc, frag="_permScore_1")
+pbuf
+```
+We can compare the distributions of maximal association per SNP
+as observed or under permutation.
+```{r dof,fig=TRUE}
+plot(density(buf$scorebuf[,1]))
+lines(density(pbuf$scorebuf[,1]), lty=2)
+```
+
+
+
