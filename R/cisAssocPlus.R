@@ -450,13 +450,10 @@ AllAssoc = function( summex, vcf.tf, variantRange, rhs=~1, nperm=3,
  suppressWarnings({
  for (i in 1:length(probes2test)) {
    ex = numdata[ probes2test[i], ]
-   ndf = data.frame(ex=sample(ex), as(colData(summex), "data.frame") )
-   rownames(ndf) = colnames(summex)  # but ex is scrambled
+   ndf = data.frame(ex=ex, as(colData(summex), "data.frame") )
+   rownames(ndf) = colnames(summex)  
    tsts[[i]] = snp.rhs.tests( formula=infmla, 
            snp.data=gtdata$genotypes[, names(varrd) ], family="gaussian",
-# this data frame has rownames and will be reordered by snp.rhs.tests
-# must avoid this
-#(           data=data.frame(ex=ex, as(colData(summex), "data.frame") )
            data=ndf, uncertain=TRUE )
    }
   })
@@ -469,9 +466,14 @@ AllAssoc = function( summex, vcf.tf, variantRange, rhs=~1, nperm=3,
    suppressWarnings({
    for (i in 1:length(probes2test)) {
      ex = as.numeric(numdata[ probes2test[i], ])
+     ndf = data.frame(ex=sample(ex), as(colData(summex), "data.frame") )
+     rownames(ndf) = colnames(summex)  # but ex is scrambled
      perms[[j]][[i]] = snp.rhs.tests( formula=infmla, 
              snp.data=gtdata$genotypes[, names(varrd) ], family="gaussian",
-             data=data.frame(ex=sample(ex), as(colData(summex), "data.frame") ), uncertain=TRUE )
+# this data frame has rownames and will be reordered by snp.rhs.tests
+# must avoid this
+#(           data=data.frame(ex=ex, as(colData(summex), "data.frame") )
+             data=ndf, uncertain=TRUE)
      }
     })
    }
