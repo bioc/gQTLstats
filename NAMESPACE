@@ -33,6 +33,10 @@ export(getFDRfunc, getTab, setFDRfunc, directPlot,
        txsPlot, eqBox2, eqDesc2, enumerateByFDR, #gmod2,
 	manhWngr)
 
+importClassesFrom(GenomicFiles, VcfStack, RangedVcfStack)
+importFrom(GenomicFiles, VcfStack,
+    subsetSample, features, assay, bindRanges, bindSampleNames)
+
 importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam, isSNV,
    genotypeToSnpMatrix, alt, ref, "vcfSamples", "vcfSamples<-", info, "alt<-",
    readGT)
@@ -54,13 +58,6 @@ S3method( plot, table.sensobj )
 S3method( plot, senstab )
 
 export(prep.cisAssocNB, cisCount, qqStore, #collapseToBuf, 
-   transAssoc,
-   paths1kg, VcfStack) #, getVCFPath)
-exportClasses("VcfStack")
-exportClasses("RangedVcfStack")
-exportMethods("bindRanges", "[")
-exportMethods("bindSampleNames")
-export(samples)
-exportMethods("features", "samples", "subsetSample", "assay")
+    transAssoc)
 
 #importFrom(biocMultiAssay, subsetSample, features)
