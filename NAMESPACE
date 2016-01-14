@@ -58,3 +58,6 @@ export(prep.cisAssocNB, cisCount, qqStore, #collapseToBuf,
     transAssoc)
 
 #importFrom(biocMultiAssay, subsetSample, features)
+
+exportClasses(TransChunk)
+export(TransChunk, filteredDFwPerm)
