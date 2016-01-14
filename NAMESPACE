@@ -8,6 +8,7 @@ import(IRanges)
 import(GenomeInfoDb)
 import(GenomicRanges)
 import(SummarizedExperiment)
+import(GenomicFiles)
 importFrom(BBmisc, chunk)
 importFrom(ffbase, hist.ff, quantile.ff) #, ffappend)
 
@@ -32,10 +33,6 @@ exportClasses("FDRsupp")
 export(getFDRfunc, getTab, setFDRfunc, directPlot,
        txsPlot, eqBox2, eqDesc2, enumerateByFDR, #gmod2,
 	manhWngr)
-
-importClassesFrom(GenomicFiles, VcfStack, RangedVcfStack)
-importFrom(GenomicFiles, VcfStack,
-    subsetSample, features, assay, bindRanges, bindSampleNames)
 
 importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam, isSNV,
    genotypeToSnpMatrix, alt, ref, "vcfSamples", "vcfSamples<-", info, "alt<-",
