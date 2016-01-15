@@ -26,7 +26,7 @@ importFrom(reshape2, melt)
 importFrom(gQTLBase, storeToFf, loadAndFilterResult, ciseStore,
 	storeApply, extractByProbes)
 
-export(cisAssoc, clipPCs, regressOut, AllAssoc) #, pifdr)
+export(cisAssoc, clipPCs, regressOut, AllAssoc, pifdr)
 export( storeToQuantiles,  storeToHist, storeToFDR,
      storeToFDRByProbe, storeToMaxAssocBySNP)
 exportClasses("FDRsupp")
