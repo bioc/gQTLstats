@@ -1,4 +1,5 @@
 #library(gQTLstats)
+# commented code can go into unit test
 #if (!exists("result")) data("1-result")
 setClass("TransChunk", representation(
   obs="GRanges", perm="GRanges", obsDist="matrix",
@@ -38,3 +39,33 @@ filteredDFwPerm = function(tc, filter=force) {
 }
 #ft1 = filteredDFwPerm(t1, filter=function(x) x[x$MAF > 0.05 & x$dist >= Inf & x$rank==1,])
 #  
+
+
+transTable = function( reg, filter = force, jobs ) {
+#
+# this code will use the BatchJobs registry reg to
+# collect information on SNP-feature associations, filtered
+# according to the function in filter (which operates on a DataFrame
+# and returns one)
+#
+# a DataFrame is returned with plug-in FDR according to the
+# filtering scheme
+#
+  if (missing(jobs)) jobs = findDone(reg)
+  lens = foreach(i = jobs, .combine=c) %dopar% length(loadResult(reg, i))
+  bad = which(lens==0)
+  if (length(bad)>0) jobs = jobs[-bad]
+  objs = foreach(i = jobs) %dopar% filteredDFwPerm( loadResult(reg, i), 
+                                     filter=filter )
+  allperms = unlist(lapply(objs, function(x) metadata(x)[["filteredPermScores"]]))
+  fullDF = do.call(rbind, objs)
+  nperm = length(allperms)
+  nobs = nrow(fullDF)
+  needrepl = (nperm < nobs)
+  if (nperm != nobs) allperms = allperms[ sample(1:nperm, size=nobs, replace = needrepl) ]
+  fullDF$pifdr = pifdr(fullDF$scores, allperms)
+  fullDF$permscores = allperms
+  metadata(fullDF)$filterfun = filter
+  fullDF
+}
+
