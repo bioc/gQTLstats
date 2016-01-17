@@ -55,7 +55,7 @@ transTable = function( reg, filter = force, jobs ) {
   lens = foreach(i = jobs, .combine=c) %dopar% length(loadResult(reg, i))
   bad = which(lens==0)
   if (length(bad)>0) jobs = jobs[-bad]
-  objs = foreach(i = jobs) %dopar% filteredDFwPerm( loadResult(reg, i), 
+  objs = foreach(i = jobs) %dopar% filteredDFwPerm( TransChunk(loadResult(reg, i)), 
                                      filter=filter )
   allperms = unlist(lapply(objs, function(x) metadata(x)[["filteredPermScores"]]))
   fullDF = do.call(rbind, objs)
