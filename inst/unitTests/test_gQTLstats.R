@@ -12,6 +12,7 @@ checkStats = function() {
    require(GenomeInfoDb)
    require(geuvPack)
    require(Rsamtools)
+   require(gQTLstats)
    data(geuFPKM)
    lgeu = geuFPKM[ which(seqnames(geuFPKM)=="chr20"), ]
    seqlevelsStyle(lgeu) = "NCBI"
@@ -131,3 +132,14 @@ checkStats = function() {
 
 }
 checkStats()
+
+checkMixedVcfProc = function() {
+ require("snpStats")
+ require("VariantAnnotation")
+ fn = system.file("vcf/polytypeSNV.vcf", package="gQTLstats")
+ vv = readVcf(fn, genome="hg19")
+ ans = mixedVCFtoSnpMatrix(vv, FALSE)$genotypes@.Data
+ checkTrue(ans[1,4] == as.raw(0xfd))
+}
+checkMixedVcfProc()
+
