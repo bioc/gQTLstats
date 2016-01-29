@@ -61,7 +61,7 @@ cisCount = function( summex, vcf.tf, rhs=~1, cisradius=50000,
 #
 # but the example extract has an ALT entry of <DEL> for which SVTYPE is NA
 #
-   ael = elementLengths(alt(vdata))
+   ael = elementNROWS(alt(vdata))
    vdata = vdata[ which(ael==1), ]
    stopifnot(length(alt(vdata)) == length(unlist(alt(vdata))))
    todrop = which(!(unlist(alt(vdata)) %in% c("A", "C", "T", "G")))
