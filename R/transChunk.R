@@ -69,3 +69,39 @@ transTable = function( reg, filter = force, jobs ) {
   fullDF
 }
 
+
+setClass("TransStore", representation(allRegistries="list",
+  numSubmitted="numeric", numDone="numeric", nloci="numeric",
+   jobinfos="list"))
+setGeneric("describe", function(object)standardGeneric("describe"))
+setMethod("describe", "TransStore", function(object) {
+  ids = sapply(object@allRegistries, function(z) z$id)
+  fracs = paste("(", paste(object@numDone, object@numSubmitted, sep="/"), ")", sep="")
+  maxmem = sapply(object@jobinfos, function(x) max(x$memory, na.rm=TRUE))
+  maxtime = sapply(object@jobinfos, function(x) max(x$time.running, na.rm=TRUE))
+  DataFrame(regids=ids, fracDone=fracs, nloci=object@nloci,
+     maxmem=maxmem, maxtime=maxtime)
+  })
+
+TransStore = function(paths) {
+   requireNamespace("doParallel")
+   regs = lapply(paths, loadRegistry)
+   subs = sapply(regs, function(x) length(findJobs(x)))
+   dones = sapply(regs, function(x) length(findDone(x)))
+   todrop = which(dones==0)
+   if (length(todrop)>0) {
+      message(paste(length(todrop), "registries have no completed jobs, dropped"))
+      regs = regs[-todrop]
+      subs = subs[-todrop]
+      dones = dones[-todrop]
+      }
+   lens = foreach(i=1:length(regs)) %dopar%
+      sum(sapply(findDone(regs[[i]]), function(x)length(loadResult(regs[[i]],x)[[1]])))  # first element is locus-centric GRanges
+   jis = lapply(regs, function(x) getJobInfo(x))
+   new("TransStore", allRegistries=regs, nloci=unlist(lens),
+      numSubmitted=subs, numDone=dones, jobinfos=jis)
+}
+setMethod("show", "TransStore", function(object) {
+  show(describe(object))
+  })
+
