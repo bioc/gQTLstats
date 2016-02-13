@@ -11,8 +11,8 @@ visualization of expression or other assay measure
 against genotypes extracted from VCF
 }
 \usage{
-eqBox2(gene, se, tf, snpgr, genome = "hg19", ...)
-eqDesc2(gene, se, tf, snpgr, genome = "hg19")
+eqBox2(gene, se, tf, snpgr, genome = "hg19", forceRs=TRUE, ...)
+eqDesc2(gene, se, tf, snpgr, genome = "hg19", forceRs=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,6 +33,12 @@ the SNP to be visualized
 }
   \item{genome}{
 tag identifying reference genome
+}
+  \item{forceRs}{ In the 1000 genomes VCF, there are sometimes
+variants identified with DELLY that are grabbed by readVcf on
+an SNV address.  Set forceRs to TRUE to retain only variants
+with 'rs' in the name.  Has no effect if readVcf extracts only
+a single variant.
 }
   \item{\dots}{
 extra arguments passed to boxplot
