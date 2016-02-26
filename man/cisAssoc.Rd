@@ -1,5 +1,6 @@
 \name{cisAssoc}
 \alias{cisAssoc}
+\alias{cisEsts}
 \alias{AllAssoc}
 \alias{cisCount}
 %- Also NEED an '\alias' for EACH other topic documented here.
@@ -12,6 +13,10 @@ and RangedSummarizedExperiment representations
 }
 \usage{
 cisAssoc(summex, vcf.tf, rhs = ~1, nperm = 3, cisradius =
+                 50000, genome = "hg19", assayind = 1, lbmaf = 1e-06,
+                 lbgtf = 1e-06, dropUnivHet = TRUE, infoFields =
+                 c("LDAF", "SVTYPE"), simpleSNV = TRUE)
+cisEsts(summex, vcf.tf, rhs = ~1, nperm = 3, cisradius =
                  50000, genome = "hg19", assayind = 1, lbmaf = 1e-06,
                  lbgtf = 1e-06, dropUnivHet = TRUE, infoFields =
                  c("LDAF", "SVTYPE"), simpleSNV = TRUE)
@@ -108,6 +113,8 @@ seqlevelsStyle for summex and vcf.tf content must agree
  lgeue = clipPCs(lgeu[,which(lgeu$popcode=="CEU")], 1:2)
  set.seed(1234)
  litc = cisAssoc(lgeue[c(162,201),], tf20, nperm=2, lbmaf=.05, cisradius=50000)
+ set.seed(1234)
+ lite = cisEsts(lgeue[c(162,201),], tf20, nperm=2, lbmaf=.05, cisradius=50000)
  summary(litc$chisq)
  mysr = range(litc)
  litc$pifdr = gQTLstats:::pifdr(litc$chisq, c(litc$permScore_1, litc$permScore_2))

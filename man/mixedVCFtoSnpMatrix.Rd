@@ -21,7 +21,7 @@ object inheriting from \code{\link[VariantAnnotation]{CollapsedVCF-class}}
 logical.  VCF allows loci for samples to be reported in various
 formats, and a given locus can have a call tagged GT and a
 genotype probability or likelihood representation tagged GP or GL.
-\code{\link[VariantAnnotation]{genotypesToSnpMatrix}} has an
+\code{\link[VariantAnnotation]{genotypeToSnpMatrix}} has an
 \code{uncertain} parameter that, if TRUE, will transform GP or GL
 content to allelic dose.  Note that only the "first" dosage type appearing in the header will be transformed.  Thus if GP is first in the header but
 a given locus is tagged only with GL, the genotype for

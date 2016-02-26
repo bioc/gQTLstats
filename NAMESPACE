@@ -61,3 +61,5 @@ export(prep.cisAssocNB, cisCount, qqStore, #collapseToBuf,
 
 exportClasses(TransChunk)
 export(TransChunk, filteredDFwPerm, transTable, mixedVCFtoSnpMatrix)
+
+export(cisEsts) # Tzuu-Wang

@@ -4,6 +4,10 @@
 \alias{prep.cisAssocNB} 
 \alias{storeToMaxAssocBySNP} 
 \alias{table_sensobj_thresh}
+\alias{TransChunk}
+\alias{TransChunk-class}
+\alias{filteredDFwPerm}
+\alias{transTable}
 
 \docType{package}
 \title{
@@ -29,6 +33,11 @@ prep.cisAssocNB (assembles information to assess negative
 binomial regression in cis association testing),
 storeToMaxAssocBySNP (progress towards SNP-specific FDR),
 table_sensobj_thresh (reporting on sensitivity analysis).
+
+Additional experimental functions are available to support
+scalable trans-gQTL testing
+TransChunk, filteredDFwPerm, and transTable operate on
+output of AllAssoc.
 }
 \author{
 \packageAuthor{gQTLstats}
