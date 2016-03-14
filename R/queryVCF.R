@@ -147,8 +147,9 @@ gQTLswarm = function (se, ind, covar = NULL, inpch=19, xlab, ylab, ...)
             gt)
     if (missing(xlab)) xlab=rowRanges(se)$snp[ind]
     if (missing(ylab)) ylab=rowRanges(se)$probeid[ind]
-    beeswarm(el, pwcol = colp, pch = inpch, xlab=xlab, ylab=ylab, ...)
-    bp = boxplot(el, plot = FALSE)
-    bxp(bp, add = TRUE, bg = "transparent")
+#    beeswarm(el, pwcol = colp, pch = inpch, xlab=xlab, ylab=ylab, ...)
+    bp = boxplot(el, xlab=xlab, ylab=ylab, notch=TRUE, pch=" ", ...) #plot = FALSEbb)
+    beeswarm(el, pwcol = colp, pch = inpch, add=TRUE)
+    #bxp(bp, add = TRUE, bg = "transparent")
 }
 
