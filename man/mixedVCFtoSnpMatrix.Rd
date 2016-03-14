@@ -29,7 +29,7 @@ thus locus will be recorded as NA.
 }
 }
 \details{
-emulates output from \code{\link[VariantAnnotation]{genotypesToSnpMatrix}}
+emulates output from \code{\link[VariantAnnotation]{genotypeToSnpMatrix}}
 }
 \value{
 list with elements \code{genotypes} and \code{map}
@@ -47,7 +47,7 @@ VJ Carey
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link[VariantAnnotation]{genotypesToSnpMatrix}}
+\code{\link[VariantAnnotation]{genotypeToSnpMatrix}}
 }
 \examples{
 fn = system.file("vcf/polytypeSNV.vcf", package="gQTLstats")

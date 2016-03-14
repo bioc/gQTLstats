@@ -8,7 +8,8 @@ obtain SnpMatrix from VCF genotypes
 obtain SnpMatrix from VCF genotypes
 }
 \usage{
-queryVCF(gr, vcf.tf, samps, genome = "hg19", getSM = TRUE)
+queryVCF(gr, vcf.tf, samps, genome = "hg19", getSM = TRUE,
+   snvOnly=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,6 +29,7 @@ tag identifying build
 logical; if FALSE, \code{\link[VariantAnnotation]{genotypeToSnpMatrix}}
 will not be run and only the output of readVcf is returned.
 }
+  \item{snvOnly}{logical, if TRUE, will confine results to SNV}
 }
 %\details{
 %%  ~~ If necessary, more details than the description above ~~

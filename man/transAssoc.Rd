@@ -70,6 +70,7 @@ a GRanges with mcols including
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+\dontrun{  # requires acccess to 1KG S3
 library(geuvPack)
 data(geuFPKM)
 seqlevelsStyle(geuFPKM) = "NCBI"
@@ -79,5 +80,6 @@ tt = transAssoc(mysr, geuFPKM[1:16,],
     bufsize=3, exChLen=4, vcfgen=function(x)gtpath(paste0("chr", x)) )
 colnames(mcols(tt))
 table(as.character(mcols(tt)$elnames))
+}
 }
 \keyword{ models }

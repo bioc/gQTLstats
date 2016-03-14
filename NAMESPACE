@@ -1,6 +1,7 @@
 import(methods)
 import(foreach)
 import(doParallel)
+import(beeswarm)
 
 import(BiocGenerics)
 import(S4Vectors)
@@ -63,3 +64,4 @@ exportClasses(TransChunk)
 export(TransChunk, filteredDFwPerm, transTable, mixedVCFtoSnpMatrix)
 
 export(cisEsts) # Tzuu-Wang
+export(gQTLs)
