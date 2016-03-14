@@ -64,4 +64,4 @@ exportClasses(TransChunk)
 export(TransChunk, filteredDFwPerm, transTable, mixedVCFtoSnpMatrix)
 
 export(cisEsts) # Tzuu-Wang
-export(gQTLs)
+export(gQTLs, gQTLswarm)

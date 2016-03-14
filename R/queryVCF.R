@@ -136,3 +136,19 @@ setMethod("boxswarm", "SnpToGeneQTL", function(x, colvar, colmap, inxlab, inylab
  bxp(bd, add=TRUE, boxfill="transparent")
 })
 
+gQTLswarm = function (se, ind, covar = NULL, inpch=19, xlab, ylab, ...) 
+{
+    gt = assays(se)[[1]][ind, ]
+    ex = assays(se)[[2]][ind, ]
+    el = split(ex, gt)
+    colp = NULL
+    if (!is.null(covar)) 
+        colp = split(as.numeric(factor(colData(se)[[covar]])), 
+            gt)
+    if (missing(xlab)) xlab=rowRanges(se)$snp[ind]
+    if (missing(ylab)) ylab=rowRanges(se)$probeid[ind]
+    beeswarm(el, pwcol = colp, pch = inpch, xlab=xlab, ylab=ylab, ...)
+    bp = boxplot(el, plot = FALSE)
+    bxp(bp, add = TRUE, bg = "transparent")
+}
+
