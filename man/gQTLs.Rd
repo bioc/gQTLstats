@@ -1,5 +1,6 @@
 \name{gQTLs}
 \alias{gQTLs}
+\alias{gQTLswarm}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 use SummarizedExperiment to manage a collection of gQTL results of interest
@@ -9,6 +10,7 @@ use SummarizedExperiment to manage a collection of gQTL results of interest
 }
 \usage{
 gQTLs(filtgr, se, tf, genome = "hg19", forceRs = TRUE, chunksize = 50)
+gQTLswarm(se, ind, covar = NULL, inpch = 19, xlab, ylab, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,9 +32,6 @@ if TRUE insist that snp ids include 'rs'
 }
   \item{chunksize}{
 VCF processing proceeds via foreach in chunks of size chunksize
-}
-\usage{
-gQTLswarm(se, ind, covar = NULL, inpch = 19, xlab, ylab, ...)
 }
   \item{se}{
 a SummarizedExperiment instance, output of \code{gQTLs}
