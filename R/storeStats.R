@@ -45,7 +45,10 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
        filter=force, .id4coln=1, ids=NULL) {
  theCall = match.call()
  r1 = storeApply(store, force, ids=.id4coln, flatten1=TRUE)[[1]]
- nperm = length(grep("permScore", names(mcols(r1))))
+ nperm.potential = length(grep("permScore", names(mcols(r1))))
+ pgotten = getter(r1)  # need to explicitly determine number of perms selected
+           # as it need not be the full number in store
+ nperm = length(pgotten)/length(r1)
  stopifnot(nperm>0)
  message("counting tests...")
  ntests = sum(unlist(storeApply( store, function(x) length(filter(x)), ids=ids )) , na.rm=TRUE)

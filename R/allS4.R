@@ -56,14 +56,25 @@ setMethod("show", "FDRsupp", function(object) {
 }
 )
 
-setFDRfunc = function(FDRsupp, fudge=1e-6, zthresh=30, ...) {
-#
-# may want to generalize from smoother choice lo()
-#
- qlfdrmod = gam(qlogis(fdr+fudge)~lo(assoc,...), data=getTab(FDRsupp))
- FDRsupp = addFDRmodel(FDRsupp, qlfdrmod)
- addFDRfunc(FDRsupp, function(assoc)
-   ifelse(assoc < zthresh, plogis(predict(getFDRmodel(FDRsupp),
-     newdata=list(assoc=assoc, data=getTab(FDRsupp))))-fudge, 0))
+#setFDRfunc = function(FDRsupp, fudge=1e-6, zthresh=30, ...) {
+##
+## may want to generalize from smoother choice lo()
+##
+# qlfdrmod = gam(qlogis(fdr+fudge)~lo(assoc,...), data=getTab(FDRsupp))
+# FDRsupp = addFDRmodel(FDRsupp, qlfdrmod)
+# addFDRfunc(FDRsupp, function(assoc)
+#   ifelse(assoc < zthresh, plogis(predict(getFDRmodel(FDRsupp),
+#     newdata=list(assoc=assoc, data=getTab(FDRsupp))))-fudge, 0))
+#}
+
+setFDRfunc = function (FDRsupp, fudge = 1e-06, zthresh = 30, maxch=30, ...)
+{
+  gt = getTab(FDRsupp)
+  fdrmod = gam(-log10(fdr+fudge)~s(assoc,bs="tp"), data=gt,
+    subset=assoc<(1.1*maxch))
+  FDRsupp = addFDRmodel(FDRsupp, fdrmod)
+  FDRsupp@FDRfunc = function(assoc)
+      10^-predict(fdrmod, newdata=list(assoc=assoc)) - fudge
+  FDRsupp
 }
 

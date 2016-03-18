@@ -26,7 +26,7 @@ for association scores greater than this value, a hard value
 of FDR 0 is assigned
 }
   \item{\dots}{
-arguments passed to \code{\link[gam]{lo}} for the smooth
+arguments passed to \code{\link[mgcv]{s}} for the smooth
 model relating association score to FDR at selected quantiles
 of the association score distribution
 }
