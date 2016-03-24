@@ -49,11 +49,11 @@ checkStats = function() {
         ids=1:3 )
      checkTrue( all(c("enumCall", "enumSess", "fdrCall") %in% 
            names(metadata(filtEnum))))
-     checkTrue( length(filtEnum) == 1108 )
+     checkTrue( length(filtEnum) == 989 )
      checkTrue( max(filtEnum$estFDR) < 0.05 )
      checkTrue( min(filtEnum$estFDR) >= 0.0 )
      checkTrue( length(unique(filtEnum$probeid)) == 18 )
-     checkTrue( length(unique(filtEnum$snp)) == 1103 )
+     checkTrue( length(unique(filtEnum$snp)) == 985 )
 
 #
 # test eqDesc2 (related eqBox2)
@@ -88,8 +88,12 @@ checkStats = function() {
      filtFDR@FDRfunc = NULL
      filtFDR = setFDRfunc( filtFDR )
      checkTrue(is.function(getFDRfunc(filtFDR)))
-     checkTrue(max(abs(coef(filtFDR@FDRmodel)-
-          c(-0.147156183359907, -0.0712895014838215))) < 1e-6 )
+newcoef = structure(c(0.57487958216754, 0.712226903412448, 1.21462315263198, 
+0.158844281416502, 0.937680032995375, -0.0333469006067456, 0.52226548981198, 
+0.277968914437912, 1.40712654986676, 0.53461376374711), .Names = c("(Intercept)", 
+"s(assoc).1", "s(assoc).2", "s(assoc).3", "s(assoc).4", "s(assoc).5", 
+"s(assoc).6", "s(assoc).7", "s(assoc).8", "s(assoc).9"))
+     checkTrue(all.equal(coef(filtFDR@FDRmodel), newcoef))
 #
 # test storeToFDR
 #

@@ -14,7 +14,7 @@ importFrom(BBmisc, chunk)
 importFrom(ffbase, hist.ff, quantile.ff) #, ffappend)
 
 importFrom(limma, lmFit)
-importFrom(gam, gam, lo)
+import(mgcv)
 
 importFrom(AnnotationDbi, select)
 

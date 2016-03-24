@@ -10,7 +10,7 @@ use SummarizedExperiment to manage a collection of gQTL results of interest
 }
 \usage{
 gQTLs(filtgr, se, tf, genome = "hg19", forceRs = TRUE, chunksize = 50)
-gQTLswarm(se, ind, covar = NULL, inpch = 19, xlab, ylab, ...)
+gQTLswarm(se, ind, covar = NULL, inpch = 19, xlab, ylab, featTag="probeid", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -51,6 +51,10 @@ xlabel for beeswarm plot, defaults to snp id as recovered from rowRanges(se)$snp
 }
   \item{ylab}{
 ylabel for beeswarm plot, defaults to probe id as recovered from rowRanges(se)$probeid
+}
+  \item{featTag}{
+element of mcols(rowRanges(se)) used to find ylab text, defaults to 'probeid',
+'symbol' is often preferred
 }
   \item{\dots}{
 passed to \code{\link[beeswarm]{beeswarm}}
