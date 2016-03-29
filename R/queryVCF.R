@@ -66,8 +66,12 @@ gQTLs = function(filtgr, se, tf, genome="hg19", forceRs=TRUE, chunksize=50) {
     # we may have a mismatch if vcf does not supply all snp ...
     # needs further checking
     if (nrow(snpd) != nrow(ex)) {
+      message("some SNP requests seem unfilled ... multiple names for same addr?")
       exkeys = gsub(":.*", "", rownames(ex))
-      snpd = snpd[ exkeys, ]  # should expand or contract as needed
+      oksnp = intersect(rownames(snpd), exkeys)
+      ex = ex[ which(exkeys %in% oksnp), ] # will drop non-intersecting
+      snpd = snpd[ which(rownames(snpd) %in% oksnp), ]  # likewise
+      filtgr = filtgr[ which(filtgr$snp %in% oksnp) ] # likewise
       }
     stopifnot( nrow(snpd) == nrow(ex) )
     rownames(ex) = NULL
