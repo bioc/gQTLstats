@@ -66,7 +66,7 @@ gQTLs = function(filtgr, se, tf, genome="hg19", forceRs=TRUE, chunksize=50) {
     # we may have a mismatch if vcf does not supply all snp ...
     # needs further checking
     if (nrow(snpd) != nrow(ex)) {
-      exkeys = gsub(":.*", rownames(ex))
+      exkeys = gsub(":.*", "", rownames(ex))
       snpd = snpd[ exkeys, ]  # should expand or contract as needed
       }
     stopifnot( nrow(snpd) == nrow(ex) )
