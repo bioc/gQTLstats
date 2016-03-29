@@ -49,7 +49,12 @@ gQTLs = function(filtgr, se, tf, genome="hg19", forceRs=TRUE, chunksize=50) {
     okids = intersect(vcfids, colnames(se))
     stopifnot(length(okids)>0)
     ex = assay(se[ filtgr$probeid, okids ])
-    rownames(ex) = NULL # why?
+#
+# to improve robustness, in case readVcf does not return everything
+# we expect (perhaps two snp names share an addr, we use snp:gene
+# as rownames
+#
+    rownames(ex) = paste(filtgr$snp, ":", filtgr$probeid, sep="")
     chunks = chunk(1:length(filtgr), chunk.size=chunksize)
     snpd = foreach (ch = chunks) %dopar% {
           q1 = queryVCF(gr=filtgr[ch], vcf.tf=tf, samps=okids,
@@ -61,9 +66,11 @@ gQTLs = function(filtgr, se, tf, genome="hg19", forceRs=TRUE, chunksize=50) {
     # we may have a mismatch if vcf does not supply all snp ...
     # needs further checking
     if (nrow(snpd) != nrow(ex)) {
-      rownames(ex) = filtgr$snp
-      ex = ex[ rownames(snpd), ]
+      exkeys = gsub(":.*", rownames(ex))
+      snpd = snpd[ exkeys, ]  # should expand or contract as needed
       }
+    stopifnot( nrow(snpd) == nrow(ex) )
+    rownames(ex) = NULL
     se = SummarizedExperiment(List(calls=snpd, exprs=ex), colData=colData(se)[colnames(ex),])
     names(filtgr) = filtgr$snp
     rowRanges(se) = filtgr
