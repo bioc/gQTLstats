@@ -83,9 +83,9 @@ setMethod("describe", "TransStore", function(object) {
      maxmem=maxmem, maxtime=maxtime)
   })
 
-TransStore = function(paths) {
+TransStore = function(regs, paths=NULL) {
    requireNamespace("doParallel")
-   regs = lapply(paths, loadRegistry)
+   if (!is.null(paths)) regs = lapply(paths, loadRegistry)
    subs = sapply(regs, function(x) length(findJobs(x)))
    dones = sapply(regs, function(x) length(findDone(x)))
    todrop = which(dones==0)

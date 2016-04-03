@@ -10,7 +10,7 @@ estimate and store function relating association scores
 to approximate plug-in FDR
 }
 \usage{
-setFDRfunc(FDRsupp, fudge = 1e-06, zthresh = 30, ...)
+setFDRfunc(FDRsupp, fudge = 1e-06, zthresh = 30, maxch = 30, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,6 +24,11 @@ positive number \code{fudge} to avoid this
   \item{zthresh}{
 for association scores greater than this value, a hard value
 of FDR 0 is assigned
+}
+  \item{maxch}{
+the model for the functional relationship between association and FDR
+is subset to observations for which association chisq score is no
+greater than 1.1*maxch
 }
   \item{\dots}{
 arguments passed to \code{\link[mgcv]{s}} for the smooth

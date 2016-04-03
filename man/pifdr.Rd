@@ -7,7 +7,7 @@ utility for computing plug-in FDR
 utility for computing plug-in FDR
 }
 \usage{
-pifdr( obs, perms, legacy=FALSE, trimToUnit = TRUE, ... ) 
+pifdr( obs, perms, trimToUnit = TRUE, ... ) 
 }
 \arguments{
   \item{obs}{

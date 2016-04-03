@@ -19,7 +19,8 @@ a GRanges instance typically obtained by filtering a ciseStore instance
 }
   \item{se}{
 SummarizedExperiment with individual level expression
-and sample-level data from which filtgr statistics were derived
+and sample-level data from which filtgr statistics were derived;
+for gQTLswarm, output of gQTLs
 }
   \item{tf}{
 TabixFile for VCF on which filtgr statistics are based
@@ -32,9 +33,6 @@ if TRUE insist that snp ids include 'rs'
 }
   \item{chunksize}{
 VCF processing proceeds via foreach in chunks of size chunksize
-}
-  \item{se}{
-a SummarizedExperiment instance, output of \code{gQTLs}
 }
   \item{ind}{
 index into rows of se to be used for visualization, must be length 1

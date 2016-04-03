@@ -182,13 +182,20 @@ and pathology.  To accomplish this, we will
 bind an interpolating model to the
 FDR estimates that we have.
 Interpolation will be accomplished with scatterplot smoothing in
-the `r CRANpkg("gam")` framework.  We'll use different
-smoothing spans for the raw and unfiltered FDR estimates.
+the `r CRANpkg("mgcv")` framework.  
+
+The code that is used to fit the interpolating model is
+```
+ fdrmod = gam(-log10(fdr+fudge)~s(assoc,bs="tp"), data=...,
+    subset=assoc<(1.1*maxch))
+```
+where fudge defaults to 1e-6 and maxch defaults to 30
+
 
 ```{r lkgam,fig=TRUE}
-library(gam)
-rawFDR = setFDRfunc(rawFDR, span=.75)
-filtFDR = setFDRfunc(filtFDR, span=.25)
+library(mgcv)
+rawFDR = setFDRfunc(rawFDR)
+filtFDR = setFDRfunc(filtFDR)
 par(mfrow=c(2,2))
 txsPlot(rawFDR)
 txsPlot(filtFDR)
@@ -319,13 +326,16 @@ vjcitn/gQTLbrowse github archive.
 We can use `r Biocpkg("VariantAnnotation")` to establish
 basic structural characteristics for all filtered variants.
 
-```{r dovaranno,cache=FALSE,eval=FALSE}
+```{r dovaranno,cache=TRUE}
 suppressPackageStartupMessages({
 library(VariantAnnotation)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 })
 txdb = TxDb.Hsapiens.UCSC.hg19.knownGene
 seqlevelsStyle(filtEnum) = "UCSC"
+#seqinfo(filtEnum) = seqinfo(txdb)
+seqlengths(filtEnum)[paste0("chr", c(1:22,"M"))] = 
+ seqlengths(txdb)[paste0("chr", c(1:22,"M"))]
 allv = locateVariants(filtEnum, txdb, AllVariants()) # multiple recs per eQTL 
 table(allv$LOCATION)
 hits = findOverlaps( filtEnum, allv )
@@ -334,7 +344,8 @@ mcols(filtEex) = cbind(mcols(filtEex), mcols(allv[subjectHits(hits)])[,1:7])
 filtEex[1:3]
 ```
 
-The resulting table is SNP:transcript specific.
+The resulting table is SNP:transcript specific, and will likely
+need further processing. 
 
 # Statistical modeling of phenorelevance of variant contexts, based on a cis-eQTL store
 
