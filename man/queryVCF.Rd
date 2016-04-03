@@ -59,7 +59,7 @@ a list of length two
 %}
 \examples{
 require(Rsamtools)
-tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="GGtools"))
+tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="gQTLstats"))
 require(geuvPack)
 data(geuFPKM)
 lgeu = geuFPKM[ which(seqnames(geuFPKM)=="chr20"), 

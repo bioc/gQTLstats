@@ -108,7 +108,7 @@ seqlevelsStyle for summex and vcf.tf content must agree
  data(geuFPKM)
  lgeu = geuFPKM[ which(seqnames(geuFPKM)=="chr20"), ]
  seqlevelsStyle(lgeu) = "NCBI"
- tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="GGtools"))
+ tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="gQTLstats"))
  if (require(VariantAnnotation)) scanVcfHeader(tf20)
  lgeue = clipPCs(lgeu[,which(lgeu$popcode=="CEU")], 1:2)
  set.seed(1234)
