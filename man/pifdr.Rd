@@ -17,34 +17,15 @@ observed association scores
 vector of association scores under permutation; length should
 be integer multiple of \code{length(obs)}
  }
-\item{legacy}{logical, if TRUE, use the approximate version of
-pifdr() available before 12/30/2013, with additional arguments if
-desired}
 \item{trimToUnit}{logical, if TRUE, values greater than 1 are
 replaced by 1.  Such values can occur, for example, with relatively
 small sample sizes.}
-\item{\dots}{extra arguments passed if legacy is TRUE}
+\item{\dots}{extra arguments ignored}
 }
 \details{
 Revised 12/30/13 to employ hist() to rapidly bin the
 permuted values.  
 
-Use \code{legacy=TRUE} to obtain the
-approximate implementation, for which the following remarks held:
-``As currently implemented the algorithm is quadratic in \code{length(obs)}.
-While it is possible to get a unique FDR value for every element of \code{obs},
-an approximate approach yields practically identical precision and by default this
-will be used for \code{obs} with length 2000 or more.  In this case,
-\code{\link{approx}} is used with \code{rule=2} to interpolate from the
-grid-based FDR estimates back to the data values.''
-Additional parameters \code{npts} and \code{applier} may be supplied
-if \code{legacy} is set to TRUE.
-
-\code{npts} defined the number of points spanning the range
-of \code{obs} to be used for a lossy grid-based computation
-only used if \code{length(obs)>npts}.
-
-\code{applier} is to be an \code{sapply}-like function.
 }
 \value{
 vector of plug-in FDR estimates congruent to \code{obs}
