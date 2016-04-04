@@ -236,7 +236,7 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
 
 .eqBox = function( gene, snp, se, tf, radius=1e6, genome="hg19", ...) {
   stopifnot(gene %in% rownames(se))
-  LL = SnpMatrixCisToSummex(se[gene,], tf, radius=radius, genome=genome)[[1]]
+  LL = .SnpMatrixCisToSummex(se[gene,], tf, radius=radius, genome=genome)[[1]]
   stopifnot(snp %in% colnames(LL))
   okids = intersect(colnames(se), rownames(LL))
   stopifnot(length(okids)>0)
@@ -248,7 +248,7 @@ cisAssoc = function( summex, vcf.tf, rhs=~1, nperm=3, cisradius=50000,
 .eqDesc = function (gene, snp, se, tf, radius=1e6, genome="hg19", ...) 
 {
     stopifnot(gene %in% rownames(se))
-    LL = SnpMatrixCisToSummex(se[gene, ], tf, radius=radius)[[1]]
+    LL = .SnpMatrixCisToSummex(se[gene, ], tf, radius=radius)[[1]]
     stopifnot(snp %in% colnames(LL))
     okids = intersect(colnames(se), rownames(LL))
     stopifnot(length(okids) > 0)

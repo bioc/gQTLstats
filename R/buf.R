@@ -46,7 +46,7 @@ collapseToBuf = function(x, y, bufsize=5, frag="_obs") {
   ymat = obsmat(y)
   ynames = colnames(ymat)
   ynames = gsub(paste0(frag, ".*"), "", ynames)
-  ynmat = t(matrix(rep(ynames, nrow(ymat)), nc=nrow(ymat)))
+  ynmat = t(matrix(rep(ynames, nrow(ymat)), ncol=nrow(ymat)))
   XYO = cbind(bufmat, ymat)
   alln = cbind(mcols(x)[,"elnames"], ynmat)
   o = t(apply(XYO,1,order,decreasing=TRUE)) # nrow = nsnp
