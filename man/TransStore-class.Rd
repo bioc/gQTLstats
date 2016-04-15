@@ -3,6 +3,7 @@
 \docType{class}
 \alias{TransStore-class}
 \alias{describe,TransStore-method}
+\alias{describe}
 
 \title{Class \code{"TransStore"}}
 \description{

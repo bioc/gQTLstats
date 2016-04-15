@@ -36,7 +36,7 @@ directPlot = function(FDRsupp) {
  abline(0,1)
 }
 
-txsPlot = function(FDRsupp) {
+txsPlot.old = function(FDRsupp) {
 # plot in transformed space
  stopifnot(is.function(FDRsupp@FDRfunc))
  tab = getTab(FDRsupp)
@@ -44,6 +44,16 @@ txsPlot = function(FDRsupp) {
  lines(seq(-6,5,.1), predict(FDRsupp@FDRmodel, newdata=
    list(assoc=exp(seq(-6,5,.1)))))
 }
+
+txsPlot = function (FDRsupp, xmax=50) 
+{
+    stopifnot(is.function(FDRsupp@FDRfunc))
+    tab = getTab(FDRsupp)
+    plot(-log10(fdr+1e-6) ~ assoc, data = getTab(FDRsupp), xlim=c(0,xmax))
+    lines(1:xmax, predict(FDRsupp@FDRmodel, newdata = list(assoc =1:xmax)))
+        
+}
+
 
 
 setMethod("show", "FDRsupp", function(object) {

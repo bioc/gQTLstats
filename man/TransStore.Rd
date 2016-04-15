@@ -13,7 +13,7 @@ TransStore(regs, paths = NULL)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{regs}{
-a list of \code{\link[BatchJobs]{registry}} instances, typically
+a list of \code{\link[BatchJobs]{Registry}} instances, typically
 one per (variant-oriented) chromosome
 }
   \item{paths}{
@@ -47,6 +47,7 @@ instance of \code{\link{TransStore-class}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
+\dontrun{  # requires devel experimental as of april 15 2016
 if (require(geuvStore2) && require(doParallel)) {
   registerDoSEQ()
   r17 = g17transRegistry()
@@ -54,5 +55,6 @@ if (require(geuvStore2) && require(doParallel)) {
   g1718 = TransStore(list(r17, r18))
   g1718
   }
+}
 }
 \keyword{ manip }% use one of  RShowDoc("KEYWORDS")

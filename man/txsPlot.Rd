@@ -8,13 +8,14 @@ visualize transformed FDR against transformed association statistics
 visualize transformed FDR against transformed association statistics
 }
 \usage{
-txsPlot(FDRsupp)
+txsPlot(FDRsupp, xmax=50)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{FDRsupp}{
 an instance of \code{\link{FDRsupp-class}}
 }
+  \item{xmax}{upper bound on xlim for display}
 }
 %\details{
 %%  ~~ If necessary, more details than the description above ~~
