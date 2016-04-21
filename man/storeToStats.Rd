@@ -114,16 +114,18 @@ is no guarantee of order among elements
    } else registerDoParallel(cores=max(c(detectCores()-1,1)))
  smchisq = storeToFf( store, "chisq", ids=store@validJobs[1:3]) 
  smchisq
- qs = storeToQuantiles( store, "chisq", ids = store@validJobs[1:5],
-   probs=seq(.1,.9,.1) )
- qs
- hh = storeToHist( store, ids = store@validJobs[1:5], breaks=
-   c(0,qs,1e9) )
- hh$counts
- fd = storeToFDR( store, xprobs=c(seq(.05,.95,.05),.99,.999) )
- tail(getTab(fd),4)
- sss = storeToFDRByProbe( store , xprobs=c(seq(.05,.95,.05),.99) )
- tail(getTab(sss),4)
+ if (.Platform$OS.type != "windows") { # avoid timeout
+  qs = storeToQuantiles( store, "chisq", ids = store@validJobs[1:5],
+    probs=seq(.1,.9,.1) )
+  qs
+  hh = storeToHist( store, ids = store@validJobs[1:5], breaks=
+    c(0,qs,1e9) )
+  hh$counts
+  fd = storeToFDR( store, xprobs=c(seq(.05,.95,.05),.99,.999) )
+  tail(getTab(fd),4)
+  sss = storeToFDRByProbe( store , xprobs=c(seq(.05,.95,.05),.99) )
+  tail(getTab(sss),4)
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
