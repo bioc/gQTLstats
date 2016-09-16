@@ -157,12 +157,12 @@ Good performance of this procedure is obtained by using
 `group_by` and `summarize` utilities of `r CRANpkg("dplyr")`.
 Iteration employs `r CRANpkg("foreach")`.
 
-```{r shobfu,cache=TRUE}
+```{r shobfu,cache=FALSE,eval=FALSE}
 fdbp = storeToFDRByProbe( prst, xprobs=c(seq(.025,.975,.025),.99))
 tail(getTab(fdbp),5)
 ```
 
-```{r shobpf,cache=TRUE}
+```{r shobpf,cache=FALSE,eval=FALSE}
 fdAtM05bp = storeToFDRByProbe( prst, filter=function(x) x[which(x$MAF > .05)],
    xprobs=c(seq(.025,.975,.025),.99))
 tail(getTab(fdAtM05bp),5)
