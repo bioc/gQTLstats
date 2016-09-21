@@ -84,10 +84,25 @@ gQTLs = function(filtgr, se, tf, genome="hg19", forceRs=TRUE, chunksize=50) {
 }
   
 
-eqBox2 = function (gene, se, tf, snpgr, genome = "hg19", forceRs = TRUE,
+eqBox2OLD = function (gene, se, tf, snpgr, genome = "hg19", forceRs = TRUE,
     ...) {
     ans = prepEqData( gene, se, tf, snpgr, genome, forceRs=forceRs )
     boxplot(split(ans$ex, ans$gt), xlab = ans$coln, ylab = gene, ...)
+}
+
+eqBox2 = function (gene, se, tf, snpgr, genome = "hg19", forceRs = TRUE,
+    ...)
+{
+    ans = prepEqData(gene, se, tf, snpgr, genome, forceRs = forceRs)
+    bb = boxplot(split(ans$ex, ans$gt), plot=FALSE)
+    ind = list(...)
+    if ("xlab" %in% names(ind)) thexlab = ind$xlab
+      else thexlab = ans$coln
+    if ("ylab" %in% names(ind)) theylab = ind$ylab
+      else theylab = gene
+    beeswarm(split(ans$ex, ans$gt), xlab = thexlab, ylab = theylab,
+        ...)
+    bxp(bb, add=TRUE, boxfill="transparent")
 }
 
 eqDesc2 = function (gene, se, tf, snpgr, genome = "hg19", forceRs=TRUE) {

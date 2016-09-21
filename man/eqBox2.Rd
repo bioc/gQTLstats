@@ -41,12 +41,14 @@ with 'rs' in the name.  Has no effect if readVcf extracts only
 a single variant.
 }
   \item{\dots}{
-extra arguments passed to boxplot
+extra arguments passed to beeswarm
 }
 }
-%\details{
-%%  ~~ If necessary, more details than the description above ~~
-%}
+\details{
+In 1.5.4, altered to supply beeswarm data visualization in addition
+to boxplot.  Use additional option corral="gutter" to reduce 
+horizontal sprawl in large samples.
+}
 %\value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
