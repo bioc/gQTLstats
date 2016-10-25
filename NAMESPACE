@@ -68,3 +68,5 @@ export(gQTLs, gQTLswarm)
 exportClass("TransStore")
 export("describe")
 export("TransStore")
+
+export(tsByRank)

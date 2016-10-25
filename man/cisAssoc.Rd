@@ -5,10 +5,11 @@
 \alias{cisCount}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-test for variant-expression associations in cis, using VCF
+test for variant-expression associations in cis or generally, using 
+VCF
 }
 \description{
-test for variant-expression associations in cis, using VCF
+test for variant-expression associations in cis or generally, using VCF
 and RangedSummarizedExperiment representations
 }
 \usage{
@@ -105,23 +106,52 @@ seqlevelsStyle for summex and vcf.tf content must agree
  require(GenomeInfoDb)
  require(geuvPack)
  require(Rsamtools)
+#
+# obtain geuvadis expression measures as FPKM
+#
  data(geuFPKM)
+#
+# confine the chromosome 20
+#
  lgeu = geuFPKM[ which(seqnames(geuFPKM)=="chr20"), ]
  seqlevelsStyle(lgeu) = "NCBI"
+#
+# acquire subset of genotypes on chr20
+#
  tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="gQTLstats"))
  if (require(VariantAnnotation)) scanVcfHeader(tf20)
+#
+# perform a general technical confounder correction, and confine
+# attention to CEU samples
+#
  lgeue = clipPCs(lgeu[,which(lgeu$popcode=="CEU")], 1:2)
+#
+# obtain all score test statistics for SNP:gene pairs at radius 50k
+#
  set.seed(1234)
  litc = cisAssoc(lgeue[c(162,201),], tf20, nperm=2, lbmaf=.05, cisradius=50000)
+#
+# obtain all estimates for SNP:gene pairs at radius 50k
+#
  set.seed(1234)
  lite = cisEsts(lgeue[c(162,201),], tf20, nperm=2, lbmaf=.05, cisradius=50000)
  summary(litc$chisq)
  mysr = range(litc)
+#
+# compute the plug-in FDR
+#
  litc$pifdr = gQTLstats:::pifdr(litc$chisq, c(litc$permScore_1, litc$permScore_2))
  litc[which(litc$pifdr < .01)]
+#
+# trans association testing.  leave to the user the question of
+# whether a test is actually cis
+#
  lita = AllAssoc(geuFPKM[1:10,], tf20, mysr)
  lita3 = AllAssoc(geuFPKM[11:20,], tf20, mysr)
  #lita5 = AllAssoc(geuFPKM[21:30,], tf20, mysr)
+#
+# This retains the top 5 (default) associations per SNP
+#
  n1 = gQTLstats:::collapseToBuf(lita, lita3)
  #n1 = collapseToBuf(n1, lita5)
 }

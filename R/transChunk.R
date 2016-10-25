@@ -102,6 +102,8 @@ TransStore = function(regs, paths=NULL) {
       numSubmitted=subs, numDone=dones, jobinfos=jis)
 }
 setMethod("show", "TransStore", function(object) {
+  cat("TransStore instance with ", length(object@allRegistries),
+ " registries.  Description:\n", sep="")
   show(describe(object))
   })
 
