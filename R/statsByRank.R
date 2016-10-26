@@ -54,7 +54,9 @@ statsByRank = function(job, rank=1) {
   feats = inigr$elnames[,rank]
   scores = inigr$scorebuf[,rank]
   permscores = job$perm$scorebuf[,rank]
-  ini = cbind(ini, DataFrame(feats,scores,permscores))
+  obsdist = job$dist[rank,]  # dists are transposed
+  permdist = job$pdist[rank,]
+  ini = cbind(ini, DataFrame(feats,scores,permscores,obsdist, permdist))
   mcols(inigr) = ini
   inigr
 }
