@@ -399,7 +399,7 @@ require(Rsamtools)
 data(geuFPKM)  # get a ranged summarized expt
 lgeu = geuFPKM[ which(seqnames(geuFPKM)=="chr20"), ] # limit to chr20
 seqlevelsStyle(lgeu) = "NCBI"
-tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="GGtools"))
+tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="gQTLstats"))
 if (require(VariantAnnotation)) scanVcfHeader(tf20)
 set.seed(1234)
 mysr = GRanges("20", IRanges(33.099e6, 33.52e6))
