@@ -70,7 +70,7 @@ optional string for title panel
    r17 = g17transRegistry()
    g17 = TransStore(list(r17))
    tbg = tbfilt(tsByRank(g17, 1)) # 1000 records
-   tf17 = ldblock::s3_1kg("17")
+   tf17 = ldblock::s3_1kg("17")  # uses S3 bucket
    require(geuvPack)
    if (!exists("geuFPKM")) data(geuFPKM)
    if (!exists("gencodeV12")) data(gencodeV12)

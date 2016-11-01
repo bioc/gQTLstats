@@ -69,4 +69,4 @@ exportClass("TransStore")
 export("describe")
 export("TransStore")
 
-export(tsByRank, transBrowse)
+export(tsByRank, transBrowse, tsByRankAccum)

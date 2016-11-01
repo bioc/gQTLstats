@@ -147,3 +147,20 @@ checkMixedVcfProc = function() {
 }
 checkMixedVcfProc()
 
+checkTsByRank = function() {
+ if (require(geuvStore2) && require(doParallel)) {
+       registerDoSEQ()
+       r17 = g17transRegistry()
+       r18 = g18transRegistry()
+       g1718 = TransStore(list(r17, r18))
+       }
+ tt1 = tsByRank(g1718, 1)
+ checkTrue(length(tt1) == 509728)
+ checkTrue(all.equal(names(mcols(tt1)), 
+   c("REF", "ALT", "snp", "MAF", "feats", "scores", "permscores", 
+        "obsdist", "permdist")))
+ checkTrue(abs(mean(tt1$scores)-26.29626)<.001)
+ checkTrue(abs(mean(tt1$MAF)-0.1718)<.001)
+}
+checkTsByRank()
+
