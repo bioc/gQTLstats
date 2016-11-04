@@ -441,7 +441,9 @@ AllAssoc = function( summex, vcf.tf, variantRange, rhs=~1, nperm=3,
  tsts = vector("list", length(probes2test) )
  summs = col.summary(gtdata$genotypes)
  mafs = summs[,"MAF"]
+ hwez = summs[,"z.HWE"]
  names(mafs) = rownames(summs)
+ names(hwez) = rownames(summs)
  #
  # loop over probe list map to collect tests
  #
@@ -498,6 +500,7 @@ AllAssoc = function( summex, vcf.tf, variantRange, rhs=~1, nperm=3,
    }
  varrd$snp = names(varrd)
  varrd$MAF = as.numeric(mafs[varrd$snp])
+ varrd$HWEZ = as.numeric(hwez[varrd$snp])
  varrd$probeid = as.character(varrd$paramRangeID)
  metadata(varrd)$sessInfo = sessionInfo()
  metadata(varrd)$init.Random.seed = iniSeed
