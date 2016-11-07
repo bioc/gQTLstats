@@ -156,9 +156,9 @@ checkTsByRank = function() {
        }
  tt1 = tsByRank(g1718, 1)
  checkTrue(length(tt1) == 509728)
- checkTrue(all.equal(names(mcols(tt1)), 
-   c("REF", "ALT", "snp", "MAF", "feats", "scores", "permscores", 
-        "obsdist", "permdist")))
+ keyfields = c("REF", "ALT", "snp", "MAF", "feats", "scores", "permscores", 
+        "obsdist", "permdist")  # eventually add z.HWE
+ checkTrue(all(keyfields %in% names(mcols(tt1))))
  checkTrue(abs(mean(tt1$scores)-26.29626)<.001)
  checkTrue(abs(mean(tt1$MAF)-0.1718)<.001)
 }

@@ -78,7 +78,8 @@ nthreg = function(n, tstore) {
 #}
 
 
-statsByRank = function(job, rank=1, filt=force) {
+statsByRank = function(job, rank=1, filt=force,
+    mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE")) {
   jj = job$obs
   if (length(jj)==0) return(NULL)
   mcols(jj)$dist = t(job$dist)  # will choose column later
@@ -90,7 +91,7 @@ statsByRank = function(job, rank=1, filt=force) {
     return(NULL) # we can have empty tiles
     }
   stopifnot(class(inigr)=="GRanges")
-  ini = mcols(inigr)[,1:4]  # eventually want to include z.HWE
+  ini = mcols(inigr)[,mcol2keep]
   feats = inigr$elnames[,rank]
   scores = inigr$scorebuf[,rank]
   permscores = pgr$scorebuf[,rank]
