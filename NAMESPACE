@@ -1,3 +1,9 @@
+  importFrom("graphics", "abline", "bxp", "hist", "lines", "plot",
+             "text")
+  importFrom("stats", "approx", "as.formula", "model.matrix", "predict",
+             "runif")
+  importFrom("utils", "sessionInfo")
+
 import(methods)
 import(foreach)
 import(doParallel)

@@ -13,6 +13,7 @@ transBrowse2 = function(tbga, annovec, tivcf, se, title="trans eQTL",
   maxrank=3) { 
 # uses transByRankAccum
 #
+   requireNamespace("shiny")
    ui = fluidPage(
      titlePanel(title),
      sidebarPanel(

@@ -63,9 +63,9 @@ realizations from permutation distribution
 passed to storeToQuantiles
 }
 }
-\details{
+%\details{
 %%  ~~ If necessary, more details than the description above ~~
-}
+%}
 \value{
 invisibly returns list with
  elements qx, qy, counts, fracs

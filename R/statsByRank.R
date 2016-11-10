@@ -79,7 +79,7 @@ nthreg = function(n, tstore) {
 
 
 statsByRank = function(job, rank=1, filt=force,
-    mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE")) {
+    mcol2keep=c("REF", "ALT", "snp", "MAF")) { #, "z.HWE")) {
   jj = job$obs
   if (length(jj)==0) return(NULL)
   mcols(jj)$dist = t(job$dist)  # will choose column later

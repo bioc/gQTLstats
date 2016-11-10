@@ -66,9 +66,9 @@ a GRanges with mcols including
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
+%\seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+%}
 \examples{
 \dontrun{  # requires acccess to 1KG S3
 library(geuvPack)

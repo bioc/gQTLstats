@@ -1,5 +1,6 @@
 \name{eqBox2}
 \alias{eqBox2}
+\alias{eqBox3}
 \alias{eqDesc2}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
@@ -13,6 +14,8 @@ against genotypes extracted from VCF
 \usage{
 eqBox2(gene, se, tf, snpgr, genome = "hg19", forceRs=TRUE, ...)
 eqDesc2(gene, se, tf, snpgr, genome = "hg19", forceRs=TRUE)
+eqBox3(gene, se, tf, snpgr, geneAnno, genome = "hg19", forceRs = TRUE,
+    ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -39,6 +42,10 @@ variants identified with DELLY that are grabbed by readVcf on
 an SNV address.  Set forceRs to TRUE to retain only variants
 with 'rs' in the name.  Has no effect if readVcf extracts only
 a single variant.
+}
+  \item{geneAnno}{
+named vector, \code{geneAnno[gene]} will be used to
+annotate display
 }
   \item{\dots}{
 extra arguments passed to beeswarm

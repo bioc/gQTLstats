@@ -1,5 +1,5 @@
 
-gmod2 = function (sym, genome = "hg19", orgDb, #=Homo.sapiens,
+gmod2 = function (sym, genome = "hg19", orgDb, 
    collector=exonsBy, verbose=FALSE) 
 {
     if (missing(orgDb)) {

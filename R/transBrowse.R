@@ -11,6 +11,7 @@
 
 transBrowse = function(tbg, anno, tivcf, se, title="trans eQTL") { 
 # add annotation to tbg for symbol and feature chr
+   requireNamespace("shiny")
    gn = anno$gene_name
    gsn = as.character(seqnames(anno))
    names(gn) = anno$gene_id

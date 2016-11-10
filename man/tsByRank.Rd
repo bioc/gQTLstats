@@ -1,5 +1,6 @@
 \name{tsByRank}
 \alias{tsByRank}
+\alias{tsByRankAccum}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 harvest contents of a TransStore by rank in associations of features to SNP

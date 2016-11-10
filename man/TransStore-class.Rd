@@ -33,9 +33,9 @@ of \code{\link[BatchJobs]{getJobInfo}} for each registry }
 information about a store }
 	 }
 }
-\references{
+%\references{
 %%  ~~put references to the literature/web site here~~
-}
+%}
 %\author{
 %%  ~~who you are~~
 %}
