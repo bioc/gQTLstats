@@ -65,7 +65,7 @@ A \code{\link[GenomicRanges]{GRanges}} instance.
   r17 = g17transRegistry()
   r18 = g18transRegistry()
   g1718 = TransStore(list(r17, r18))
-  tbg = tsByRank(g1718, 1)
+  tbg = tsByRank(g1718, 1, mcol2keep=c("REF", "ALT", "snp", "MAF")) # default z.HWE not currently available
 
  # consider the following filtering utility
  tbfilt = function(tbg, seqnames.="17", minMAF=.1, minabsodist = 1e7,
@@ -76,7 +76,7 @@ A \code{\link[GenomicRanges]{GRanges}} instance.
  }
  #
  g17 = TransStore(list(r17))
- tbga = tbfilt(tsByRankAccum(g17, 3)) # 1000 records
+ tbga = tbfilt(tsByRankAccum(g17, 3, mcol2keep=c("REF", "ALT", "snp", "MAF"))) # 1000 records
  head(tbga,2)
  }
 }
