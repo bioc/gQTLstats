@@ -15,7 +15,7 @@ tsByRank = function(tsin, rank=1, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE
  acc = .transStoreAccessor(tsin)
  z = foreach(i = 1:N) %dopar% {
    nj = length(findDone(allregs(tsin)[[i]]))
-   lapply(1:nj, function(j) { statsByRank(acc(i, j), rank=rank, filt=filt, mcol2keep=mcol2kee=)})
+   lapply(1:nj, function(j) { statsByRank(acc(i, j), rank=rank, filt=filt, mcol2keep=mcol2keep)})
    }
  do.call(c, unlist(z))
 }
