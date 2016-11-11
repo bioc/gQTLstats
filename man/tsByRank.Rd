@@ -9,8 +9,8 @@ harvest contents of a TransStore by rank in associations of features to SNP
 Harvest contents of a TransStore by rank in associations of features to SNP.
 }
 \usage{
-tsByRank(tsin, rank = 1, filt=force)
-tsByRankAccum(tsin, maxrank = 3, filt=force)
+tsByRank(tsin, rank = 1, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force)
+tsByRankAccum(tsin, maxrank = 3, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,10 +27,12 @@ recorded over all features.
 }
 \item{maxrank}{all features and scores will be retrieved
 up to \code{maxrank}, see example}
+\item{mcol2keep}{a character vector of metadata columns to
+retain}
 \item{filt}{a function accepting a GRanges and returning
 a GRanges.  The mcols of the GRanges to be processed
 will have elements
-"REF", "ALT", "snp", "MAF", "scorebuf", "elnames", "dist",
+\code{c(mcol2keep, "scorebuf", "elnames", "dist")},
 where the latter two are matrices with number of columns
 equal to the \code{bufsize} of the \code{\link{transAssoc}} call
 that generated \code{ts}. Only SNP-specific elements can be used

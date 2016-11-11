@@ -10,17 +10,17 @@
  function(i,j) loadResult( rs[[i]], js[[i]][j] )
 }
 
-tsByRank = function(tsin, rank=1, filt=force) {
+tsByRank = function(tsin, rank=1, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force) {
  N = nregs(tsin)
  acc = .transStoreAccessor(tsin)
  z = foreach(i = 1:N) %dopar% {
    nj = length(findDone(allregs(tsin)[[i]]))
-   lapply(1:nj, function(j) { statsByRank(acc(i, j), rank, filt=filt)})
+   lapply(1:nj, function(j) { statsByRank(acc(i, j), rank=rank, filt=filt, mcol2keep=mcol2kee=)})
    }
  do.call(c, unlist(z))
 }
 
-tsByRankAccum = function(tsin, maxrank=3, filt=force) {
+tsByRankAccum = function(tsin, maxrank=3, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force) {
  N = nregs(tsin)
  acc = .transStoreAccessor(tsin)
  accum = vector("list", maxrank)
@@ -28,7 +28,8 @@ tsByRankAccum = function(tsin, maxrank=3, filt=force) {
   accum[[cur]] = {
    tmp = foreach(i = 1:N) %dopar% {
     nj = length(findDone(allregs(tsin)[[i]]))
-    lapply(1:nj, function(j) { statsByRank(acc(i, j), cur, filt=filt)})
+    lapply(1:nj, function(j) { statsByRank(acc(i, j), rank=cur, filt=filt,
+         mcol2keep=mcol2keep)})
     }
    do.call(c, unlist(tmp))
    }
@@ -62,24 +63,9 @@ nthreg = function(n, tstore) {
   allregs(tstore)[[n]]
 }
 
-#statsByRank = function(tstore, rank) {
-#  probe1 = loadResults(allregs(tstore)[[1]])[[1]]
-#  nregs = length(allregs(tstore))
-#  therank = nrow(probe1$dist)
-#  stopifnot(rank <= therank)
-#  inigr = probe1$obs
-#  ini = mcols(inigr)[,1:4]
-#  feats = inigr$elnames[,rank]
-#  scores = inigr$scorebuf[,rank]
-#  permscores = probe1$perm$scorebuf[,rank]
-#  ini = cbind(ini, DataFrame(feats,scores,permscores))
-#  mcols(inigr) = ini
-#  inigr
-#}
-
 
 statsByRank = function(job, rank=1, filt=force,
-    mcol2keep=c("REF", "ALT", "snp", "MAF")) { #, "z.HWE")) {
+    mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE")) {
   jj = job$obs
   if (length(jj)==0) return(NULL)
   mcols(jj)$dist = t(job$dist)  # will choose column later
