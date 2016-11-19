@@ -3,6 +3,7 @@ setOldClass("gam") # may be too restrictive to assume GAM in use
 .nullgam = ""
 class(.nullgam) = "gam"
 setClassUnion("gamORNULL", c("gam", "NULL"))
+setClassUnion("functionORNULL", c("function", "NULL"))
 
 setClass("FDRsupp", representation(tab="data.frame",
    FDRfunc="functionORNULL", FDRmodel="gamORNULL", theCall="call",

@@ -76,3 +76,5 @@ export("describe")
 export("TransStore")
 
 export(tsByRank, transBrowse, tsByRankAccum, transBrowse2, eqBox3)
+export(pifdr2)
+export(tsIndex.reg)

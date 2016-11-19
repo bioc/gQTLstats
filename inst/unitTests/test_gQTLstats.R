@@ -154,9 +154,10 @@ checkTsByRank = function() {
        r18 = g18transRegistry()
        g1718 = TransStore(list(r17, r18))
        }
- tt1 = tsByRank(g1718, 1)
+ tt1 = tsByRank(g1718, 1, mcol2keep=c("REF", "snp", "MAF")) # must limit
+        # as geuvStore2 is legacy ...
  checkTrue(length(tt1) == 509728)
- keyfields = c("REF", "ALT", "snp", "MAF", "feats", "scores", "permscores", 
+ keyfields = c("snp", "MAF", "feats", "scores", "permscores", 
         "obsdist", "permdist")  # eventually add z.HWE
  checkTrue(all(keyfields %in% names(mcols(tt1))))
  checkTrue(abs(mean(tt1$scores)-26.29626)<.001)
