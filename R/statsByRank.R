@@ -35,11 +35,11 @@ tsByRankAccum = function(tsin, maxrank=3, mcol2keep=c("REF", "ALT", "snp", "MAF"
    }
   } # now all ranks available
  ans = accum[[1]] # basis 
- tmpmat_scores = matrix(NA, nr=length(ans), nc=maxrank)
- tmpmat_permscores = matrix(NA, nr=length(ans), nc=maxrank)
- tmpmat_permdists = matrix(NA, nr=length(ans), nc=maxrank)
- tmpmat_obsdists = matrix(NA, nr=length(ans), nc=maxrank)
- tmpmat_feats = matrix(NA_character_, nr=length(ans), nc=maxrank)
+ tmpmat_scores = matrix(NA, nrow=length(ans), ncol=maxrank)
+ tmpmat_permscores = matrix(NA, nrow=length(ans), ncol=maxrank)
+ tmpmat_permdists = matrix(NA, nrow=length(ans), ncol=maxrank)
+ tmpmat_obsdists = matrix(NA, nrow=length(ans), ncol=maxrank)
+ tmpmat_feats = matrix(NA_character_, nrow=length(ans), ncol=maxrank)
  for (i in 1:maxrank) {
    tmpmat_permscores[,i] = accum[[i]]$permscores
    tmpmat_permdists[,i] = accum[[i]]$permdist

@@ -1,5 +1,6 @@
 \name{pifdr}
 \alias{pifdr}
+\alias{pifdr2}
 \title{
 utility for computing plug-in FDR
 }
@@ -8,6 +9,7 @@ utility for computing plug-in FDR
 }
 \usage{
 pifdr( obs, perms, trimToUnit = TRUE, ... ) 
+pifdr2( obs, perms, trimToUnit = TRUE, expandPerms=TRUE, ... ) 
 }
 \arguments{
   \item{obs}{
@@ -20,6 +22,11 @@ be integer multiple of \code{length(obs)}
 \item{trimToUnit}{logical, if TRUE, values greater than 1 are
 replaced by 1.  Such values can occur, for example, with relatively
 small sample sizes.}
+\item{expandPerms}{With certain pair-specific filtering operations, the number
+of scores obtained after permutation may not be a multiple
+of the number of observed scores.  If TRUE, the scores obtained
+under permutation are sampled with replacement to simplify
+computation of plug-in FDR.}
 \item{\dots}{extra arguments ignored}
 }
 \details{

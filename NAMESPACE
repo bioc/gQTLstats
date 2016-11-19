@@ -50,9 +50,11 @@ importFrom(Biobase, selectSome, pData, assayDataNew, exprs, samples)
 #importFrom(BiocParallel, bpparam, bpworkers, bplapply)
 
 importFrom(BatchJobs, batchMapResults, makeRegistry, submitJobs,
-	waitForJobs, findNotDone)
+	waitForJobs, findNotDone, findDone, loadResult, loadRegistry,
+	findJobs, getJobInfo)
 
-importFrom(snpStats, snp.rhs.tests, col.summary, chi.squared)
+importFrom(snpStats, snp.rhs.tests, col.summary, chi.squared,
+     snp.rhs.estimates)
 
 importFrom(dplyr, filter, group_by, summarize, "%>%",
   rbind_all, arrange)

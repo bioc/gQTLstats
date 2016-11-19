@@ -106,7 +106,7 @@ storeToFDR = function(store, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
  trimToUnit = function(x) pmax(0, pmin(1, x))
  fdr = trimToUnit(oy/(nperm*ncalls))
  ans = data.frame(assoc=xq, fdr=fdr, ncalls=ncalls, avg.false=oy/nperm)
- new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo(),
+ new("FDRsupp", tab=ans, FDRfunc=NULL, FDRmodel=NULL, theCall=theCall, sessinfo=sessionInfo(),
     filterUsed=filter)
 }
 

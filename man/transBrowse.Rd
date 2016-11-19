@@ -1,5 +1,6 @@
 \name{transBrowse}
 \alias{transBrowse}
+\alias{transBrowse2}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 shiny app to exhibit genotype:genomic feature distributions
@@ -9,6 +10,7 @@ exhibit genotype:genomic feature distributions with a shiny app
 }
 \usage{
 transBrowse(tbg, anno, tivcf, se, title = "trans eQTL")
+transBrowse2(tbg, anno, tivcf, se, title = "trans eQTL", maxrank=3)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,10 +34,19 @@ SummarizedExperiment instance with rowname coincident with
   \item{title}{
 optional string for title panel
 }
+  \item{maxrank}{
+transBrowse2 works with the tsByRankAccum function that collects
+scores down to a specified rank.  This parameter specifies the boundary.
 }
-%\details{
-%%  ~~ If necessary, more details than the description above ~~
-%}
+}
+\details{
+This function is under development.  The intention is to allow
+convenient visualization of off-chromosome genotype-feature
+relationships.  AllAssoc collects association scores SNP-wise, and
+saves the largest "K" scores obtained, along with feature identity
+and location metadata.  The largest score obtained for a given SNP
+is the rank 1 association, the next largest is rank 2, and so on.
+}
 %\value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -72,7 +83,7 @@ optional string for title panel
    library(geuvStore2)
    r17 = g17transRegistry()
    g17 = TransStore(list(r17))
-   tbg = tbfilt(tsByRankAccum(g17, 3)) # 1000 records
+   tbg = tbfilt(tsByRankAccum(g17, 3, mcol2keep=c("REF", "snp", "MAF"))) # 1000 records
    tf17 = ldblock::s3_1kg("17")  # uses S3 bucket
    require(geuvPack)
    require(shiny)

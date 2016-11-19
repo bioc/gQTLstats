@@ -1,5 +1,6 @@
 \name{TransStore}
 \alias{TransStore}
+\alias{tsIndex.reg}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Instance constructor for managing trans gQTL results
@@ -9,6 +10,7 @@ Instance constructor for managing trans gQTL results
 }
 \usage{
 TransStore(regs, paths = NULL)
+tsIndex.reg(tsin, ind)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,10 +21,14 @@ one per (variant-oriented) chromosome
   \item{paths}{
 if desired, paths to folders for which \code{\link[BatchJobs]{loadRegistry}} succeeds, used instead of \code{regs}
 }
+\item{tsin}{a TransStore instance}
+\item{ind}{index of registry to index}
 }
-%\details{
-%%  ~~ If necessary, more details than the description above ~~
-%}
+\details{
+\code{tsIndex.reg} is experimental, producing a hash mapping snps
+to registry job identifiers, to support rapid store-level retrieval
+of locus-specific findings.
+}
 \value{
 instance of \code{\link{TransStore-class}}
 %%  ~Describe the value returned
