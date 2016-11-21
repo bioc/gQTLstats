@@ -8,6 +8,7 @@ import(methods)
 import(foreach)
 import(doParallel)
 import(beeswarm)
+import(shiny)
 
 import(BiocGenerics)
 import(S4Vectors)
@@ -39,7 +40,7 @@ export( storeToQuantiles,  storeToHist, storeToFDR,
 exportClasses("FDRsupp")
 export(getFDRfunc, getTab, setFDRfunc, directPlot,
        txsPlot, eqBox2, eqDesc2, enumerateByFDR, #gmod2,
-	manhWngr)
+	manhWngr, eqBox3)
 
 importFrom(VariantAnnotation, readVcf, scanVcfHeader, ScanVcfParam, isSNV,
    genotypeToSnpMatrix, alt, ref, "vcfSamples", "vcfSamples<-", info, "alt<-",
@@ -79,4 +80,4 @@ export("TransStore")
 
 export(tsByRank, transBrowse, tsByRankAccum, transBrowse2, eqBox3)
 export(pifdr2)
-export(tsIndex.reg)
+export(tsIndex.reg, tqbrowser)
