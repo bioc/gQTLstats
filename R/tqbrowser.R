@@ -32,15 +32,18 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
      selectInput("curband", "cytoband", choices=names(tiling),
         selected=band.init),
      uiOutput("snpSelector"),
-     numericInput("rank", "rank", 1, min=1, max=5, step=1)
+     numericInput("rank", "rank", 1, min=1, max=5, step=1),
+     numericInput("num2lab", "# to label", 5, min=5, max=50, step=5),
+     width=3
      ),
     tabsetPanel(
      tabPanel("Manh.", plotOutput("manh")),
-     tabPanel("y vs GT", plotOutput("eqbox"))
+     tabPanel("y vs GT", plotOutput("eqbox")),
+     tabPanel("Manh2", ggvisOutput("p"))
      )
     )
 #   
- server = function(input, output) {
+ server = function(input, output, session) {
    output$selband = renderTable( input$curband )
    output$snpSelector = renderUI({
      tagList(
@@ -52,8 +55,35 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
       x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
       y = band2feats(tiling, input$curband, tsbra, function(x) 
             x$allscores[,input$rank])
-      plot(x,y,xlab=input$cursnp)
+      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
+      topinds = order(y,decreasing=TRUE)[1:input$num2lab]
+      plot(x,y,xlab=input$curband,cex.lab=1.2)
+      text(x[topinds], jitter(y[topinds]), nm[topinds], cex=1.1)
       })
+   tt = reactive({
+#
+# define helper for tooltip
+#
+     all_values <- function(x) {
+             if(is.null(x)) return(NULL)
+             #row <- curdf[curdf$rowid == x$rowid, ]
+             #print(row)
+             #paste0(row, ": ", format(row), collapse = "<br />")
+             #row["nm"]
+             curdf[curdf$rowid == x$rowid, "nm" ]
+           }
+#
+# construct manhattanplot and tooltip
+#
+      pos = band2feats(tiling, input$curband, tsbra, function(x) start(x))
+      y = band2feats(tiling, input$curband, tsbra, function(x) 
+            x$allscores[,input$rank])
+      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
+      curdf = data.frame(pos=pos, y=y, nm=nm, rowid=1:length(pos)) 
+      curdf %>% ggvis(~pos, ~y, key:=~rowid) %>% layer_points() %>% add_tooltip(all_values,
+          "hover")
+      })
+   tt %>% bind_shiny("p")
    output$eqbox = renderPlot({
      curchrn = sub("[pq].*", "", input$curband) # character
 #     print(curchrn)
@@ -61,9 +91,11 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
      fns = experiments(mae)[[gelname]]@files
      fn = fns[curchrn]
      tf = TabixFile(fn)
+     suppressMessages({
      eqBox3( tsbra[input$cursnp,]$allfeats[input$rank], 
          experiments(mae)[[felname]],
          tf, tsbra[input$cursnp,], annovec ) 
+     })
     })
  } # end server
 shinyApp(ui=ui, server=server)

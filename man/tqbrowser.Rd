@@ -76,7 +76,7 @@ VJ Carey <stvjc@channing.harvard.edu>
 #
 # obtain infrastructure
 #
-packs = c("VariantAnnotation", "GenomicFiles",
+packs = c("VariantAnnotation", "GenomicFiles", "ggvis",
   "Rsamtools", "GenomeInfoDb", "geuvPack", "shiny",
   "MultiAssayExperiment", "AnnotationHub", "ldblock")
 suppressPackageStartupMessages({
@@ -100,8 +100,9 @@ seqlevelsStyle(geuFPKM) = "NCBI"
 # bind to MAE
 #
 el = ExperimentList(list(geu=geuFPKM, vcf=vcst))
+suppressWarnings({ # samples don't line up between expression and genotype, we know this
 mae = MultiAssayExperiment(el, pData=colData(el[[1]]))
-
+})
 #
 # obtain and clean up cytoband representation
 #
