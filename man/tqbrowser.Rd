@@ -76,8 +76,8 @@ VJ Carey <stvjc@channing.harvard.edu>
 #
 # obtain infrastructure
 #
-packs = c("VariantAnnotation", "GenomicFiles", "ggvis",
-  "Rsamtools", "GenomeInfoDb", "geuvPack", "shiny",
+packs = c("VariantAnnotation", "GenomicFiles", "ggvis", "plotly",
+  "Rsamtools", "GenomeInfoDb", "geuvPack", "shiny", "ggplot2",
   "MultiAssayExperiment", "AnnotationHub", "ldblock")
 suppressPackageStartupMessages({
 r = sapply(packs, require, character.only=TRUE)

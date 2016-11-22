@@ -28,20 +28,25 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
  requireNamespace("shiny")
  ui = fluidPage(
     titlePanel("cytoband chooser"),
-    sidebarPanel(
-     selectInput("curband", "cytoband", choices=names(tiling),
-        selected=band.init),
-     uiOutput("snpSelector"),
-     numericInput("rank", "rank", 1, min=1, max=5, step=1),
-     numericInput("num2lab", "# to label", 5, min=5, max=50, step=5),
-     width=3
-     ),
-    tabsetPanel(
-     tabPanel("Manh.", plotOutput("manh")),
-     tabPanel("y vs GT", plotOutput("eqbox")),
-     tabPanel("Manh2", ggvisOutput("p"))
-     )
-    )
+     sidebarLayout(
+      sidebarPanel(
+       selectInput("curband", "cytoband", choices=names(tiling),
+          selected=band.init),
+       uiOutput("snpSelector"),
+       numericInput("rank", "rank", 1, min=1, max=5, step=1),
+       numericInput("num2lab", "# to label", 5, min=5, max=50, step=5),
+       width=3
+       ),
+      mainPanel(
+       tabsetPanel(
+        tabPanel("Manh.", plotOutput("manh")),
+        tabPanel("y vs GT", plotOutput("eqbox")),
+        tabPanel("Manh2", ggvisOutput("p")),
+        tabPanel("Manh3", plotlyOutput("manh3"))
+        )
+       )
+    ) # end layout
+   ) # end fluidPage
 #   
  server = function(input, output, session) {
    output$selband = renderTable( input$curband )
@@ -60,18 +65,18 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
       plot(x,y,xlab=input$curband,cex.lab=1.2)
       text(x[topinds], jitter(y[topinds]), nm[topinds], cex=1.1)
       })
+   output$manh3 = renderPlotly({
+      x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
+      y = band2feats(tiling, input$curband, tsbra, function(x) 
+            x$allscores[,input$rank])
+      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
+      topinds = order(y,decreasing=TRUE)[1:input$num2lab]
+#      plot(x,y,xlab=input$curband,cex.lab=1.2)
+#      text(x[topinds], jitter(y[topinds]), nm[topinds], cex=1.1)
+      curdf = data.frame(pos=x, assoc=y, snp=nm, stringsAsFactors=FALSE)
+      ggplotly(ggplot(curdf, aes(x=pos, y=assoc, text=snp)) + geom_point())
+      })
    tt = reactive({
-#
-# define helper for tooltip
-#
-     all_values <- function(x) {
-             if(is.null(x)) return(NULL)
-             #row <- curdf[curdf$rowid == x$rowid, ]
-             #print(row)
-             #paste0(row, ": ", format(row), collapse = "<br />")
-             #row["nm"]
-             curdf[curdf$rowid == x$rowid, "nm" ]
-           }
 #
 # construct manhattanplot and tooltip
 #
@@ -79,9 +84,16 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
       y = band2feats(tiling, input$curband, tsbra, function(x) 
             x$allscores[,input$rank])
       nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
-      curdf = data.frame(pos=pos, y=y, nm=nm, rowid=1:length(pos)) 
-      curdf %>% ggvis(~pos, ~y, key:=~rowid) %>% layer_points() %>% add_tooltip(all_values,
-          "hover")
+      curdf = data.frame(pos=pos, y=y, nm=nm, rowid=1:length(pos), band=input$curband) 
+#
+# define helper for tooltip
+#
+     all_values <- function(x) {
+             if(is.null(x)) return(NULL)
+             curdf[curdf$rowid == x$rowid, "nm" ]
+           }
+      curdf %>% ggvis(~pos, ~y, key:=~rowid) %>% layer_points() %>% 
+                 add_tooltip(function(x) curdf[curdf$rowid==x$rowid, "nm"]) #all_values, "hover")
       })
    tt %>% bind_shiny("p")
    output$eqbox = renderPlot({

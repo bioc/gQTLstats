@@ -9,6 +9,8 @@ import(foreach)
 import(doParallel)
 import(beeswarm)
 import(shiny)
+import(ggplot2)
+import(plotly)
 
 import(BiocGenerics)
 import(S4Vectors)
