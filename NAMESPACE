@@ -11,6 +11,7 @@ import(beeswarm)
 import(shiny)
 import(ggplot2)
 import(plotly)
+import(erma)
 
 import(BiocGenerics)
 import(S4Vectors)
