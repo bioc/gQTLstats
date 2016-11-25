@@ -78,7 +78,7 @@ VJ Carey <stvjc@channing.harvard.edu>
 #
 packs = c("VariantAnnotation", "GenomicFiles", "ggvis", "plotly",
   "Rsamtools", "GenomeInfoDb", "geuvPack", "shiny", "ggplot2",
-  "MultiAssayExperiment", "AnnotationHub", "ldblock")
+  "MultiAssayExperiment", "AnnotationHub", "ldblock", "erma")
 suppressPackageStartupMessages({
 r = sapply(packs, require, character.only=TRUE)
 })
@@ -95,7 +95,6 @@ seqlevelsStyle(vcst) = "NCBI"
 if (!exists("geuFPKM")) data(geuFPKM)
 data(gen2sym)
 seqlevelsStyle(geuFPKM) = "NCBI"
-
 #
 # bind to MAE
 #
@@ -105,22 +104,26 @@ mae = MultiAssayExperiment(el, pData=colData(el[[1]]))
 })
 #
 # obtain and clean up cytoband representation
-#
-ah = AnnotationHub()
-cyto37 = ah[["AH5012"]]
-seqlevelsStyle(cyto37) = "NCBI"
-cyto37 = as(cyto37, "GRanges")
-sn = as.character(seqnames(cyto37))
-mcols(cyto37)$name = paste0(sn, mcols(cyto37)$name)
-names(cyto37) = mcols(cyto37)$name
-seqlengths(cyto37)["MT"] = 16569
+# cyto37n created as follows:
+#ah = AnnotationHub()
+#cyto37 = ah[["AH5012"]]
+#seqlevelsStyle(cyto37) = "NCBI"
+#cyto37 = as(cyto37, "GRanges")
+#sn = as.character(seqnames(cyto37))
+#mcols(cyto37)$name = paste0(sn, mcols(cyto37)$name)
+#names(cyto37) = mcols(cyto37)$name
+#seqlengths(cyto37)["MT"] = 16569
+data(cyto37n)
 data(tbgaOrmdl3)  # saved output of tsByRankAccum, giving association scores
+#
+# obtain chromatin state calls from erma
+erset = makeErmaSet()
 #
 # target and invoke browser
 #
 okba = c("17q12", "17q21.1", "17q21.2")
-tqbrowser( mae, "geu", "vcf", cyto37[okba], 
-   tbgaOrmdl3, gen2sym, band.init="17q12" )
+tqbrowser( mae, "geu", "vcf", cyto37n[okba], 
+   tbgaOrmdl3, gen2sym, band.init="17q12", ermaset=erset )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -33,6 +33,7 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
     titlePanel("cytoband chooser"),
      sidebarLayout(
       sidebarPanel(
+#       actionButton("act", "Submit"),
        selectInput("curband", "cytoband", choices=names(tiling),
           selected=band.init),
        uiOutput("snpSelector"),
@@ -43,10 +44,8 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
        ),
       mainPanel(
        tabsetPanel(
-        tabPanel("Manh.", plotOutput("manh")),
-        tabPanel("y vs GT", plotOutput("eqbox")),
-        tabPanel("Manh2", ggvisOutput("p")),
-        tabPanel("Manh3", plotlyOutput("manh3"))
+        tabPanel("Manh.", plotlyOutput("manh")),
+        tabPanel("y vs GT", plotOutput("eqbox"))
         )
        )
     ) # end layout
@@ -60,70 +59,21 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
          band2feats(tiling, input$curband, tsbra))
        )
       })
-   if (!is.null(ermaset)) 
     output$celltypeSelector = renderUI({
      tagList(
        selectInput("celltype", "celltype", choices=
          cellTypes(ermaset), selected=cellTypes(ermaset)[4])
        )
       })
-   output$manh = renderPlot({
-      x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
-      y = band2feats(tiling, input$curband, tsbra, function(x) 
-            x$allscores[,input$rank])
-      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
-      topinds = order(y,decreasing=TRUE)[1:input$num2lab]
-      plot(x,y,xlab=input$curband,cex.lab=1.2)
-      text(x[topinds], jitter(y[topinds]), nm[topinds], cex=1.1)
-      })
-   output$manh3 = renderPlotly({
-    statevec = NULL
-    if (!is.null(ermaset)) {
-      curr = tiling[input$curband]
-      print(curr)     
-      seqlevelsStyle(curr) = "UCSC" # match ermaset
-      rowRanges(ermaset) = curr
-print(input$celltype)
-      ind = which(cellTypes(ermaset) == input$celltype)
-print(ind)
-      curstates = subsetByRanges(ermaset[,ind], curr)[[1]][[1]] #multiple files, multiple ranges permitted, we are using 1,1
- #     print(curstates)     
-      seqlevelsStyle(curstates) = seqlevelsStyle(tsbra)
-      fo = findOverlaps(subsetByOverlaps(tsbra, tiling[input$curband]), curstates)
-      print(fo)
-      statevec = curstates$name[ subjectHits(fo) ]
-      }
-      x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
-      y = band2feats(tiling, input$curband, tsbra, function(x) 
-            x$allscores[,input$rank])
-      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
+#   output$manh = renderPlot({
+#      x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
+#      y = band2feats(tiling, input$curband, tsbra, function(x) 
+#            x$allscores[,input$rank])
+#      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
 #      topinds = order(y,decreasing=TRUE)[1:input$num2lab]
 #      plot(x,y,xlab=input$curband,cex.lab=1.2)
 #      text(x[topinds], jitter(y[topinds]), nm[topinds], cex=1.1)
-      curdf = data.frame(pos=x, assoc=y, snp=nm, state=paste0(nm, ":", statevec), stringsAsFactors=FALSE)
-      pp = ggplot(curdf, aes(x=pos, y=assoc, text=state)) + geom_point()
-      ggplotly(pp)
-      })
-   tt = reactive({
-#
-# construct manhattanplot and tooltip
-#
-      pos = band2feats(tiling, input$curband, tsbra, function(x) start(x))
-      y = band2feats(tiling, input$curband, tsbra, function(x) 
-            x$allscores[,input$rank])
-      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
-      curdf = data.frame(pos=pos, y=y, nm=nm, rowid=1:length(pos), band=input$curband) 
-#
-# define helper for tooltip
-#
-     all_values <- function(x) {
-             if(is.null(x)) return(NULL)
-             curdf[curdf$rowid == x$rowid, "nm" ]
-           }
-      curdf %>% ggvis(~pos, ~y, key:=~rowid) %>% layer_points() %>% 
-                 add_tooltip(function(x) curdf[curdf$rowid==x$rowid, "nm"]) #all_values, "hover")
-      })
-   tt %>% bind_shiny("p")
+#      })
    output$eqbox = renderPlot({
      curchrn = sub("[pq].*", "", input$curband) # character
 #     print(curchrn)
@@ -132,11 +82,32 @@ print(ind)
      fn = fns[curchrn]
      tf = TabixFile(fn)
      suppressMessages({
-     eqBox3( tsbra[input$cursnp,]$allfeats[input$rank], 
+     eqBox3( tsbra[input$cursnp,]$allfeats[input$rank],
          experiments(mae)[[felname]],
-         tf, tsbra[input$cursnp,], annovec ) 
+         tf, tsbra[input$cursnp,], annovec )
      })
-    })
+   })
+
+    
+output$manh = renderPlotly({
+        curr = tiling[input$curband]
+        seqlevelsStyle(curr) = "UCSC" # match ermaset
+        rowRanges(ermaset) = curr
+        ind = which(cellTypes(ermaset) == input$celltype)
+        print(ind)
+        print(input$celltype)
+        curstates = subsetByRanges(ermaset[,ind], curr)[[1]][[1]] #multiple files, multiple ranges permitted, we are using 1,1
+        seqlevelsStyle(curstates) = seqlevelsStyle(tsbra)[1]
+        fo = findOverlaps(subsetByOverlaps(tsbra, tiling[input$curband]), curstates)
+        statevec = curstates$name[ subjectHits(fo) ]
+      x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
+      y = band2feats(tiling, input$curband, tsbra, function(x) 
+            x$allscores[,input$rank])
+      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
+      curdf = data.frame(pos=x, assoc=y, snp=nm, state=paste0(nm, ":", statevec), stateOnly=statevec, stringsAsFactors=FALSE)
+#      ggplot(curdf, aes(x=pos, y=assoc, text=state, colour=stateOnly))+geom_point()
+      ggplotly(ggplot(curdf, aes(x=pos, y=assoc, text=state, colour=stateOnly))+geom_point()) 
+     })
  } # end server
 shinyApp(ui=ui, server=server)
 } # end tqbrowser
