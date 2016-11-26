@@ -116,6 +116,8 @@ mae = MultiAssayExperiment(el, pData=colData(el[[1]]))
 data(cyto37n)
 data(tbgaOrmdl3)  # saved output of tsByRankAccum, giving association scores
 #
+library(gwascat)
+data(ebicat37)
 # obtain chromatin state calls from erma
 erset = makeErmaSet()
 #
@@ -123,7 +125,7 @@ erset = makeErmaSet()
 #
 okba = c("17q12", "17q21.1", "17q21.2")
 tqbrowser( mae, "geu", "vcf", cyto37n[okba], 
-   tbgaOrmdl3, gen2sym, band.init="17q12", ermaset=erset )
+   tbgaOrmdl3, gen2sym, band.init="17q12", ermaset=erset, gwascat=ebicat37 )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

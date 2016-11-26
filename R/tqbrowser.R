@@ -8,7 +8,7 @@ band2feats = function(cbstruct, bandid, gr, featExtractor = function(x)names(x))
  }
 
 tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
-  band.init="6q12", ermaset=NULL, ...) {
+  band.init="6q12", ermaset, gwascat, ...) {
 # 
 # browse ranked trans-associations in tiles
 #
@@ -44,8 +44,8 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
        ),
       mainPanel(
        tabsetPanel(
-        tabPanel("y vs GT", plotOutput("eqbox")),
-        tabPanel("Manh.", plotlyOutput("manh"))
+        tabPanel("Manh.", helpText("plotly Manhattan plot, select subplots by mouse, mouseover for point metadata"), plotlyOutput("manh")),
+        tabPanel("y vs GT", plotOutput("eqbox"))
         )
        )
     ) # end layout
@@ -65,15 +65,6 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
          cellTypes(ermaset), selected=cellTypes(ermaset)[4])
        )
       })
-#   output$manh = renderPlot({
-#      x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
-#      y = band2feats(tiling, input$curband, tsbra, function(x) 
-#            x$allscores[,input$rank])
-#      nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
-#      topinds = order(y,decreasing=TRUE)[1:input$num2lab]
-#      plot(x,y,xlab=input$curband,cex.lab=1.2)
-#      text(x[topinds], jitter(y[topinds]), nm[topinds], cex=1.1)
-#      })
    output$eqbox = renderPlot({
      curchrn = sub("[pq].*", "", input$curband) # character
      fns = experiments(mae)[[gelname]]@files
@@ -93,22 +84,40 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
         curr = tiling[input$curband]
         seqlevelsStyle(curr) = "UCSC" # match ermaset
         rowRanges(ermaset) = curr
-        ind = which(cellTypes(ermaset) == input$celltype)
-        curstates = subsetByRanges(ermaset[,ind], 
-                curr)[[1]][[1]] #multiple files, multiple ranges permitted, we are using 1,1
-        seqlevelsStyle(curstates) = seqlevelsStyle(tsbra)[1]
-        fo = findOverlaps(subsetByOverlaps(tsbra, tiling[input$curband]), curstates)
-        statevec = curstates$name[ subjectHits(fo) ]
-        x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
-        y = band2feats(tiling, input$curband, tsbra, function(x) 
-            x$allscores[,input$rank])
-        nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
-        curdf = data.frame(pos=x, assoc=y, snp=nm, 
-               state=paste0(nm, ":", statevec), 
-               stateOnly=statevec, stringsAsFactors=FALSE)
-        ggplotly(
-           ggplot(curdf, aes(x=pos, y=assoc, text=state, 
-              colour=stateOnly))+geom_point()) 
+        chk = c(is.null(input$celltype), is.null(input$rank), is.null(input$curband))
+        if (!any(chk)) {
+          ind = which(cellTypes(ermaset) == input$celltype)
+          curstates = subsetByRanges(ermaset[,ind], 
+                  curr)[[1]][[1]] #multiple files, multiple ranges permitted, we are using 1,1
+          seqlevelsStyle(curstates) = seqlevelsStyle(tsbra)[1]
+          fo = findOverlaps(subsetByOverlaps(tsbra, tiling[input$curband]), curstates)
+          statevec = curstates$name[ subjectHits(fo) ]
+          x = band2feats(tiling, input$curband, tsbra, function(x) start(x))
+          y = band2feats(tiling, input$curband, tsbra, function(x) 
+              x$allscores[,input$rank])
+          nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
+          gwascat = as(gwascat, "GRanges")
+          genome(gwascat) = genome(curr)[1]
+          seqlevelsStyle(gwascat) = seqlevelsStyle(curr)[1]
+          gw = subsetByOverlaps(gwascat, curr)
+          mcg = mcols(gw)
+          seqlevelsStyle(gw) = seqlevelsStyle(curstates)[1]
+          gfo = findOverlaps(gw, curstates)
+          gstatevec = curstates$name[ subjectHits(gfo) ]
+          gwdf = data.frame(pos=start(gw), assoc=-mcg[,"PVALUE_MLOG"],
+                  snp=mcg[,"STRONGEST SNP-RISK ALLELE"],
+                  stateid=mcg[,"DISEASE/TRAIT"], state=gstatevec,
+                  stringsAsFactors=FALSE)
+          curdf = data.frame(pos=x, assoc=y, snp=nm, 
+                 stateid=paste0(nm, ":", statevec), 
+                 state=statevec, stringsAsFactors=FALSE)
+          curdf = rbind(curdf, gwdf)
+          ggp = ggplot(curdf, aes(x=pos, y=assoc, text=stateid, 
+                colour=state))+geom_point() + labs(x=input$curband, y="<0: -log10p gwas, >0:qtl assoc")
+          if (!is.null(ggp)) ggplotly( ggp )
+#             ggplot(curdf, aes(x=pos, y=assoc, text=state, 
+#                colour=stateOnly))+geom_point()) 
+          }
      })
  } # end server
 shinyApp(ui=ui, server=server)
