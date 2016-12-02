@@ -1,3 +1,38 @@
+# symbols as of Dec 2 2016
+#
+# [1] "AllAssoc"             "cisAssoc"             "cisCount"            
+# [4] "cisEsts"              "clipPCs"              "collapse_multiPerm"  
+# [7] "describe"             "directPlot"           "distToGene"          
+#[10] "enumerateByFDR"       "eqBox2"               "eqBox3"              
+#[13] "eqDesc2"              "filteredDFwPerm"      "getFDRfunc"          
+#[16] "getTab"               "gQTLs"                "gQTLswarm"           
+#[19] "manhWngr"             "mixedVCFtoSnpMatrix"  "pifdr"               
+#[22] "pifdr2"               "pifdr3"               "prep.cisAssocNB"     
+#[25] "qqStore"              "queryVCF"             "regressOut"          
+#[28] "senstab"              "setFDRfunc"           "storeToFDR"          
+#[31] "storeToFDRByProbe"    "storeToHist"          "storeToMaxAssocBySNP"
+#[34] "storeToQuantiles"     "table_sensobj_thresh" "tqbrowser"           
+#[37] "transAssoc"           "transBrowse"          "transBrowse2"        
+#[40] "TransChunk"           "TransStore"           "transTable"          
+#[43] "tsByRank"             "tsByRankAccum"        "tsIndex.reg"         
+#[46] "txsPlot"             
+
+# declared tested at that date
+
+# test cisAssoc
+# test clipPCs
+# test directPlot -- should have a plot=FALSE param
+# test enumerateByFDR
+# test eqDesc2 (related eqBox2)
+# test getFDRfunc
+# test getTab
+#    test regressOut
+#    test setFDRfunc
+# test storeToFDR
+# test storeToHist
+# test storeToQuantiles
+
+
 checkStats = function() {
 #
 # [1] "cisAssoc"          "clipPCs"           "directPlot"       
