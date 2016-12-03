@@ -1,4 +1,4 @@
- distToGene = function(buf, annogr) { if (is.null(buf)) return(buf);
+ distToGene.slow = function(buf, annogr) { if (is.null(buf)) return(buf);
    ans = sapply(1:length(buf), function(i) {
      tmp = distance(buf[i], annogr[as.character(buf[i]$elnames)])
      dtss = distance(buf[i], resize(annogr[as.character(buf[i]$elnames)],1))
@@ -10,6 +10,26 @@
    })
    ans
  }
+
+distToGene = function (buf, annogr) 
+{
+    stopifnot(seqlevelsStyle(buf) %in% seqlevelsStyle(annogr))
+    if (is.null(buf)) 
+        return(buf)
+    beln = buf$elnames
+    ans = sapply(1:ncol(beln), function(i) {
+        tmp = distance(buf, annogr[beln[,i]])
+        dtss = distance(buf, resize(annogr[beln[,i]], 1))
+        outbody = which(tmp > 0)
+        if (length(outbody) > 0) 
+            tmp[outbody] = dtss[outbody]
+        if (any(is.na(tmp))) 
+            tmp[is.na(tmp)] = Inf
+        tmp
+    })
+    t(ans)
+}
+
 
 
 collapse_multiPerm = function( se, fblockList, tf, varrng, nperms, bufsize=10 ) {
