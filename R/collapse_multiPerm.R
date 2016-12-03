@@ -1,14 +1,11 @@
-distToGene = function(buf, annogr) { if (is.null(buf)) return(buf);
-  sapply(1:length(buf), function(i) {
-  ac = as.character
-  ans = rep(NA, length( buf$elnames[i,] ) )
-  ans[ ac(seqnames(buf[i])) != ac(seqnames(annogr[ buf$elnames[i,] ])) ] = Inf  # off chrom
-  ans[ overlapsAny(annogr[ buf$elnames[i,] ] , buf[i]) ] = 0
-  tss = resize(annogr[ buf$elnames[i,] ] , 1 )
-  undone = which(is.na(ans))
-  if (length(undone)>0) ans[undone] = start(buf[i]) - start(tss[undone])
-  ans
-})}
+ distToGene = function(buf, annogr) { if (is.null(buf)) return(buf);
+   ans = lapply(1:length(buf), function(i) {
+     tmp = distance(buf[i], annogr[as.character(buf[i]$elnames)])
+     if (any(is.na(tmp))) tmp[is.na(tmp)] = Inf
+   })
+   unlist(ans)
+ }
+
 
 collapse_multiPerm = function( se, fblockList, tf, varrng, nperms, bufsize=10 ) {
 #
@@ -26,16 +23,18 @@ collapse_multiPerm = function( se, fblockList, tf, varrng, nperms, bufsize=10 ) 
    message("variantRange does not yield testable SNP, returning NULL")
    return(NULL)
    }
+ if (inherits(tt0, "try-error")) return(tt0)
 #
 # continue iteration, filtering strongest associations seen so far into buffer 
 #
  for (j in 2:length(fblockList)) { # test remaining chunks of transcriptome, retaining best so far
    tt = try(AllAssoc(se[fblockList[[j]],], tf, variantRange=varrng, nperm=nperms))
-   tt0 = gQTLstats:::collapseToBuf( tt0, tt, bufsize=bufsize )
+   if (inherits(tt, "try-error")) return(tt)
+   tt0 = collapseToBuf( tt0, tt, bufsize=bufsize )
    permOut = vector("list", nperms)
    for (k in 1:nperms) {
      if (j == 2) permOut[[k]] = tt0 # must get started, then continue permuted buffer
-     permOut[[k]] = gQTLstats:::collapseToBuf( permOut[[k]], tt , bufsize=bufsize, frag=paste0("_permScore_", k))
+     permOut[[k]] = collapseToBuf( permOut[[k]], tt , bufsize=bufsize, frag=paste0("_permScore_", k))
      gc()
      }
    }

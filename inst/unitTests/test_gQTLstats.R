@@ -18,6 +18,7 @@
 #[46] "txsPlot"             
 
 # declared tested at that date
+# new: AllAssoc
 
 # test cisAssoc
 # test clipPCs
@@ -200,3 +201,42 @@ checkTsByRank = function() {
 }
 checkTsByRank()
 
+
+checkAllAssoc = function() {
+ require(Rsamtools)
+ require(GenomicRanges)
+ require(geuvPack) 
+ data(geuFPKM)
+ mysr = GRanges("20", IRanges(33.09e6, 33.51e6))
+ tf20 = TabixFile(system.file("vcf/c20exch.vcf.gz", package="gQTLstats"))
+ set.seed(1234)
+ lita = AllAssoc( geuFPKM[1:10,], tf20, mysr )
+ checkTrue(length(lita)==499)
+ checkTrue(all(dim(mcols(lita))==c(499,47)))
+ checkTrue(abs(sum(mcols(lita)[,"ENSG00000152931.6_obs"])-1728.742)<.01)
+ checkTrue(abs(sum(mcols(lita)[,"z.HWE"])+40.20654)<.01)
+
+coln = c("paramRangeID", "REF", "ALT", "ENSG00000152931.6_obs", "ENSG00000183696.9_obs", 
+"ENSG00000139269.2_obs", "ENSG00000169129.8_obs", "ENSG00000134602.11_obs", 
+"ENSG00000136237.12_obs", "ENSG00000259425.1_obs", "ENSG00000242284.2_obs", 
+"ENSG00000235027.1_obs", "ENSG00000228169.3_obs", "ENSG00000152931.6_permScore_1", 
+"ENSG00000183696.9_permScore_1", "ENSG00000139269.2_permScore_1", 
+"ENSG00000169129.8_permScore_1", "ENSG00000134602.11_permScore_1", 
+"ENSG00000136237.12_permScore_1", "ENSG00000259425.1_permScore_1", 
+"ENSG00000242284.2_permScore_1", "ENSG00000235027.1_permScore_1", 
+"ENSG00000228169.3_permScore_1", "ENSG00000152931.6_permScore_2", 
+"ENSG00000183696.9_permScore_2", "ENSG00000139269.2_permScore_2", 
+"ENSG00000169129.8_permScore_2", "ENSG00000134602.11_permScore_2", 
+"ENSG00000136237.12_permScore_2", "ENSG00000259425.1_permScore_2", 
+"ENSG00000242284.2_permScore_2", "ENSG00000235027.1_permScore_2", 
+"ENSG00000228169.3_permScore_2", "ENSG00000152931.6_permScore_3", 
+"ENSG00000183696.9_permScore_3", "ENSG00000139269.2_permScore_3", 
+"ENSG00000169129.8_permScore_3", "ENSG00000134602.11_permScore_3", 
+"ENSG00000136237.12_permScore_3", "ENSG00000259425.1_permScore_3", 
+"ENSG00000242284.2_permScore_3", "ENSG00000235027.1_permScore_3", 
+"ENSG00000228169.3_permScore_3", "snp", "MAF", "z.HWE", "probeid"
+)
+ checkTrue(all(names(mcols(lita))==coln))
+}
+
+checkAllAssoc()
