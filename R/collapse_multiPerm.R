@@ -1,9 +1,10 @@
  distToGene = function(buf, annogr) { if (is.null(buf)) return(buf);
-   ans = lapply(1:length(buf), function(i) {
+   ans = sapply(1:length(buf), function(i) {
      tmp = distance(buf[i], annogr[as.character(buf[i]$elnames)])
      if (any(is.na(tmp))) tmp[is.na(tmp)] = Inf
+     tmp
    })
-   unlist(ans)
+   ans
  }
 
 
