@@ -244,15 +244,17 @@ checkAllAssoc()
 chkD2g = function() {
  require(geuvPack)
  data(gencodeV12GR)
- demlocs = GRanges(c("chr1", "chr1", "chr20", "chr20"),
-     IRanges(c(3000, 4000, 5000, 49551414), width=1))
+ demlocs = GRanges(c("chr1", "chr1", "chr20", "chr20", "chr20", "chr20"),
+     IRanges(c(3000, 4000, 5000, 49551414, 49551004, 49576092), width=1))
  mm = names(gencodeV12GR)[1:5]
- mm = rbind(mm,mm,mm,mm)
+ mm = rbind(mm,mm,mm,mm,mm,mm)
  mcols(demlocs)$elnames = mm
  dd = distToGene(demlocs, gencodeV12GR[1:5])
- soln = structure(c(Inf, Inf, Inf, 169818803, 169628244, Inf, Inf, Inf, 
-169817803, 169627244, Inf, Inf, 49546403, Inf, Inf, Inf, Inf, 
-0, Inf, Inf), .Dim = c(5L, 4L))
+ soln = structure(c(Inf, Inf, Inf, 169860407, 169628244, Inf, Inf, Inf, 
+169859407, 169627244, Inf, Inf, 49570091, Inf, Inf, Inf, Inf, 
+0, Inf, Inf, Inf, Inf, 24087, Inf, Inf, Inf, Inf, 999, Inf, Inf
+), .Dim = 5:6)
+
  checkTrue(all(dd==soln))
 }
 
