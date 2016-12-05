@@ -104,6 +104,7 @@ is no guarantee of order among elements
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
+\dontrun{
  stopifnot(require(geuvStore2)) 
  require(BatchJobs)
  require(gQTLBase)
@@ -126,6 +127,7 @@ is no guarantee of order among elements
   sss = storeToFDRByProbe( store , xprobs=c(seq(.05,.95,.05),.99) )
   tail(getTab(sss),4)
   }
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -61,6 +61,7 @@ predicted using the GAM model held in the FDRsupp instance.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
+\dontrun{
 require(geuvStore2)
 require(gQTLBase)
 st = makeGeuvStore2()
@@ -69,6 +70,7 @@ filtEnum = enumerateByFDR( st, filtFDR,
   filter=function(x)x[which(x$mindist <= 500000 & x$MAF >= 0.05)] )
 names(metadata(filtEnum))
 filtEnum[order(filtEnum$chisq, decreasing=TRUE)[1:2]]
+} # not really essential
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

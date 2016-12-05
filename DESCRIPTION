@@ -1,6 +1,6 @@
 Package: gQTLstats
 Title: gQTLstats: computationally efficient analysis for eQTL and allied studies
-Version: 1.7.35
+Version: 1.7.37
 Author: VJ Carey <stvjc@channing.harvard.edu>
 Description: computationally efficient analysis of eQTL, mQTL, dsQTL, etc.
 Suggests: geuvPack, geuvStore2, Rsamtools, knitr, rmarkdown, ggbio,
