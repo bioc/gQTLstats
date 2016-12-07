@@ -44,7 +44,7 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
        ),
       mainPanel(
        tabsetPanel(
-        tabPanel("Manh.", helpText("plotly Manhattan plot, select subplots by mouse, mouseover for point metadata"), plotlyOutput("manh")),
+        tabPanel("Manh.", helpText("plotly Manhattan plot, select subplots by mouse, mouseover for point metadata; note points above y=0 are eQTL association scores, points below y=0 are gwascat findings (-log10 p)"), plotlyOutput("manh")),
         tabPanel("y vs GT", plotOutput("eqbox"))
         )
        )
@@ -61,7 +61,7 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
       })
     output$celltypeSelector = renderUI({
      tagList(
-       selectInput("celltype", "celltype", choices=
+       selectInput("celltype", "celltype for chrom. state annotation", choices=
          cellTypes(ermaset), selected=cellTypes(ermaset)[4])
        )
       })

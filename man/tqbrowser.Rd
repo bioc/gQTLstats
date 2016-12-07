@@ -69,6 +69,9 @@ VJ Carey <stvjc@channing.harvard.edu>
 %%% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
+if (interactive) {
+oa = options()$example.ask
+options(example.ask=FALSE)
 #
 # this example assumes you have a working internet connection
 # it will collect genotype information from a S3 bucket
@@ -126,6 +129,8 @@ erset = makeErmaSet()
 okba = c("17q12", "17q21.1", "17q21.2")
 tqbrowser( mae, "geu", "vcf", cyto37n[okba], 
    tbgaOrmdl3, gen2sym, band.init="17q12", ermaset=erset, gwascat=ebicat37 )
+options(example.ask=oa)
+} # end interactivity check
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
