@@ -81,7 +81,9 @@ exportClass("TransStore")
 export("describe")
 export("TransStore")
 
-export(tsByRank, transBrowse, tsByRankAccum, transBrowse2, eqBox3)
+export(tsByRank_sing, transBrowse, tsByRankAccum_sing, transBrowse2, eqBox3)
 export(pifdr2)
 export(tsIndex.reg, tqbrowser, pifdr3)
 export(collapse_multiPerm, distToGene)
+
+export(getTransRegistries, tsByRankAccum)

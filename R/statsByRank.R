@@ -1,34 +1,36 @@
+# Note: functions with name suffix _sing were implemented for the
+# case of a single permutation for plug in FDR
 # a TransStore is a list of registries
 # each registry is a collection of job outputs
 # to traverse the store (possibly in parallel)
 # we want efficient direct access to job outputs
 # and verification that traversal is complete
 
-.transStoreAccessor = function(ts) {
+.transStoreAccessor_sing = function(ts) {
  rs = allregs(ts)
  js = lapply(rs, findDone) # vector of job names for each
  function(i,j) loadResult( rs[[i]], js[[i]][j] )
 }
 
-tsByRank = function(tsin, rank=1, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force) {
+tsByRank_sing = function(tsin, rank=1, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force) {
  N = nregs(tsin)
- acc = .transStoreAccessor(tsin)
+ acc = .transStoreAccessor_sing(tsin)
  z = foreach(i = 1:N) %dopar% {
    nj = length(findDone(allregs(tsin)[[i]]))
-   lapply(1:nj, function(j) { statsByRank(acc(i, j), rank=rank, filt=filt, mcol2keep=mcol2keep)})
+   lapply(1:nj, function(j) { statsByRank_sing(acc(i, j), rank=rank, filt=filt, mcol2keep=mcol2keep)})
    }
  do.call(c, unlist(z))
 }
 
-tsByRankAccum = function(tsin, maxrank=3, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force) {
+tsByRankAccum_sing = function(tsin, maxrank=3, mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE"), filt=force) {
  N = nregs(tsin)
- acc = .transStoreAccessor(tsin)
+ acc = .transStoreAccessor_sing(tsin)
  accum = vector("list", maxrank)
  for (cur in 1:maxrank) {
   accum[[cur]] = {
    tmp = foreach(i = 1:N) %dopar% {
     nj = length(findDone(allregs(tsin)[[i]]))
-    lapply(1:nj, function(j) { statsByRank(acc(i, j), rank=cur, filt=filt,
+    lapply(1:nj, function(j) { statsByRank_sing(acc(i, j), rank=cur, filt=filt,
          mcol2keep=mcol2keep)})
     }
    do.call(c, unlist(tmp))
@@ -64,7 +66,7 @@ nthreg = function(n, tstore) {
 }
 
 
-statsByRank = function(job, rank=1, filt=force,
+statsByRank_sing = function(job, rank=1, filt=force,
     mcol2keep=c("REF", "ALT", "snp", "MAF", "z.HWE")) {
   jj = job$obs
   if (length(jj)==0) return(NULL)
@@ -87,3 +89,104 @@ statsByRank = function(job, rank=1, filt=force,
   mcols(inigr) = ini
   inigr
 }
+
+
+statsByRank = function (job, rank = 1, filt = force, mcol2keep = c("REF", "ALT", 
+    "snp", "MAF", "z.HWE")) 
+{
+    jj = job$obs
+    if (length(jj) == 0) 
+        return(NULL)
+    mcols(jj)$dist = t(job$dist)
+    inigr = filt(jj)
+    if (class(inigr) != "GRanges") {
+        return(NULL)
+    }
+    ppp = job$perms
+    nperm = length(ppp)
+    for (i in 1:nperm) {
+        pp = ppp[[i]]
+        mcols(pp)$pdist = t(job$pdists[[i]])
+        if (i==1) pgr = filt(pp)
+        else mcols(pgr) = cbind(mcols(pgr), mcols(filt(pp)))
+    }
+    stopifnot(class(inigr) == "GRanges")
+    ini = mcols(inigr)[, mcol2keep]
+    feats = inigr$elnames[, rank]
+    scores = inigr$scorebuf[, rank]
+    obsdist = inigr$dist[, rank]
+    permscores = matrix(NA, nr=length(inigr), ncol=nperm)
+    colnames(permscores) = paste0("permscore.", 1:nperm)
+    permdists = matrix(NA, nr=length(inigr), ncol=nperm)
+    colnames(permdists) = paste0("pdist.", 1:nperm)
+    psinds = grep("scorebuf", names(mcols(pgr)))
+    pdinds = grep("pdist", names(mcols(pgr)))
+    for (i in 1:nperm) {
+       permscores[,i] = mcols(pgr)[, psinds[i]][,rank]
+       permdists[,i] = mcols(pgr)[, pdinds[i]][,rank]
+       }
+    ini = cbind(ini, DataFrame(feats, scores, permscores, obsdist, 
+        permdists))
+    mcols(inigr) = ini
+    inigr
+}
+
+ findDone2 = function(x) {
+     d = findDone(x)
+     if (length(x$availJobs)>0) return(intersect(d, x$availJobs))
+     d
+   }
+
+.transStoreAccessor2 = function (ts) 
+{
+    rs = ts@allRegistries
+    js = lapply(rs, findDone2)
+    function(i, j) loadResult(rs[[i]], js[[i]][j])
+}
+
+tsByRankAccum = function (tsin, maxrank = 3, mcol2keep = c("REF", "ALT", "snp", 
+    "MAF", "z.HWE"), filt = force) 
+{
+    N = nregs(tsin)
+    acc = .transStoreAccessor2(tsin)
+    accum = vector("list", maxrank)
+    for (cur in 1:maxrank) {
+        accum[[cur]] = {
+            tmp = foreach(i = 1:N) %dopar% {
+                nj = length(findDone2(allregs(tsin)[[i]]))
+                lapply(1:nj, function(j) {
+                  statsByRank(acc(i, j), rank = cur, filt = filt, 
+                    mcol2keep = mcol2keep)
+                })
+            }
+            do.call(c, unlist(tmp))
+        }
+    }
+    ini = accum[[1]][, mcol2keep]
+    alldists = matrix(NA, nr=length(ini), ncol=maxrank)
+    allscores = matrix(NA, nr=length(ini), ncol=maxrank)
+    allfeats = matrix(NA_character_, nr=length(ini), ncol=maxrank)
+    for (i in 1:maxrank) {
+      allscores[,i] = accum[[i]]$scores
+      alldists[,i] = accum[[i]]$obsdist
+      allfeats[,i] = accum[[i]]$feats
+      }
+    nperms = length(pinds <- grep("permscore", names(mcols(accum[[1]]))))
+    pdinds = grep("pdist", names(mcols(accum[[1]])))
+    permscoresByRank = vector("list", maxrank)
+    permdistsByRank = vector("list", maxrank)
+    for (i in 1:maxrank) {
+       permscoresByRank[[i]] = mcols(accum[[i]])[, pinds]
+       permdistsByRank[[i]] = mcols(accum[[i]])[, pdinds]
+    }
+    for (i in c("allscores", "alldists", "allfeats"))
+      mcols(ini)[[i]] = get(i)
+    permscoreNames = paste0("permscoresByRank", 1:maxrank)
+    permdistNames = paste0("pdistsByRank", 1:maxrank)
+    for (i in 1:maxrank) {
+      mcols(ini)[[permscoreNames[i]]] = permscoresByRank[[i]]
+      mcols(ini)[[permdistNames[i]]] = permdistsByRank[[i]]
+    }
+    ini
+}
+

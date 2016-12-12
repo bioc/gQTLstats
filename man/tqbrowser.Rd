@@ -69,7 +69,7 @@ VJ Carey <stvjc@channing.harvard.edu>
 %%% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-if (interactive) {
+if (interactive()) {
 oa = options()$example.ask
 options(example.ask=FALSE)
 #
@@ -79,6 +79,8 @@ options(example.ask=FALSE)
 #
 # obtain infrastructure
 #
+message("note: as of Dec 17 2016 this function will trigger transient errors... ignore them")
+message("loading packages...")
 packs = c("VariantAnnotation", "GenomicFiles", "ggvis", "plotly",
   "Rsamtools", "GenomeInfoDb", "geuvPack", "shiny", "ggplot2",
   "MultiAssayExperiment", "AnnotationHub", "ldblock", "erma")
@@ -89,12 +91,14 @@ stopifnot(all(r))
 
 # use S3 bucket to get genotypes, create VcfStack wrapper
 #
+message("create VcfStack...")
 tf17 = ldblock::s3_1kg("17")
 vcst = VcfStack(c("17"=path(tf17)))
 seqlevelsStyle(vcst) = "NCBI"
 
 # obtain expression data for GEUVADIS samples
 #
+message("obtain expression data...")
 if (!exists("geuFPKM")) data(geuFPKM)
 data(gen2sym)
 seqlevelsStyle(geuFPKM) = "NCBI"
@@ -102,6 +106,7 @@ seqlevelsStyle(geuFPKM) = "NCBI"
 # bind to MAE
 #
 el = ExperimentList(list(geu=geuFPKM, vcf=vcst))
+message("create MultiAssayExperiment...")
 suppressWarnings({ # samples don't line up between expression and genotype, we know this
 mae = MultiAssayExperiment(el, pData=colData(el[[1]]))
 })
@@ -116,20 +121,23 @@ mae = MultiAssayExperiment(el, pData=colData(el[[1]]))
 #mcols(cyto37)$name = paste0(sn, mcols(cyto37)$name)
 #names(cyto37) = mcols(cyto37)$name
 #seqlengths(cyto37)["MT"] = 16569
+message("obtain cytoband index...")
 data(cyto37n)
 data(tbgaOrmdl3)  # saved output of tsByRankAccum, giving association scores
 #
+message("obtain gwas catalog...")
 library(gwascat)
 data(ebicat37)
 # obtain chromatin state calls from erma
+message("obtain chromatin state calls...")
 erset = makeErmaSet()
 #
 # target and invoke browser
 #
 okba = c("17q12", "17q21.1", "17q21.2")
-tqbrowser( mae, "geu", "vcf", cyto37n[okba], 
-   tbgaOrmdl3, gen2sym, band.init="17q12", ermaset=erset, gwascat=ebicat37 )
-options(example.ask=oa)
+on.exit(options(example.ask=oa))
+print(tqbrowser( mae, "geu", "vcf", cyto37n[okba], 
+   tbgaOrmdl3, gen2sym, band.init="17q12", ermaset=erset, gwascat=ebicat37 ))
 } # end interactivity check
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

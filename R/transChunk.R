@@ -86,8 +86,21 @@ setMethod("describe", "TransStore", function(object) {
 TransStore = function(regs, paths=NULL) {
    requireNamespace("doParallel")
    if (!is.null(paths)) regs = lapply(paths, loadRegistry)
-   subs = sapply(regs, function(x) length(findJobs(x)))
-   dones = sapply(regs, function(x) length(findDone(x)))
+   findJobs2 = function(x) {
+     if (length(x$availJobs)>0) return(x$availJobs)
+     findJobs(x)
+   }
+   findDone2 = function(x) {
+     d = findDone(x)
+     if (length(x$availJobs)>0) return(intersect(d, x$availJobs))
+     d
+   }
+   getJobInfo2 = function(x) {
+     d = findDone2(x)
+     getJobInfo(x)[as.character(d),]
+   }
+   subs = sapply(regs, function(x) length(findJobs2(x)))
+   dones = sapply(regs, function(x) length(findDone2(x)))
    todrop = which(dones==0)
    if (length(todrop)>0) {
       message(paste(length(todrop), "registries have no completed jobs, dropped"))
@@ -96,8 +109,8 @@ TransStore = function(regs, paths=NULL) {
       dones = dones[-todrop]
       }
    lens = foreach(i=1:length(regs)) %dopar%
-      sum(sapply(findDone(regs[[i]]), function(x)length(loadResult(regs[[i]],x)[[1]])))  # first element is locus-centric GRanges
-   jis = lapply(regs, function(x) getJobInfo(x))
+      sum(sapply(findDone2(regs[[i]]), function(x)length(loadResult(regs[[i]],x)[[1]])))  # first element is locus-centric GRanges
+   jis = lapply(regs, function(x) getJobInfo2(x))
    new("TransStore", allRegistries=regs, nloci=unlist(lens),
       numSubmitted=subs, numDone=dones, jobinfos=jis)
 }
