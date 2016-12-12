@@ -190,7 +190,7 @@ checkTsByRank = function() {
        r18 = g18transRegistry()
        g1718 = TransStore(list(r17, r18))
        }
- tt1 = tsByRank(g1718, 1, mcol2keep=c("REF", "snp", "MAF")) # must limit
+ tt1 = tsByRank_sing(g1718, 1, mcol2keep=c("REF", "snp", "MAF")) # must limit
         # as geuvStore2 is legacy ...
  checkTrue(length(tt1) == 509728)
  keyfields = c("snp", "MAF", "feats", "scores", "permscores", 
