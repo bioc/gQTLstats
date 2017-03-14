@@ -79,7 +79,7 @@ options(example.ask=FALSE)
 #
 # obtain infrastructure
 #
-message("note: as of Dec 17 2016 this function will trigger transient errors... ignore them")
+# message("note: as of Dec 17 2016 this function will trigger transient errors... ignore them") # solved with req()
 message("loading packages...")
 packs = c("VariantAnnotation", "GenomicFiles", "ggvis", "plotly",
   "Rsamtools", "GenomeInfoDb", "geuvPack", "shiny", "ggplot2",
