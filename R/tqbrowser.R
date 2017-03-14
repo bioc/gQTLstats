@@ -81,6 +81,7 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
       }
    })
   output$manh = renderPlotly({
+        req(input$curband, input$celltype, input$cursnp)
         curr = tiling[input$curband]
         seqlevelsStyle(curr) = "UCSC" # match ermaset
         rowRanges(ermaset) = curr
