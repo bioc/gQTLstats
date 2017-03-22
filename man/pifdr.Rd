@@ -1,6 +1,7 @@
 \name{pifdr}
 \alias{pifdr}
 \alias{pifdr2}
+\alias{pifdr3}
 \title{
 utility for computing plug-in FDR
 }

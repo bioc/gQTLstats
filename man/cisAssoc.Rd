@@ -3,6 +3,8 @@
 \alias{cisEsts}
 \alias{AllAssoc}
 \alias{cisCount}
+\alias{collapse_multiPerm}
+\alias{distToGene}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 test for variant-expression associations in cis or generally, using 
@@ -80,6 +82,9 @@ scope of the VCF to be used for testing against all features on summex}
 workhorse for statistical modeling.  VCF content is
 transformed to the byte-code (which allows for uncertain imputation)
 and used in fast testing.
+
+distToGene is a helper function that should be replaced with
+something from the Bioconductor annotation subsystem
 }
 \value{
 cisAssoc: a \code{\link[GenomicRanges]{GRanges-class}} instance

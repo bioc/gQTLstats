@@ -115,9 +115,9 @@ statsByRank = function (job, rank = 1, filt = force, mcol2keep = c("REF", "ALT",
     feats = inigr$elnames[, rank]
     scores = inigr$scorebuf[, rank]
     obsdist = inigr$dist[, rank]
-    permscores = matrix(NA, nr=length(inigr), ncol=nperm)
+    permscores = matrix(NA, nrow=length(inigr), ncol=nperm)
     colnames(permscores) = paste0("permscore.", 1:nperm)
-    permdists = matrix(NA, nr=length(inigr), ncol=nperm)
+    permdists = matrix(NA, nrow=length(inigr), ncol=nperm)
     colnames(permdists) = paste0("pdist.", 1:nperm)
     psinds = grep("scorebuf", names(mcols(pgr)))
     pdinds = grep("pdist", names(mcols(pgr)))
@@ -163,9 +163,9 @@ tsByRankAccum = function (tsin, maxrank = 3, mcol2keep = c("REF", "ALT", "snp",
         }
     }
     ini = accum[[1]][, mcol2keep]
-    alldists = matrix(NA, nr=length(ini), ncol=maxrank)
-    allscores = matrix(NA, nr=length(ini), ncol=maxrank)
-    allfeats = matrix(NA_character_, nr=length(ini), ncol=maxrank)
+    alldists = matrix(NA, nrow=length(ini), ncol=maxrank)
+    allscores = matrix(NA, nrow=length(ini), ncol=maxrank)
+    allfeats = matrix(NA_character_, nrow=length(ini), ncol=maxrank)
     for (i in 1:maxrank) {
       allscores[,i] = accum[[i]]$scores
       alldists[,i] = accum[[i]]$obsdist

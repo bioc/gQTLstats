@@ -1,6 +1,9 @@
 \name{tsByRank}
 \alias{tsByRank}
 \alias{tsByRankAccum}
+\alias{tsByRankAccum_sing}
+\alias{tsByRank_sing}
+\alias{getTransRegistries}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 harvest contents of a TransStore by rank in associations of features to SNP
@@ -37,9 +40,14 @@ equal to the \code{bufsize} of the \code{\link{transAssoc}} call
 that generated \code{ts}. Only SNP-specific elements can be used
 to define the filter.}
 }
-%\details{
-%%  ~~ If necessary, more details than the description above ~~
-%}
+\details{
+tsByRankAccum_sing and other functions with suffix _sing
+were developed for the case of a single permutation
+
+getTransRegistries() accesses objects packaged
+for demonstration purposes
+
+}
 \value{
 A \code{\link[GenomicRanges]{GRanges}} instance.
 }

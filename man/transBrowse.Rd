@@ -10,7 +10,7 @@ exhibit genotype:genomic feature distributions with a shiny app
 }
 \usage{
 transBrowse(tbg, anno, tivcf, se, title = "trans eQTL")
-transBrowse2(tbg, anno, tivcf, se, title = "trans eQTL", maxrank=3)
+transBrowse2(tbga, annovec, tivcf, se, title = "trans eQTL", maxrank=3)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -24,6 +24,10 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
 # server starts by checking this and selecting the
 # associated component
 #
+# annovec is used to map expression 'probe' tokens to friendlier annotation
+#  like gene symbol; use {names(x) = x} if already happy with x
+#  this is also an opportunity for annoContexts
+#
 # first, verify that the MAE supplied includes a VcfStack
 #
  stopifnot(inherits(experiments(mae)[[gelname]], "VcfStack"))
@@ -97,6 +101,8 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
           y = band2feats(tiling, input$curband, tsbra, function(x) 
               x$allscores[,input$rank])
           nm = band2feats(tiling, input$curband, tsbra, function(x) names(x))
+          genenms = band2feats(tiling, input$curband, tsbra, 
+                  function(x) x$allfeats[, input$rank])
           gwascat = as(gwascat, "GRanges")
           genome(gwascat) = genome(curr)[1]
           seqlevelsStyle(gwascat) = seqlevelsStyle(curr)[1]
@@ -110,7 +116,7 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
                   stateid=mcg[,"DISEASE/TRAIT"], state=gstatevec,
                   stringsAsFactors=FALSE)
           curdf = data.frame(pos=x, assoc=y, snp=nm, 
-                 stateid=paste0(nm, ":", statevec), 
+                 stateid=paste0(nm, ":", annovec[genenms]), 
                  state=statevec, stringsAsFactors=FALSE)
           curdf = rbind(curdf, gwdf)
           ggp = ggplot(curdf, aes(x=pos, y=assoc, text=stateid, 

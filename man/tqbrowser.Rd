@@ -8,7 +8,8 @@ general browsing facility for trans-gQTL
 Provide a general browsing facility for trans-gQTL.
 }
 \usage{
-tqbrowser(mae, felname, gelname, tiling, tsbra, annovec, band.init = "6q12", ...)
+tqbrowser(mae, felname, gelname, tiling, tsbra, 
+  annovec, band.init = "6q12", ermaset, gwascat, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -38,6 +39,12 @@ translated to the associated value in the display.
 }
   \item{band.init}{
 an initial tile selection
+}
+  \item{ermaset}{
+instance of \code{\link[erma]{ErmaSet-class}}
+}
+  \item{gwascat}{
+instance of \code{\link[gwascat]{gwaswloc-class}}
 }
   \item{\dots}{
 not currently used
