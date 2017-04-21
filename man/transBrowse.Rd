@@ -17,7 +17,17 @@ transBrowse2(tbga, annovec, tivcf, se, title = "trans eQTL", maxrank=3)
   \item{tbg}{
 filtered output of \code{\link{tsByRankAccum}}, see example
 }
+  \item{tbga}{
+filtered output of \code{\link{tsByRankAccum}}, see example
+}
   \item{anno}{
+%#GRanges instance with content analogous to that of 
+%#\code{gencodeV12} data element of \code{geuvPack}
+a vector with 'feature symbols' (e.g.,, gene symbols) as values and
+'feature names' (elements of rownames of \code{se}, e.g., ENSEMBLE gene ids)
+as names
+}
+  \item{annovec}{
 %#GRanges instance with content analogous to that of 
 %#\code{gencodeV12} data element of \code{geuvPack}
 a vector with 'feature symbols' (e.g.,, gene symbols) as values and
