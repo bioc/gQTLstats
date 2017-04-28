@@ -100,7 +100,7 @@ stopifnot(all(r))
 #
 message("create VcfStack...")
 tf17 = ldblock::s3_1kg("17")
-vcst = VcfStack(c("17"=path(tf17)))
+vcst = VcfStack2(c("17"=path(tf17)))
 seqlevelsStyle(vcst) = "NCBI"
 
 # obtain expression data for GEUVADIS samples
@@ -115,7 +115,7 @@ seqlevelsStyle(geuFPKM) = "NCBI"
 el = ExperimentList(list(geu=geuFPKM, vcf=vcst))
 message("create MultiAssayExperiment...")
 suppressWarnings({ # samples don't line up between expression and genotype, we know this
-mae = MultiAssayExperiment(el, pData=colData(el[[1]]))
+mae = MultiAssayExperiment(el, colData=colData(el[[1]]))
 })
 #
 # obtain and clean up cytoband representation
