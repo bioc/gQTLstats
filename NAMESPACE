@@ -5,6 +5,7 @@
   importFrom("utils", "sessionInfo")
 
 import(methods)
+importFrom(ggbeeswarm, geom_quasirandom)
 import(foreach)
 import(doParallel)
 import(beeswarm)

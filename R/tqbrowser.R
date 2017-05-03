@@ -49,7 +49,7 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
       mainPanel(
        tabsetPanel(
         tabPanel("Manh.", helpText("plotly Manhattan plot, select subplots by mouse, mouseover for point metadata; note points above y=0 are eQTL association scores, points below y=0 are gwascat findings (-log10 p)"), plotlyOutput("manh")),
-        tabPanel("y vs GT", plotOutput("eqbox"))
+        tabPanel("y vs GT", plotlyOutput("eqbox"))
         )
        )
     ) # end layout
@@ -69,16 +69,17 @@ tqbrowser = function( mae, felname, gelname, tiling, tsbra, annovec,
          cellTypes(ermaset), selected=cellTypes(ermaset)[4])
        )
       })
-   output$eqbox = renderPlot({
+   output$eqbox = renderPlotly({
      curchrn = sub("[pq].*", "", input$curband) # character
-     fns = experiments(mae)[[gelname]]@files
+#     fns = experiments(mae)[[gelname]]@files
+     fns = path(experiments(mae)[[gelname]]@files)
      fn = fns[curchrn]
      tf = TabixFile(fn)
      if (!is.null(input$cursnp)) {  # delay while renderUI sets up
       tb = tsbra[input$cursnp,]
       tbf = tb$allfeats[input$rank]
       suppressMessages({
-       eqBox3( tbf, 
+       eqBox4( tbf, 
          experiments(mae)[[felname]],
          tf, tb, annovec )
        })
