@@ -199,7 +199,7 @@ checkTsByRank = function() {
  checkTrue(abs(mean(tt1$scores)-26.29626)<.001)
  checkTrue(abs(mean(tt1$MAF)-0.1718)<.001)
 }
-checkTsByRank()
+# checkTsByRank() # Dec 2017 BatchJobs alterations
 
 
 checkAllAssoc = function() {

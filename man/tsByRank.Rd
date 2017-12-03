@@ -67,6 +67,7 @@ A \code{\link[GenomicRanges]{GRanges}} instance.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
+\dontrun{ # BatchJObs issues 12/2017
  if (require(doParallel)) {
   registerDoSEQ()
  lit = TransStore(getTransRegistries()) # very limited slice
@@ -94,6 +95,7 @@ A \code{\link[GenomicRanges]{GRanges}} instance.
 #   tbg = tbg[ which(tbg$MAF > minMAF) ]
 #   tbg[ order(tbg$scores, decreasing=TRUE) ][1:nrec]
 # }
+}
  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

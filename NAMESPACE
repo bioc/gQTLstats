@@ -88,4 +88,4 @@ export(tsIndex.reg, tqbrowser, pifdr3)
 export(collapse_multiPerm, distToGene)
 
 export(getTransRegistries, tsByRankAccum)
-export(VcfStack2)
+#export(VcfStack2)

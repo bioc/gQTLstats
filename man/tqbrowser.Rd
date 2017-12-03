@@ -100,7 +100,7 @@ stopifnot(all(r))
 #
 message("create VcfStack...")
 tf17 = ldblock::s3_1kg("17")
-vcst = VcfStack2(c("17"=path(tf17)))
+vcst = VcfStack(c("17"=path(tf17)), index=FALSE)
 seqlevelsStyle(vcst) = "NCBI"
 
 # obtain expression data for GEUVADIS samples
