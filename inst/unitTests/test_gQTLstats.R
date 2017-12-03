@@ -183,23 +183,23 @@ checkMixedVcfProc = function() {
 }
 checkMixedVcfProc()
 
-checkTsByRank = function() {
- if (require(geuvStore2) && require(doParallel)) {
-       registerDoSEQ()
-       r17 = g17transRegistry()
-       r18 = g18transRegistry()
-       g1718 = TransStore(list(r17, r18))
-       }
- tt1 = tsByRank_sing(g1718, 1, mcol2keep=c("REF", "snp", "MAF")) # must limit
-        # as geuvStore2 is legacy ...
- checkTrue(length(tt1) == 509728)
- keyfields = c("snp", "MAF", "feats", "scores", "permscores", 
-        "obsdist", "permdist")  # eventually add z.HWE
- checkTrue(all(keyfields %in% names(mcols(tt1))))
- checkTrue(abs(mean(tt1$scores)-26.29626)<.001)
- checkTrue(abs(mean(tt1$MAF)-0.1718)<.001)
-}
-checkTsByRank()
+#checkTsByRank = function() {
+# if (require(geuvStore2) && require(doParallel)) {
+#       registerDoSEQ()
+#       r17 = g17transRegistry()
+#       r18 = g18transRegistry()
+#       g1718 = TransStore(list(r17, r18))
+#       }
+# tt1 = tsByRank_sing(g1718, 1, mcol2keep=c("REF", "snp", "MAF")) # must limit
+#        # as geuvStore2 is legacy ...
+# checkTrue(length(tt1) == 509728)
+# keyfields = c("snp", "MAF", "feats", "scores", "permscores", 
+#        "obsdist", "permdist")  # eventually add z.HWE
+# checkTrue(all(keyfields %in% names(mcols(tt1))))
+# checkTrue(abs(mean(tt1$scores)-26.29626)<.001)
+# checkTrue(abs(mean(tt1$MAF)-0.1718)<.001)
+#}
+#checkTsByRank()
 
 
 checkAllAssoc = function() {

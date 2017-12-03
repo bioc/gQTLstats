@@ -53,6 +53,7 @@ instance of \code{\link{TransStore-class}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
+\dontrun{  # dec 2017 changes to BatchJobs lead to errors
 if (require(geuvStore2) && require(doParallel)) {
   registerDoSEQ()
   r17 = g17transRegistry()
@@ -60,5 +61,6 @@ if (require(geuvStore2) && require(doParallel)) {
   g1718 = TransStore(list(r17, r18))
   g1718
   }
+ } # end dontrun
 }
 \keyword{ manip }% use one of  RShowDoc("KEYWORDS")

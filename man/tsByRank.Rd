@@ -67,6 +67,7 @@ A \code{\link[GenomicRanges]{GRanges}} instance.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
+\dontrun{ # dec 2017 -- BatchJobs registry must be updated
  if (require(doParallel)) {
   registerDoSEQ()
  lit = TransStore(getTransRegistries()) # very limited slice
@@ -95,6 +96,7 @@ A \code{\link[GenomicRanges]{GRanges}} instance.
 #   tbg[ order(tbg$scores, decreasing=TRUE) ][1:nrec]
 # }
  }
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

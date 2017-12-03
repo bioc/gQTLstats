@@ -1,19 +1,12 @@
 
-gmod2 = function (sym, genome = "hg19", orgDb, 
+gmod2 = function (sym, genome = "hg19", orgDb,
    collector=exonsBy, verbose=FALSE) 
 {
     if (missing(orgDb)) {
-       require("Homo.sapiens")
-       orgDb = Homo.sapiens
-       }
-    rend = suppressPackageStartupMessages
-    if (verbose) rend = force
-    rend({
-    require(txn <- gsub("%%G%%", genome, "TxDb.Hsapiens.UCSC.%%G%%.knownGene"),
-      character.only=TRUE)
-    require(deparse(substitute(orgDb)), character.only=TRUE)
-    })
-    txdb = get(txn)
+      message("assuming Homo.sapiens for gene models")
+      orgDb = Homo.sapiens
+     }
+    txdb = TxDb(orgDb)
     num = AnnotationDbi::select(orgDb, keys=sym, keytype="SYMBOL", 
           columns="ENTREZID")$ENTREZID
     collector(txdb, by = "gene")[[num]]

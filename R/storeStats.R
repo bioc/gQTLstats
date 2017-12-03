@@ -8,36 +8,36 @@ vecToQuantiles = function( vec,
   quantile(filter(vec), probs )
 }
 
-vecToHist = function( vec, breaks, filter=force)
-   hist(vec, breaks=breaks)
-
-vecsToFDR = function(vec, permvec, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
-    1e-05, 1e-06, 1e-07))), xfield = "chisq",
-    getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
-       grep("permScore", names(mcols(x)))])),
-       filter=force, .id4coln=1, ids=NULL) {
- theCall = match.call()
- ntests = length(vec)
- message("counting #NA...")
- nna = sum(is.na(vec))
- ntests = ntests - nna
- message("obtaining assoc quantiles...")
- xq = vecToQuantiles(vec, probs=xprobs, filter=filter, ids=ids) # nxq
- message("computing perm_assoc histogram....")
- yh.orig = vecToHist(permvec, getter=getter, breaks=c(0,xq,1e10), filter=filter, ids=ids)$counts # nxq+2
- yh = numeric(length(yh.orig)-1)
- yh[1] = yh.orig[1] + yh.orig[2]  # fuse first 2 elements for left boundary
- yh[2:length(yh)] = yh.orig[-c(1,2)] # transfer
- oy = nperm*ntests - cumsum(yh) # how many perm scores exceed cuts in assoc score
- ncalls = ntests*(1-xprobs)
- trimToUnit = function(x) pmax(0, pmin(1, x))
- fdr = trimToUnit(oy/(nperm*ncalls))
- ans = data.frame(assoc=xq, fdr=fdr, ncalls=ncalls, avg.false=oy/nperm)
- new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo(),
-    filterUsed=filter)
-}
-
-
+#vecToHist = function( vec, breaks, filter=force)
+#   hist(vec, breaks=breaks)
+#
+#vecsToFDR = function(vec, permvec, xprobs = c(seq(0, 0.999, 0.001), 1 - (c(1e-04,
+#    1e-05, 1e-06, 1e-07))), xfield = "chisq",
+#    getter = function(x) as.numeric(S4Vectors::as.matrix(mcols(x)[, 
+#       grep("permScore", names(mcols(x)))])),
+#       filter=force, .id4coln=1, ids=NULL) {
+# theCall = match.call()
+# ntests = length(vec)
+# message("counting #NA...")
+# nna = sum(is.na(vec))
+# ntests = ntests - nna
+# message("obtaining assoc quantiles...")
+# xq = vecToQuantiles(vec, probs=xprobs, filter=filter, ids=ids) # nxq
+# message("computing perm_assoc histogram....")
+# yh.orig = vecToHist(permvec, getter=getter, breaks=c(0,xq,1e10), filter=filter, ids=ids)$counts # nxq+2
+# yh = numeric(length(yh.orig)-1)
+# yh[1] = yh.orig[1] + yh.orig[2]  # fuse first 2 elements for left boundary
+# yh[2:length(yh)] = yh.orig[-c(1,2)] # transfer
+# oy = nperm*ntests - cumsum(yh) # how many perm scores exceed cuts in assoc score
+# ncalls = ntests*(1-xprobs)
+# trimToUnit = function(x) pmax(0, pmin(1, x))
+# fdr = trimToUnit(oy/(nperm*ncalls))
+# ans = data.frame(assoc=xq, fdr=fdr, ncalls=ncalls, avg.false=oy/nperm)
+# new("FDRsupp", tab=ans, theCall=theCall, sessinfo=sessionInfo(),
+#    filterUsed=filter)
+#}
+#
+#
 
 storeToQuantiles = function( store, field, 
      probs=c(seq(0,.999,.001), 1-(c(1e-4,1e-5,1e-6,1e-7))), 
