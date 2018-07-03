@@ -12,6 +12,7 @@ manhWngr = function( store, probeid="ENSG00000183814.10",
  sel1 = extractByProbes(store, probeid)
  if (applyFDRfilter) sel1 = fdrsupp@filterUsed(sel1)
  sel1$ml10fdr = -log10( getFDRfunc(fdrsupp)(sel1$chisq)+1e-6 ) # evaluate FDR
+ sel1$ml10fdr = as.numeric(sel1$ml10fdr)
  df = as(sel1, "data.frame")
  seqlevelsStyle(namedGR) = slstyle
  hkeep = namedGR[ which(namedGR %over% sel1) ]
