@@ -336,6 +336,7 @@ seqlevelsStyle(filtEnum) = "UCSC"
 #seqinfo(filtEnum) = seqinfo(txdb)
 seqlengths(filtEnum)[paste0("chr", c(1:22,"M"))] = 
  seqlengths(txdb)[paste0("chr", c(1:22,"M"))]
+filtEnum = keepStandardChromosomes(filtEnum) 
 suppressWarnings({
 allv = locateVariants(filtEnum, txdb, AllVariants()) # multiple recs per eQTL 
 })
