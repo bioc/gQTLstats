@@ -62,7 +62,7 @@ importFrom(snpStats, snp.rhs.tests, col.summary, chi.squared,
      snp.rhs.estimates)
 
 importFrom(dplyr, filter, group_by, summarize, "%>%",
-  rbind_all, arrange)
+  bind_rows, arrange)
 
 export( table_sensobj_thresh, queryVCF, senstab )
 S3method( plot, table.sensobj )

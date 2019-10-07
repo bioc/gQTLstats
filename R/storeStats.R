@@ -265,7 +265,7 @@ storeToFDRByProbe = function( store, xprobs = seq(0, 0.99, 0.01),
     maxbp = storeApply(store, function(x) {
        maxByProbe(1, filter(x), force) }, ids=ids)
 suppressWarnings({  # expected unequal factor levels
-    maxbp = rbind_all(maxbp)  # note filter was already applied
+    maxbp = bind_rows(maxbp)  # note filter was already applied
 })
     dfrToFDR(maxbp, xprobs = xprobs, xfield = xfield, filter=filter)
 }
