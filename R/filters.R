@@ -38,7 +38,7 @@ reconstruct = function(ex, inds2drop, center=TRUE) {
           paste0(selectSome(inds2drop),collapse=","), "from", assn[1], collapse=""))
      ex = t(assays(se)[[1]])
      recon = reconstruct(ex, inds2drop, center)
-     assays(se)[[1]] = recon   # BAD ... assay(x) seems to do better
+     assays(se, withDimnames=FALSE)[[1]] = recon   # BAD ... assay(x) seems to do better
      metadata(se)$PCsClipped = inds2drop
      colnames(se)=cn
      rownames(se)=rn
@@ -56,7 +56,7 @@ regressOut = function(x, rhs, ...) {
  ex = assay(x)
  f = lmFit(ex, mm, ...)
  r = ex - (f$coef %*% t(f$design))
- assay(x) = r
+ assay(x,withDimnames=FALSE) = r
  rownames(x) = rn
  colnames(x) = cn
  x

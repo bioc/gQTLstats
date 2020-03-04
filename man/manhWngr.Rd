@@ -41,7 +41,6 @@ if TRUE, use the filter defined in the \code{filterUsed}
 element of the object supplied as \code{fdrsupp} 
 on the output
 }
-  \item{\dots}{additional arguments for plotting}
 }
 %\details{
 %%  ~~ If necessary, more details than the description above ~~
