@@ -25,7 +25,7 @@ symbol for feature identifier
 instance of \code{\link{FDRsupp-class}}
 }
   \item{namedGR}{
-\code{\link[GenomicRanges]{GRanges}} instance with 'name' in mcols element
+\code{\link{GRanges}} instance with 'name' in mcols element
 }
   \item{slstyle}{
 seqlevelsStyle

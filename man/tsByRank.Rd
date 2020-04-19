@@ -49,7 +49,7 @@ for demonstration purposes
 
 }
 \value{
-A \code{\link[GenomicRanges]{GRanges}} instance.
+A \code{\link{GRanges}} instance.
 }
 %\references{
 %%% ~put references to the literature/web site here ~

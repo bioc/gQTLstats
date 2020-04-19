@@ -34,10 +34,10 @@ AllAssoc(summex, vcf.tf, variantRange, rhs = ~1, nperm = 3,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{summex}{
-a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
+a \code{\link{RangedSummarizedExperiment}} object
 }
   \item{vcf.tf}{
-instance of \code{\link[Rsamtools]{TabixFile}}, referring to a
+instance of \code{\link{TabixFile}}, referring to a
 tabix-indexed, bgzipped VCF file
 }
   \item{rhs}{
@@ -60,7 +60,7 @@ index of \code{assays(summex)} to use for expression data retrieval
 }
   \item{lbmaf}{
 lower bound on MAF of SNP to retain for analysis, computed using
-\code{\link[snpStats]{col.summary}}
+\code{\link{col.summary}}
 }
   \item{lbgtf}{
 lower bound on genotype frequency of SNP to retain for analysis
@@ -72,7 +72,7 @@ See \url{http://www.biostars.org/p/117155/#117270}
 }
   \item{infoFields}{character -- VCF fields to retain in vcfInfo() part of query}
   \item{simpleSNV}{logical -- will use simple computation of
-\code{\link[VariantAnnotation]{isSNV}} to filter variants for
+\code{\link{isSNV}} to filter variants for
 analysis to SNV }
   \item{variantRange}{GRanges instance that defines the
 scope of the VCF to be used for testing against all features on summex}

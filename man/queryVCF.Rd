@@ -26,7 +26,7 @@ samples to be retained
 tag identifying build
 }
   \item{getSM}{
-logical; if FALSE, \code{\link[VariantAnnotation]{genotypeToSnpMatrix}}
+logical; if FALSE, \code{\link{genotypeToSnpMatrix}}
 will not be run and only the output of readVcf is returned.
 }
   \item{snvOnly}{logical, if TRUE, will confine results to SNV}

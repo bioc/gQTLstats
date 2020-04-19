@@ -26,7 +26,7 @@ for gQTLswarm, output of gQTLs
 TabixFile for VCF on which filtgr statistics are based
 }
   \item{genome}{
-tag for \code{\link[VariantAnnotation]{readVcf}}
+tag for \code{\link{readVcf}}
 }
   \item{forceRs}{
 if TRUE insist that snp ids include 'rs'

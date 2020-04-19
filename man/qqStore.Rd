@@ -25,7 +25,7 @@ optional job id vector; if NULL, all jobs used
 }
   \item{.probs}{
 vector of probabilities for use with quantile evaluation,
-as provided in ffbase, using \code{\link[gQTLstats]{storeToQuantiles}}
+as provided in ffbase, using \code{\link{storeToQuantiles}}
 }
   \item{xlim.in}{
 xlim setting for QQplot

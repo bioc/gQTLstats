@@ -24,7 +24,7 @@ an element of rownames(se) from which a vector of assay
 values will be created
 }
   \item{se}{
-a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
+a \code{\link{RangedSummarizedExperiment}} object
 }
   \item{tf}{
 instance of class \code{\link[Rsamtools]{TabixFile-class}}, defining

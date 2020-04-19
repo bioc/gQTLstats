@@ -21,7 +21,7 @@ regressOut(x, rhs, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
+a \code{\link{RangedSummarizedExperiment}} object
 }
   \item{inds2drop}{
 Vector of PCs to be eliminated by setting the associated diagonal elements in the
@@ -47,7 +47,7 @@ the design matrix specified by the \code{rhs}; \code{\link[limma]{lmFit}} is use
 compute coefficients, linear predictions and residuals.
 }
 \value{
-a \code{\link[SummarizedExperiment]{RangedSummarizedExperiment}} object
+a \code{\link{RangedSummarizedExperiment}} object
 }
 
 \references{

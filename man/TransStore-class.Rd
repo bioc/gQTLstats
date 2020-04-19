@@ -16,7 +16,7 @@ Objects can be created by calls of the form \code{new("TransStore", ...)}.
 \section{Slots}{
   \describe{
     \item{\code{allRegistries}:}{Object of class \code{"list"} containing
-\code{\link[BatchJobs]{Registry}} instances }
+\code{\link{Registry}} instances }
     \item{\code{numSubmitted}:}{Object of class \code{"numeric"} records
 number of jobs submitted for each registry }
     \item{\code{numDone}:}{Object of class \code{"numeric"} records
@@ -24,7 +24,7 @@ number of jobs completed for each registry }
     \item{\code{nloci}:}{Object of class \code{"numeric"} records number of
 loci with test results for each registry }
     \item{\code{jobinfos}:}{Object of class \code{"list"} records results
-of \code{\link[BatchJobs]{getJobInfo}} for each registry }
+of \code{\link{getJobInfo}} for each registry }
   }
 }
 \section{Methods}{

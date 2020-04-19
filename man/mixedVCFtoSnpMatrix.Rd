@@ -15,13 +15,13 @@ mixedVCFtoSnpMatrix(vcf, preferGT = TRUE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{vcf}{
-object inheriting from \code{\link[VariantAnnotation]{CollapsedVCF-class}}
+object inheriting from \code{\link{CollapsedVCF-class}}
 }
   \item{preferGT}{
 logical.  VCF allows loci for samples to be reported in various
 formats, and a given locus can have a call tagged GT and a
 genotype probability or likelihood representation tagged GP or GL.
-\code{\link[VariantAnnotation]{genotypeToSnpMatrix}} has an
+\code{\link{genotypeToSnpMatrix}} has an
 \code{uncertain} parameter that, if TRUE, will transform GP or GL
 content to allelic dose.  Note that only the "first" dosage type appearing in the header will be transformed.  Thus if GP is first in the header but
 a given locus is tagged only with GL, the genotype for
@@ -29,7 +29,7 @@ thus locus will be recorded as NA.
 }
 }
 \details{
-emulates output from \code{\link[VariantAnnotation]{genotypeToSnpMatrix}}
+emulates output from \code{\link{genotypeToSnpMatrix}}
 }
 \value{
 list with elements \code{genotypes} and \code{map}
@@ -47,7 +47,7 @@ VJ Carey
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link[VariantAnnotation]{genotypeToSnpMatrix}}
+\code{\link{genotypeToSnpMatrix}}
 }
 \examples{
 fn = system.file("vcf/polytypeSNV.vcf", package="gQTLstats")
