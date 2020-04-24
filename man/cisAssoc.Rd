@@ -37,7 +37,7 @@ AllAssoc(summex, vcf.tf, variantRange, rhs = ~1, nperm = 3,
 a \code{\link{RangedSummarizedExperiment}} object
 }
   \item{vcf.tf}{
-instance of \code{\link{TabixFile}}, referring to a
+instance of \code{TabixFile}, referring to a
 tabix-indexed, bgzipped VCF file
 }
   \item{rhs}{
