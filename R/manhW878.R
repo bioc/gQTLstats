@@ -14,7 +14,9 @@ manhWngr = function( store, probeid="ENSG00000183814.10",
  sel1$ml10fdr = -log10( getFDRfunc(fdrsupp)(sel1$chisq)+1e-6 ) # evaluate FDR
  sel1$ml10fdr = as.numeric(sel1$ml10fdr)
  df = as(sel1, "data.frame")
+ oldg = genome(namedGR)
  seqlevelsStyle(namedGR) = slstyle
+ genome(namedGR) = oldg  # previous will add a different tag
  hkeep = namedGR[ which(namedGR %over% sel1) ]
  nn = nearest(sel1, hkeep)
  lab = hkeep$name[nn]
