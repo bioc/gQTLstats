@@ -325,8 +325,11 @@ vjcitn/gQTLbrowse github archive.
 
 We can use `r Biocpkg("VariantAnnotation")` to establish
 basic structural characteristics for all filtered variants.
+This code is blocked owing to changes to seqlevelsStyle that
+need to be reconciled at a deeper level.  Please notify stvjc
+at channing.harvard.edu if there is a need to run this code.
 
-```{r dovaranno,cache=TRUE}
+```{r dovaranno,cache=TRUE,eval=FALSE}
 suppressPackageStartupMessages({
 library(VariantAnnotation)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
